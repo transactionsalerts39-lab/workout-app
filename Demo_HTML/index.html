@@ -2,9 +2,14 @@
 <html>
 <body>
     <h1>Learning JavaScript</h1>
-    <button onclick="showInfo()">Show Person Info</button>
-    <button onclick="showHobbies()">Show Hobbies</button>
-    <button onclick="getWeather()">Get Weather</button>
+    <button onclick="showInfo()" style="background-color: yellow; margin: 5px; padding: 10px;">Show Person Info</button>
+    <button onclick="showHobbies()" style="background-color: yellow; margin: 5px; padding: 10px;">Show Hobbies</button>
+    <button onclick="getWeather()" style="background-color: yellow; margin: 5px; padding: 10px;">Get Weather</button>
+    <button onclick="showTime()" style="background-color: yellow; margin: 5px; padding: 10px;">Show Current Time</button>
+    <button onclick="calculateAge()" style="background-color: yellow; margin: 5px; padding: 10px;">Calculate Age</button>
+    <button onclick="showRandomNumber()" style="background-color: yellow; margin: 5px; padding: 10px;">Random Number</button>
+    <button onclick="showLocation()" style="background-color: yellow; margin: 5px; padding: 10px;">Show Location</button>
+    <button onclick="showGreeting()" style="background-color: yellow; margin: 5px; padding: 10px;">Personal Greeting</button>
     
     <div id="weatherInfo" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; background-color: #f9f9f9;"></div>
     
@@ -28,6 +33,32 @@
         
         function showHobbies() {
             alert("Hobbies: " + hobbies.join(", "));
+        }
+        
+        function showTime() {
+            const now = new Date();
+            alert("Current time: " + now.toLocaleTimeString());
+        }
+        
+        function calculateAge() {
+            const birthYear = 2004;
+            const currentYear = new Date().getFullYear();
+            const calculatedAge = currentYear - birthYear;
+            alert("Age calculation: " + calculatedAge + " years old");
+        }
+        
+        function showRandomNumber() {
+            const randomNum = Math.floor(Math.random() * 100) + 1;
+            alert("Random number: " + randomNum);
+        }
+        
+        function showLocation() {
+            alert("Location: " + person.city + ", " + person.street);
+        }
+        
+        function showGreeting() {
+            const greeting = "Hello " + name + "! Welcome to JavaScript learning!";
+            alert(greeting);
         }
         
         // 4. CONSOLE FUNCTION - for testing in browser console
