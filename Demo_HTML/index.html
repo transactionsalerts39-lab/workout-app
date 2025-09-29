@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Learning JavaScript</h1>
+    <button onclick="showInfo()">Show Person Info</button>
+    <button onclick="showHobbies()">Show Hobbies</button>
+    <button onclick="getWeather()">Get Weather</button>
+    
+    <div id="weatherInfo" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; background-color: #f9f9f9;"></div>
+    
+    <script>
+        // 1. VARIABLES - storing different types of data
+        let name = "John";           // String (text)
+        let age = 20;               // Number
+        let isStudent = true;       // Boolean (true/false)
+        let hobbies = ["reading", "writing", "coding"];  // Array (list)
+        
+        // 2. OBJECT - storing related data together
+        let person = {
+            street: "123 Main St",
+            city: "Anytown"
+        };
+        
+        // 3. FUNCTIONS - reusable blocks of code
+        function showInfo() {
+            alert("Name: " + name + "\nAge: " + age + "\nStudent: " + isStudent);
+        }
+        
+        function showHobbies() {
+            alert("Hobbies: " + hobbies.join(", "));
+        }
+        
+        // 4. CONSOLE FUNCTION - for testing in browser console
+        function testFunction() {
+            console.log("Hello from console!");
+            console.log("Name:", name);
+            console.log("Age:", age);
+            console.log("All hobbies:", hobbies);
+            console.log("Person object:", person);
+        }
+        
+        // 5. WEATHER API FUNCTION - fetching data from internet
+        async function getWeather() {
+            try {
+                // Show loading message
+                document.getElementById('weatherInfo').innerHTML = "Loading weather data...";
+                
+                // Free weather API (no key required)
+                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current=temperature_2m');
+                const data = await response.json();
+                
+                // Get temperature from API response
+                const temperature = data.current.temperature_2m;
+                const unit = data.current_units.temperature_2m;
+                
+                // Display weather on page
+                document.getElementById('weatherInfo').innerHTML = 
+                    `<h3>Current Weather</h3>
+                     <p><strong>Temperature:</strong> ${temperature}${unit}</p>
+                     <p><strong>Location:</strong> New York City</p>`;
+                
+                // Also log to console
+                console.log("Weather data:", data);
+                console.log("Temperature:", temperature + unit);
+                
+            } catch (error) {
+                console.error("Error fetching weather:", error);
+                document.getElementById('weatherInfo').innerHTML = 
+                    "<p style='color: red;'>Error loading weather data. Please try again.</p>";
+            }
+        }
+        
+        // 6. Run test function automatically when page loads
+        console.log("Page loaded! Try typing 'testFunction()' or 'getWeather()' in the console");
+    </script>
+</body>
+</html>
