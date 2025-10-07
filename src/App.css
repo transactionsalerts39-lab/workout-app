@@ -1,0 +1,24 @@
+main {
+  position: relative;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  animation: confettiPop 680ms ease-out forwards;
+  transform-origin: center;
+}
+
+@keyframes confettiPop {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(0.6) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--tw-confetti-x, 0%), var(--tw-confetti-y, 120%), 0) scale(0.6)
+      rotate(45deg);
+  }
+}

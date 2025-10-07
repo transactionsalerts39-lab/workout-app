@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: theme('colors.slate.100');
+    color: theme('colors.slate.950');
+  }
+
+  body {
+    @apply m-0 min-h-screen bg-slate-100;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  button {
+    font: inherit;
+  }
+}
