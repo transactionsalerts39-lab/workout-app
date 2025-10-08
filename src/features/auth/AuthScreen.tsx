@@ -1,6 +1,10 @@
 import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import { useAuthContext } from '../../context/AuthContext'
+import { Button } from '../../components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card'
+import { Input } from '../../components/ui/input'
+import { Label } from '../../components/ui/label'
 
 interface FormState {
   username: string
@@ -60,85 +64,91 @@ export function AuthScreen() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-12">
-      <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-card">
-        <header className="mb-6 flex flex-col gap-2 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">{title}</h1>
+      <Card className="w-full max-w-md p-8">
+        <CardHeader className="mb-6 space-y-2 text-center">
+          <CardTitle className="text-2xl">{title}</CardTitle>
           <p className="text-sm text-slate-500">
             {mode === 'login'
               ? 'Log in to pick up where you left off.'
               : 'Track your training progress alongside the coach plan.'}
           </p>
-        </header>
+        </CardHeader>
 
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <label className="text-sm font-medium text-slate-700">
-            Username
-            <input
-              type="text"
-              name="username"
-              autoComplete="username"
-              required
-              value={form.username}
-              onChange={(event) => setForm((prev) => ({ ...prev, username: event.target.value }))}
-              className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-              disabled={pending || isLoading}
-            />
-          </label>
-
-          {mode === 'signup' && (
-            <label className="text-sm font-medium text-slate-700">
-              Display name
-              <input
+        <CardContent>
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="auth-username" className="text-sm font-medium text-slate-700">
+                Username
+              </Label>
+              <Input
+                id="auth-username"
                 type="text"
-                name="displayName"
-                value={form.displayName}
-                onChange={(event) => setForm((prev) => ({ ...prev, displayName: event.target.value }))}
-                className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-                disabled={pending || isLoading}
-              />
-            </label>
-          )}
-
-          <label className="text-sm font-medium text-slate-700">
-            Password
-            <input
-              type="password"
-              name="password"
-              autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-              required
-              value={form.password}
-              onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))}
-              className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-              disabled={pending || isLoading}
-            />
-          </label>
-
-          {mode === 'signup' && (
-            <label className="text-sm font-medium text-slate-700">
-              Confirm password
-              <input
-                type="password"
-                name="confirmPassword"
-                autoComplete="new-password"
+                name="username"
+                autoComplete="username"
                 required
-                value={form.confirmPassword}
-                onChange={(event) => setForm((prev) => ({ ...prev, confirmPassword: event.target.value }))}
-                className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+                value={form.username}
+                onChange={(event) => setForm((prev) => ({ ...prev, username: event.target.value }))}
                 disabled={pending || isLoading}
               />
-            </label>
-          )}
+            </div>
 
-          {error ? <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p> : null}
+            {mode === 'signup' ? (
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="auth-display" className="text-sm font-medium text-slate-700">
+                  Display name
+                </Label>
+                <Input
+                  id="auth-display"
+                  type="text"
+                  name="displayName"
+                  value={form.displayName}
+                  onChange={(event) => setForm((prev) => ({ ...prev, displayName: event.target.value }))}
+                  disabled={pending || isLoading}
+                />
+              </div>
+            ) : null}
 
-          <button
-            type="submit"
-            className="mt-2 w-full rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300"
-            disabled={pending || isLoading}
-          >
-            {pending ? 'Working…' : submitLabel}
-          </button>
-        </form>
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="auth-password" className="text-sm font-medium text-slate-700">
+                Password
+              </Label>
+              <Input
+                id="auth-password"
+                type="password"
+                name="password"
+                autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+                required
+                value={form.password}
+                onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))}
+                disabled={pending || isLoading}
+              />
+            </div>
+
+            {mode === 'signup' ? (
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="auth-confirm" className="text-sm font-medium text-slate-700">
+                  Confirm password
+                </Label>
+                <Input
+                  id="auth-confirm"
+                  type="password"
+                  name="confirmPassword"
+                  autoComplete="new-password"
+                  required
+                  value={form.confirmPassword}
+                  onChange={(event) => setForm((prev) => ({ ...prev, confirmPassword: event.target.value }))}
+                  disabled={pending || isLoading}
+                />
+              </div>
+            ) : null}
+
+            {error ? <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p> : null}
+
+            <Button type="submit" className="mt-2" disabled={pending || isLoading}>
+              {pending ? 'Working…' : submitLabel}
+            </Button>
+          </form>
+        </CardContent>
 
         <footer className="mt-6 flex flex-col gap-3 text-center text-xs text-slate-500">
           <p>
@@ -176,7 +186,7 @@ export function AuthScreen() {
             <p>Admin account: username <span className="font-semibold">admin</span> / password <span className="font-semibold">admin123</span></p>
           ) : null}
         </footer>
-      </div>
+      </Card>
     </div>
   )
 }

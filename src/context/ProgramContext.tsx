@@ -12,6 +12,7 @@ import type {
   ChallengeProgram,
   ClientCheckIn,
   ClientProfile,
+  ClientProfileSettings,
   Currency,
   PaymentRecord,
   PlanRenewalReminder,
@@ -67,6 +68,7 @@ interface ProgramContextValue {
   unlockChallenge: (clientId: string, challengeId: string) => boolean
   recordPayment: (input: RecordPaymentInput) => void
   findClientByUserId: (userId: string) => ClientProfile | undefined
+  updateClientSettings: (clientId: string, settings: ClientProfileSettings) => void
 }
 
 const ProgramContext = createContext<ProgramContextValue | undefined>(undefined)
@@ -85,6 +87,7 @@ function cloneClientProfile(profile: ClientProfile): ClientProfile {
     checkIns: profile.checkIns.map((checkIn) => ({ ...checkIn, attachments: [...checkIn.attachments] })),
     progressPhotos: profile.progressPhotos.map((photo) => ({ ...photo })),
     payments: profile.payments.map((payment) => ({ ...payment })),
+    profileSettings: profile.profileSettings ? { ...profile.profileSettings } : undefined,
   }
 }
 
@@ -188,6 +191,9 @@ function defaultClientForUser(userId: string, displayName: string): ClientProfil
     progressPhotos: [],
     payments: [],
     lastCheckInAt: undefined,
+    profileSettings: {
+      preferredName: displayName,
+    },
   }
 }
 
@@ -370,6 +376,21 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
     )
   }
 
+  const updateClientSettings = (clientId: string, settings: ClientProfileSettings) => {
+    setClients((previous) =>
+      previous.map((client) => {
+        if (client.id !== clientId) return client
+        return {
+          ...client,
+          profileSettings: {
+            ...(client.profileSettings ?? {}),
+            ...settings,
+          },
+        }
+      }),
+    )
+  }
+
   const recordPayment = (input: RecordPaymentInput) => {
     setClients((previous) =>
       previous.map((client) => {
@@ -446,6 +467,7 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
     addProgressPhoto,
     toggleAutoRenew,
     extendSubscription,
+    updateClientSettings,
     unlockChallenge,
     recordPayment,
     findClientByUserId: (userId: string) => clients.find((client) => client.userId === userId),

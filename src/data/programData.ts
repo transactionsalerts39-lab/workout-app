@@ -678,6 +678,13 @@ export const fallbackClients: ClientProfile[] = [
       }),
     ],
     lastCheckInAt: daysFromNow(-3),
+    profileSettings: {
+      preferredName: 'Maya',
+      birthDate: '1993-07-18',
+      age: 31,
+      healthNotes: 'Hip mobility warm-up required before long runs.',
+      emergencyContact: 'Arjun Chen · +91 90000 00000',
+    },
   },
   {
     id: 'client_jordan',
@@ -756,6 +763,13 @@ export const fallbackClients: ClientProfile[] = [
       }),
     ],
     lastCheckInAt: daysFromNow(-6),
+    profileSettings: {
+      preferredName: 'Jordi',
+      birthDate: '1990-02-11',
+      age: 34,
+      healthNotes: 'Monitor lower-back fatigue; limit axial loading on week 3.',
+      emergencyContact: 'Priya Lee · +91 94444 44444',
+    },
   },
 ]
 

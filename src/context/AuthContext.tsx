@@ -185,8 +185,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const channel = supabaseClient
       .channel('app_users_changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'app_users' }, (payload: RealtimePostgresChangesPayload<SupabaseUserRow>) => {
-        const newRow = payload.new ? mapSupabaseUser(payload.new) : null
-        const oldRowId = payload.old?.id ?? null
+        const newRow = payload.new && 'id' in payload.new ? mapSupabaseUser(payload.new as SupabaseUserRow) : null
+        const oldRowId = payload.old && 'id' in payload.old ? (payload.old.id as string) : null
 
         setUsers((previous) => {
           switch (payload.eventType) {

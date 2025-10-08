@@ -244,8 +244,8 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     const channel = supabaseClient
       .channel('session_progress_changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'session_progress' }, (payload: RealtimePostgresChangesPayload<SessionProgressRow>) => {
-        const newRow = payload.new ?? null
-        const oldRow = payload.old ?? null
+        const newRow = payload.new && 'user_id' in payload.new ? (payload.new as SessionProgressRow) : null
+        const oldRow = payload.old && 'user_id' in payload.old ? (payload.old as SessionProgressRow) : null
 
         setRecords((previous) => {
           if (payload.eventType === 'DELETE' && oldRow) {

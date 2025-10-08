@@ -7,6 +7,7 @@ import { AuthScreen } from './features/auth/AuthScreen'
 import { AdminDashboard } from './features/admin/AdminDashboard'
 import { UserDashboard } from './features/dashboard/UserDashboard'
 import { WorkoutSessionView } from './features/workout/WorkoutSessionView'
+import { Button } from './components/ui/button'
 import './App.css'
 
 interface ViewState {
@@ -70,39 +71,27 @@ function AppShell() {
             <div className="flex items-center gap-3">
               <span className="text-lg font-semibold text-slate-900">Coach Plan</span>
               <nav className="flex gap-2 text-sm">
-                <button
-                  type="button"
+                <Button
+                  size="sm"
+                  variant={view.screen === 'dashboard' ? 'default' : 'secondary'}
                   onClick={() => setView((prev) => ({ ...prev, screen: 'dashboard' }))}
-                  className={`rounded-full px-3 py-1 transition ${
-                    view.screen === 'dashboard'
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600'
-                  }`}
                 >
                   My dashboard
-                </button>
+                </Button>
                 {hasAdminAccess ? (
-                  <button
-                    type="button"
+                  <Button
+                    size="sm"
+                    variant={view.screen === 'admin' ? 'default' : 'secondary'}
                     onClick={() => setView((prev) => ({ ...prev, screen: 'admin' }))}
-                    className={`rounded-full px-3 py-1 transition ${
-                      view.screen === 'admin'
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600'
-                    }`}
                   >
                     Admin
-                  </button>
+                  </Button>
                 ) : null}
               </nav>
             </div>
-            <button
-              type="button"
-              onClick={logout}
-              className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600"
-            >
+            <Button size="sm" variant="outline" onClick={logout}>
               Log out
-            </button>
+            </Button>
           </div>
         </header>
 

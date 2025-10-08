@@ -66,6 +66,14 @@ export interface SubscriptionProduct {
   includesChallengeAccess: boolean
 }
 
+export interface ClientProfileSettings {
+  preferredName?: string
+  birthDate?: string
+  age?: number
+  healthNotes?: string
+  emergencyContact?: string
+}
+
 export interface ClientCheckIn {
   id: string
   clientId: string
@@ -134,6 +142,7 @@ export interface ClientProfile {
   progressPhotos: ProgressPhoto[]
   payments: PaymentRecord[]
   lastCheckInAt?: string
+  profileSettings?: ClientProfileSettings
 }
 
 export interface RevenueSnapshot {
