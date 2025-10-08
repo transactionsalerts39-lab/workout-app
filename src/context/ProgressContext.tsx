@@ -35,6 +35,18 @@ interface ProgressContextValue {
 
 const ProgressContext = createContext<ProgressContextValue | undefined>(undefined)
 
+type SessionProgressRow = {
+  user_id: string
+  week_index: number
+  session_id: string
+  exercise_id: string
+  completed_sets: number
+  total_sets: number
+  set_entries: string[] | null
+  notes: string | null
+  last_updated_at: string | null
+}
+
 function cloneOrCreateUserRecord(
   record: UserProgressRecord | undefined,
   userId: string,
@@ -117,7 +129,7 @@ function collectSummaries(records: Record<string, UserProgressRecord>, weeks: We
   })
 }
 
-function buildRemoteRecords(rows: any[], userLookup: Map<string, StoredUser>): Record<string, UserProgressRecord> {
+function buildRemoteRecords(rows: SessionProgressRow[], userLookup: Map<string, StoredUser>): Record<string, UserProgressRecord> {
   const result = new Map<string, UserProgressRecord>()
 
   rows.forEach((row) => {
@@ -144,7 +156,7 @@ function buildRemoteRecords(rows: any[], userLookup: Map<string, StoredUser>): R
   return Object.fromEntries(result.entries())
 }
 
-function rowToSessionProgress(row: any): SessionProgress {
+function rowToSessionProgress(row: SessionProgressRow): SessionProgress {
   return {
     completedSets: row.completed_sets,
     totalSets: row.total_sets,
@@ -231,9 +243,9 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
     const channel = supabaseClient
       .channel('session_progress_changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'session_progress' }, (payload: RealtimePostgresChangesPayload<any>) => {
-        const newRow = (payload.new as any) ?? null
-        const oldRow = (payload.old as any) ?? null
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'session_progress' }, (payload: RealtimePostgresChangesPayload<SessionProgressRow>) => {
+        const newRow = payload.new ?? null
+        const oldRow = payload.old ?? null
 
         setRecords((previous) => {
           if (payload.eventType === 'DELETE' && oldRow) {
@@ -484,6 +496,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useProgressContext(): ProgressContextValue {
   const ctx = useContext(ProgressContext)
   if (!ctx) {

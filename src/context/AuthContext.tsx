@@ -28,7 +28,17 @@ function generateLocalId(): string {
   return `user-${Math.random().toString(36).slice(2, 10)}`
 }
 
-function mapSupabaseUser(row: any): StoredUser {
+type SupabaseUserRow = {
+  id: string
+  username: string
+  display_name: string
+  password_hash: string
+  salt: string
+  is_admin: boolean
+  created_at: string
+}
+
+function mapSupabaseUser(row: SupabaseUserRow): StoredUser {
   return {
     id: row.id,
     username: row.username,
@@ -174,9 +184,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const channel = supabaseClient
       .channel('app_users_changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'app_users' }, (payload: RealtimePostgresChangesPayload<any>) => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'app_users' }, (payload: RealtimePostgresChangesPayload<SupabaseUserRow>) => {
         const newRow = payload.new ? mapSupabaseUser(payload.new) : null
-        const oldRowId = (payload.old as { id?: string } | null)?.id ?? null
+        const oldRowId = payload.old?.id ?? null
 
         setUsers((previous) => {
           switch (payload.eventType) {
@@ -298,6 +308,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuthContext(): AuthContextValue {
   const ctx = useContext(AuthContext)
   if (!ctx) {

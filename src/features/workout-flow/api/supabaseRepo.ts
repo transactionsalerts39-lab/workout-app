@@ -239,18 +239,62 @@ export function createSupabaseRepo(options: SupabaseRepoOptions) {
   }
 }
 
-function mapProgramDay(row: any): ProgramDay {
+type ProgramExerciseRow = {
+  id: string
+  name: string
+  order: number
+  target_rep_min: number
+  target_rep_max: number
+  prescribed_sets: number
+}
+
+type ProgramDayRow = {
+  id: string
+  week: number
+  date_iso: string
+  program_exercises?: ProgramExerciseRow[] | null
+}
+
+type SetLogRow = {
+  id: string
+  program_exercise_id: string
+  exercise_log_id: string
+  set_index: number
+  reps: number
+  weight: number | null
+  comment: string | null
+  exceeded_range?: boolean | null
+  created_at: string
+}
+
+type ExerciseLogRow = {
+  id: string
+  program_day_id: string
+  program_exercise_id: string
+  completed_sets: number
+  all_sets_complete: boolean
+  points_earned: number
+  created_at: string
+  updated_at: string
+  left_exercise_view_at: string | null
+}
+
+type ExerciseLogResultRow = ExerciseLogRow & {
+  set_logs?: SetLogRow[] | null
+}
+
+function mapProgramDay(row: ProgramDayRow): ProgramDay {
   return {
     id: row.id,
     week: row.week,
     dateISO: row.date_iso,
     exercises: (row.program_exercises ?? [])
-      .map((exercise: any) => mapProgramExercise(exercise))
+      .map((exercise) => mapProgramExercise(exercise))
       .sort((a: ProgramExercise, b: ProgramExercise) => a.order - b.order),
   }
 }
 
-function mapProgramExercise(row: any): ProgramExercise {
+function mapProgramExercise(row: ProgramExerciseRow): ProgramExercise {
   return {
     id: row.id,
     name: row.name,
@@ -261,7 +305,7 @@ function mapProgramExercise(row: any): ProgramExercise {
   }
 }
 
-function mapSetLog(row: any): SetLog {
+function mapSetLog(row: SetLogRow): SetLog {
   return {
     id: row.id,
     programExerciseId: row.program_exercise_id,
@@ -275,7 +319,7 @@ function mapSetLog(row: any): SetLog {
   }
 }
 
-function mapExerciseLog(row: any): ExerciseLog {
+function mapExerciseLog(row: ExerciseLogRow): ExerciseLog {
   return {
     id: row.id,
     programDayId: row.program_day_id,
@@ -289,9 +333,9 @@ function mapExerciseLog(row: any): ExerciseLog {
   }
 }
 
-function mapExerciseLogResult(row: any): ExerciseLogResult {
+function mapExerciseLogResult(row: ExerciseLogResultRow): ExerciseLogResult {
   return {
     exerciseLog: mapExerciseLog(row),
-    setLogs: (row.set_logs ?? []).map((setLog: any) => mapSetLog(setLog)).sort((a: SetLog, b: SetLog) => a.setIndex - b.setIndex),
+    setLogs: (row.set_logs ?? []).map((setLog) => mapSetLog(setLog)).sort((a: SetLog, b: SetLog) => a.setIndex - b.setIndex),
   }
 }

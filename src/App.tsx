@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { AuthProvider, useAuthContext } from './context/AuthContext'
 import { PlanProvider, usePlanContext } from './context/PlanContext'
 import { ProgressProvider } from './context/ProgressContext'
+import { ProgramProvider } from './context/ProgramContext'
 import { AuthScreen } from './features/auth/AuthScreen'
 import { AdminDashboard } from './features/admin/AdminDashboard'
 import { UserDashboard } from './features/dashboard/UserDashboard'
@@ -121,7 +122,7 @@ function AppShell() {
         </main>
       </div>
     )
-  }, [activeSessionId, hasAdminAccess, isLoading, logout, user, view, weeks])
+  }, [activeSessionId, hasAdminAccess, isLoading, logout, user, view])
 
   return content
 }
@@ -130,7 +131,9 @@ function Providers({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
       <PlanProvider>
-        <ProgressProvider>{children}</ProgressProvider>
+        <ProgramProvider>
+          <ProgressProvider>{children}</ProgressProvider>
+        </ProgramProvider>
       </PlanProvider>
     </AuthProvider>
   )

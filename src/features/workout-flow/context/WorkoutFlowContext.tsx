@@ -154,6 +154,7 @@ export function WorkoutFlowProvider({ dateISO, children }: PropsWithChildren<Wor
   return <WorkoutFlowContext.Provider value={value}>{children}</WorkoutFlowContext.Provider>
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useWorkoutFlowContext(): WorkoutFlowContextValue {
   const ctx = useContext(WorkoutFlowContext)
   if (!ctx) {

@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAuthContext } from '../../context/AuthContext'
+import { useProgressContext } from '../../context/ProgressContext'
+import { useProgramContext } from '../../context/ProgramContext'
+import type { Currency, TemplateExerciseSlot, WorkoutTemplate } from '../../types/program'
 
 interface ExerciseDefinition {
   id: string
@@ -13,6 +16,7 @@ interface ExerciseDefinition {
 interface SelectedExercise extends ExerciseDefinition {
   week: number
   day: number
+  templateSlotId?: string
 }
 
 interface AthleteProfile {
@@ -97,6 +101,22 @@ const EXERCISE_LIBRARY: ExerciseDefinition[] = Array.from({ length: 300 }).map((
   }
 })
 
+const TEMPLATE_PATTERN_LABEL: Record<TemplateExerciseSlot['pattern'], string> = {
+  compound: 'Compound Strength',
+  accessory: 'Accessory Focus',
+  power: 'Power Output',
+  isolation: 'Isolation',
+  conditioning: 'Conditioning',
+}
+
+const TEMPLATE_INTENSITY_LABEL: Record<TemplateExerciseSlot['pattern'], string> = {
+  compound: 'Heavy',
+  accessory: 'Moderate',
+  power: 'Power',
+  isolation: 'Tempo',
+  conditioning: 'Conditioning',
+}
+
 const FOCUS_OPTIONS = Array.from(new Set(EXERCISE_LIBRARY.map((exercise) => exercise.focus))).sort()
 const EQUIPMENT_OPTIONS = Array.from(new Set(EXERCISE_LIBRARY.map((exercise) => exercise.equipment))).sort()
 
@@ -159,8 +179,58 @@ function generateId(prefix: string) {
   return `${prefix}_${Math.random().toString(36).slice(2, 10)}`
 }
 
+function computeAllowedTemplateAdjustments(template: WorkoutTemplate): number {
+  const totalSlots = template.days.reduce((sum, day) => sum + day.slots.length, 0)
+  const allowance = Math.floor((template.adjustmentsAllowedPercent / 100) * totalSlots)
+  return Math.max(1, allowance)
+}
+
+function buildTemplateLookup(template?: WorkoutTemplate) {
+  const slotLookup = new Map<string, TemplateExerciseSlot>()
+  if (!template) return slotLookup
+  template.days.forEach((day) => {
+    day.slots.forEach((slot) => {
+      slotLookup.set(slot.slotId, slot)
+    })
+  })
+  return slotLookup
+}
+
+function countTemplateAdjustments(exercises: SelectedExercise[], templateLookup: Map<string, TemplateExerciseSlot>): number {
+  return exercises.reduce((count, exercise) => {
+    if (!exercise.templateSlotId) return count
+    const slot = templateLookup.get(exercise.templateSlotId)
+    if (!slot) return count
+    return exercise.name !== slot.baseExercise ? count + 1 : count
+  }, 0)
+}
+
+function formatCurrency(amount: number, currency: Currency) {
+  return new Intl.NumberFormat(currency === 'INR' ? 'en-IN' : 'en-US', {
+    style: 'currency',
+    currency,
+    maximumFractionDigits: 0,
+  }).format(amount)
+}
+
 export function AdminDashboard() {
   const { user, users } = useAuthContext()
+  const {
+    strengthCategories: strengthCategoryDefs,
+    workoutTemplates,
+    challenges,
+    subscriptionProducts,
+    clients,
+    revenueSnapshot,
+    renewalReminders,
+    developmentCostSummary,
+    assignTemplate,
+    swapTemplateSlot,
+    toggleAutoRenew,
+    extendSubscription,
+    unlockChallenge,
+  } = useProgramContext()
+  const { summaries } = useProgressContext()
 
   const athletes = useMemo<AthleteProfile[]>(() => {
     const nonAdminUsers = users.filter((entry) => !entry.isAdmin)
@@ -178,11 +248,39 @@ export function AdminDashboard() {
     })
   }, [users])
 
+  const subscriptionProductLookup = useMemo(
+    () => new Map(subscriptionProducts.map((product) => [product.id, product])),
+    [subscriptionProducts],
+  )
+
+  const clientRoster = useMemo(
+    () =>
+      clients.map((client) => ({
+        client,
+        progress: summaries.find((summary) => summary.userId === client.userId) ?? null,
+        product: subscriptionProductLookup.get(client.subscription.productId) ?? null,
+      })),
+    [clients, subscriptionProductLookup, summaries],
+  )
+
+  const templateCountByCategory = useMemo(() => {
+    const map = new Map<string, number>()
+    workoutTemplates.forEach((template) => {
+      template.categoryBreakdown.forEach((category) => {
+        map.set(category, (map.get(category) ?? 0) + 1)
+      })
+    })
+    return map
+  }, [workoutTemplates])
+
+  const clientByUserId = useMemo(() => new Map(clients.map((client) => [client.userId, client])), [clients])
+
   const [exerciseQuery, setExerciseQuery] = useState('')
   const [focusFilter, setFocusFilter] = useState('')
   const [equipmentFilter, setEquipmentFilter] = useState('')
   const [visibleCount, setVisibleCount] = useState(60)
   const [selectedExercises, setSelectedExercises] = useState<SelectedExercise[]>([])
+  const [activeTemplateId, setActiveTemplateId] = useState('')
   const [selectedAthleteId, setSelectedAthleteId] = useState('')
   const [weekCount, setWeekCount] = useState(4)
   const [startDate, setStartDate] = useState(() => new Date().toISOString().split('T')[0])
@@ -191,6 +289,31 @@ export function AdminDashboard() {
   const [planHistory, setPlanHistory] = useState<PlanHistoryRecord[]>(FALLBACK_PLAN_HISTORY)
   const [notifications, setNotifications] = useState<NotificationRecord[]>(FALLBACK_NOTIFICATIONS)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
+
+  const activeTemplate = useMemo(
+    () => workoutTemplates.find((template) => template.id === activeTemplateId),
+    [activeTemplateId, workoutTemplates],
+  )
+
+  const templateSlotLookup = useMemo(() => buildTemplateLookup(activeTemplate), [activeTemplate])
+
+  const templateAdjustmentStats = useMemo(() => {
+    if (!activeTemplate) return null
+    const allowed = computeAllowedTemplateAdjustments(activeTemplate)
+    const used = countTemplateAdjustments(selectedExercises, templateSlotLookup)
+    return { allowed, used }
+  }, [activeTemplate, selectedExercises, templateSlotLookup])
+
+  const templateAdjustmentLimitLabel = useMemo(() => {
+    if (!activeTemplate) return null
+    const allowed = computeAllowedTemplateAdjustments(activeTemplate)
+    return `${allowed} slot${allowed === 1 ? '' : 's'} (${activeTemplate.adjustmentsAllowedPercent}% flex)`
+  }, [activeTemplate])
+
+  const selectedAthleteClient = useMemo(() => {
+    if (!selectedAthleteId) return null
+    return clientByUserId.get(selectedAthleteId) ?? null
+  }, [clientByUserId, selectedAthleteId])
 
   const filteredExercises = useMemo(() => {
     const query = exerciseQuery.trim().toLowerCase()
@@ -285,6 +408,65 @@ export function AdminDashboard() {
     )
   }
 
+  const handleLoadTemplate = (templateId: string) => {
+    if (selectedExercises.length > 0) {
+      const shouldReplace = typeof window === 'undefined' || window.confirm('Loading a template will replace your current exercises. Continue?')
+      if (!shouldReplace) {
+        return
+      }
+    }
+    const template = workoutTemplates.find((entry) => entry.id === templateId)
+    if (!template) return
+
+    const nextExercises: SelectedExercise[] = []
+    template.days.forEach((day, dayIndex) => {
+      day.slots.forEach((slot) => {
+        nextExercises.push({
+          id: `${template.id}_${slot.slotId}`,
+          name: slot.baseExercise,
+          focus: `${day.emphasis}`,
+          equipment: slot.equipment,
+          pattern: TEMPLATE_PATTERN_LABEL[slot.pattern],
+          intensity: TEMPLATE_INTENSITY_LABEL[slot.pattern],
+          week: 1,
+          day: Math.min(dayIndex + 1, 7),
+          templateSlotId: slot.slotId,
+        })
+      })
+    })
+
+    setSelectedExercises(nextExercises)
+    setActiveTemplateId(templateId)
+    setWeekCount(Math.min(Math.max(template.durationWeeks, 1), 24))
+    setPlanName(template.name)
+    setPlanNotes(template.notes.join('\n'))
+    const allowed = computeAllowedTemplateAdjustments(template)
+    setToastMessage(`${template.name} loaded. Adjust up to ${allowed} slots (${template.adjustmentsAllowedPercent}% flex).`)
+  }
+
+  const handleTemplateSlotChange = (slotId: string, nextExercise: string) => {
+    if (!activeTemplate) return
+
+    setSelectedExercises((previous) => {
+      const nextList = previous.map((exercise) =>
+        exercise.templateSlotId === slotId
+          ? {
+              ...exercise,
+              name: nextExercise,
+            }
+          : exercise,
+      )
+
+      const allowed = computeAllowedTemplateAdjustments(activeTemplate)
+      const adjustments = countTemplateAdjustments(nextList, templateSlotLookup)
+      if (adjustments > allowed) {
+        setToastMessage(`Template adjustments capped at ${allowed} (${activeTemplate.adjustmentsAllowedPercent}% limit).`)
+        return previous
+      }
+      return nextList
+    })
+  }
+
   const handleSubmitPlan = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const trimmedName = planName.trim()
@@ -308,8 +490,6 @@ export function AdminDashboard() {
       createdAt: Date.now(),
     }
 
-    setPlanHistory((previous) => [newPlan, ...previous])
-
     const newNotification: NotificationRecord = {
       id: generateId('notif'),
       athleteId: athlete.id,
@@ -319,9 +499,41 @@ export function AdminDashboard() {
       read: false,
     }
 
-    setNotifications((previous) => [newNotification, ...previous])
+    if (selectedAthleteClient && activeTemplateId && activeTemplate) {
+      const previousTemplateId = selectedAthleteClient.assignedTemplateId
+      const previousAdjustments = [...selectedAthleteClient.templateAdjustments]
+      try {
+        assignTemplate(selectedAthleteClient.id, activeTemplateId)
+        for (const exercise of selectedExercises) {
+          if (!exercise.templateSlotId) continue
+          const templateDay = activeTemplate.days.find((day) => day.slots.some((slot) => slot.slotId === exercise.templateSlotId))
+          const templateSlot = templateDay?.slots.find((slot) => slot.slotId === exercise.templateSlotId)
+          if (!templateDay || !templateSlot) continue
+          if (exercise.name === templateSlot.baseExercise) continue
+          const swapApplied = swapTemplateSlot(selectedAthleteClient.id, activeTemplateId, templateDay.dayId, templateSlot.slotId, exercise.name)
+          if (!swapApplied) {
+            throw new Error('Template adjustment limit reached while assigning exercises.')
+          }
+        }
+      } catch (error) {
+        console.error('Failed to assign template adjustments', error)
+        if (previousTemplateId) {
+          assignTemplate(selectedAthleteClient.id, previousTemplateId)
+          previousAdjustments.forEach((adjustment) => {
+            swapTemplateSlot(selectedAthleteClient.id, previousTemplateId, adjustment.dayId, adjustment.slotId, adjustment.replacementExercise)
+          })
+        } else {
+          assignTemplate(selectedAthleteClient.id, '')
+        }
+        setToastMessage('Unable to assign the template. No changes were applied.')
+        return
+      }
+    }
 
+    setPlanHistory((previous) => [newPlan, ...previous])
+    setNotifications((previous) => [newNotification, ...previous])
     setToastMessage(`${trimmedName} shared with ${athlete.name}`)
+
     setSelectedExercises([])
     setSelectedAthleteId('')
     setPlanName('')
@@ -471,12 +683,304 @@ export function AdminDashboard() {
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
+          <header className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">Workout categorisation</h2>
+              <p className="text-xs text-slate-500">Strength templates grouped by push, pull, legs, upper, and custom programmes.</p>
+            </div>
+          </header>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {strengthCategoryDefs.map((category) => {
+              const templateCount = templateCountByCategory.get(category.slug) ?? templateCountByCategory.get(category.id) ?? 0
+              return (
+                <article key={category.id} className="space-y-3 rounded-2xl border border-slate-200 px-4 py-4 text-sm shadow-sm">
+                  <header className="flex items-center justify-between gap-2">
+                    <h3 className="text-base font-semibold text-slate-900">{category.label}</h3>
+                    <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-600">
+                      {templateCount} template{templateCount === 1 ? '' : 's'}
+                    </span>
+                  </header>
+                  <p className="text-slate-600">{category.description}</p>
+                  <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
+                    {category.highlights.map((highlight) => (
+                      <span key={highlight} className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">
+                        {highlight}
+                      </span>
+                    ))}
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Sample splits</p>
+                    <ul className="mt-1 space-y-1 text-xs text-slate-600">
+                      {category.sampleSplits.map((split) => (
+                        <li key={split}>• {split}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <p className="text-[11px] text-slate-500">Best for: {category.recommendedUse}</p>
+                </article>
+              )
+            })}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
+          <header className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">Preset challenges</h2>
+              <p className="text-xs text-slate-500">8–12 week programmes that clients unlock via subscription upgrades.</p>
+            </div>
+            <p className="text-xs font-semibold text-indigo-600">Select an athlete above to assign a challenge.</p>
+          </header>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {challenges.map((challenge) => {
+              const requiredProduct = challenge.requiredSubscriptionProductId
+                ? subscriptionProductLookup.get(challenge.requiredSubscriptionProductId)
+                : null
+              const selectedClientEligible =
+                selectedAthleteClient &&
+                (!requiredProduct || selectedAthleteClient.subscription.productId === requiredProduct.id)
+              const alreadyActive = selectedAthleteClient?.activeChallengeId === challenge.id
+              return (
+                <article key={challenge.id} className="flex flex-col justify-between rounded-2xl border border-slate-200 px-4 py-4 text-sm shadow-sm">
+                  <div className="space-y-3">
+                    <header className="flex items-center justify-between">
+                      <h3 className="text-base font-semibold text-slate-900">{challenge.name}</h3>
+                      <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-600">{challenge.durationWeeks} week{challenge.durationWeeks === 1 ? '' : 's'}</span>
+                    </header>
+                    <p className="text-slate-600">{challenge.summary}</p>
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Primary outcomes</p>
+                      <ul className="mt-1 space-y-1 text-xs text-slate-600">
+                        {challenge.outcomes.map((outcome) => (
+                          <li key={outcome}>• {outcome}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <p className="text-xs font-semibold text-slate-700">
+                      Unlock: {formatCurrency(challenge.unlockCost, challenge.currency)} · Level {challenge.difficulty}
+                    </p>
+                    {requiredProduct ? (
+                      <p className="text-[11px] text-slate-500">Requires {requiredProduct.name}</p>
+                    ) : (
+                      <p className="text-[11px] text-slate-500">Available with any active subscription</p>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    className="mt-4 rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-2 text-xs font-semibold text-indigo-600 transition hover:bg-indigo-100 disabled:cursor-not-allowed disabled:text-slate-400"
+                    disabled={!selectedClientEligible || alreadyActive}
+                    onClick={() => {
+                      if (!selectedAthleteClient) {
+                        setToastMessage('Select an athlete to assign a challenge.')
+                        return
+                      }
+                      const success = unlockChallenge(selectedAthleteClient.id, challenge.id)
+                      setToastMessage(
+                        success
+                          ? `${challenge.name} unlocked for ${selectedAthleteClient.name}`
+                          : 'Subscription tier upgrade required before unlocking this challenge.',
+                      )
+                    }}
+                  >
+                    {alreadyActive ? 'Already assigned' : selectedClientEligible ? 'Assign to athlete' : 'Upgrade subscription first'}
+                  </button>
+                </article>
+              )
+            })}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
+          <header className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">Client roster & progress</h2>
+              <p className="text-xs text-slate-500">Monitor assigned plans, completion rates, renewals, and subscription health.</p>
+            </div>
+            <p className="text-xs text-slate-500">Renewals next 14 days: {revenueSnapshot.upcomingRenewals}</p>
+          </header>
+          <div className="mt-6 space-y-4">
+            {clientRoster.map(({ client, progress, product }) => {
+              const completionPercent = progress?.completionPercent ?? (client.totalSessions ? Math.round((client.completedSessions / client.totalSessions) * 100) : 0)
+              const renewDate = new Date(client.subscription.renewsOn).toLocaleDateString()
+              return (
+                <article key={client.id} className="rounded-2xl border border-slate-200 p-4 shadow-sm">
+                  <header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <h3 className="text-base font-semibold text-slate-900">{client.name}</h3>
+                      <p className="text-xs text-slate-500">Goal: {client.goal}</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
+                      <span className="rounded-full bg-indigo-100 px-3 py-1 text-indigo-600">{product?.name ?? 'Custom plan'}</span>
+                      <span className={`rounded-full px-3 py-1 text-white ${client.subscription.status === 'active' ? 'bg-emerald-500' : client.subscription.status === 'grace' ? 'bg-amber-500' : 'bg-slate-400'}`}>
+                        {client.subscription.status.toUpperCase()}
+                      </span>
+                      {client.activeChallengeId ? (
+                        <span className="rounded-full bg-violet-100 px-3 py-1 text-violet-700">Challenge active</span>
+                      ) : null}
+                    </div>
+                  </header>
+                  <div className="mt-4 grid gap-4 md:grid-cols-4">
+                    <div>
+                      <p className="text-[11px] uppercase tracking-wide text-slate-500">Completion</p>
+                      <div className="mt-2 h-2 rounded-full bg-slate-200">
+                        <div className="h-2 rounded-full bg-indigo-500" style={{ width: `${completionPercent}%` }} />
+                      </div>
+                      <p className="mt-1 text-xs text-slate-600">{completionPercent}% · {progress?.completedSessions ?? client.completedSessions}/{progress?.totalSessions ?? client.totalSessions} sessions</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] uppercase tracking-wide text-slate-500">Next renewal</p>
+                      <p className="mt-2 text-sm font-semibold text-slate-800">{renewDate}</p>
+                      <button
+                        type="button"
+                        onClick={() => extendSubscription(client.id, 3)}
+                        className="mt-2 rounded-full border border-slate-200 px-3 py-1 text-[11px] font-semibold text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600"
+                      >
+                        Extend 3 months
+                      </button>
+                    </div>
+                    <div>
+                      <p className="text-[11px] uppercase tracking-wide text-slate-500">Auto-renew</p>
+                      <p className="mt-2 text-sm font-semibold text-slate-800">{client.subscription.autoRenew ? 'Enabled' : 'Disabled'}</p>
+                      <button
+                        type="button"
+                        onClick={() => toggleAutoRenew(client.id)}
+                        className="mt-2 rounded-full border border-slate-200 px-3 py-1 text-[11px] font-semibold text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600"
+                      >
+                        Toggle
+                      </button>
+                    </div>
+                    <div>
+                      <p className="text-[11px] uppercase tracking-wide text-slate-500">Template in use</p>
+                      <p className="mt-2 text-sm font-semibold text-slate-800">
+                        {client.assignedTemplateId ? workoutTemplates.find((template) => template.id === client.assignedTemplateId)?.name ?? 'Custom build' : 'Custom build'}
+                      </p>
+                      <p className="mt-1 text-[11px] text-slate-500">Adjustments: {client.templateAdjustments.length}</p>
+                    </div>
+                  </div>
+                </article>
+              )
+            })}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
+          <header className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">Monetisation & subscriptions</h2>
+              <p className="text-xs text-slate-500">Track revenue, plan renewals, and product pricing.</p>
+            </div>
+          </header>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <article className="rounded-2xl border border-slate-200 bg-slate-900/5 p-4">
+              <p className="text-[11px] uppercase tracking-wide text-slate-500">Monthly recurring revenue</p>
+              <p className="mt-2 text-xl font-semibold text-slate-900">{formatCurrency(revenueSnapshot.monthlyRecurringRevenue, 'INR')}</p>
+            </article>
+            <article className="rounded-2xl border border-slate-200 bg-slate-900/5 p-4">
+              <p className="text-[11px] uppercase tracking-wide text-slate-500">Collected this month</p>
+              <p className="mt-2 text-xl font-semibold text-slate-900">{formatCurrency(revenueSnapshot.totalCollectedThisMonth, 'INR')}</p>
+            </article>
+            <article className="rounded-2xl border border-slate-200 bg-slate-900/5 p-4">
+              <p className="text-[11px] uppercase tracking-wide text-slate-500">Active subscriptions</p>
+              <p className="mt-2 text-xl font-semibold text-slate-900">{revenueSnapshot.activeSubscriptions}</p>
+            </article>
+            <article className="rounded-2xl border border-slate-200 bg-slate-900/5 p-4">
+              <p className="text-[11px] uppercase tracking-wide text-slate-500">Pending invoices</p>
+              <p className="mt-2 text-xl font-semibold text-slate-900">{revenueSnapshot.pendingInvoices}</p>
+            </article>
+          </div>
+          <div className="mt-6 grid gap-4 lg:grid-cols-[2fr_3fr]">
+            <div className="rounded-2xl border border-slate-200 p-4">
+              <h3 className="text-sm font-semibold text-slate-800">Upcoming renewals</h3>
+              <ul className="mt-3 space-y-2 text-xs text-slate-600">
+                {renewalReminders.map((reminder) => {
+                  const client = clients.find((entry) => entry.id === reminder.clientId)
+                  return (
+                    <li key={reminder.clientId} className="flex items-center justify-between">
+                      <span>{client?.name ?? reminder.clientId} · {reminder.billingPeriodLabel}</span>
+                      <time className="text-slate-500">{new Date(reminder.renewsOn).toLocaleDateString()}</time>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-slate-200 p-4">
+              <h3 className="text-sm font-semibold text-slate-800">Products & development costs</h3>
+              <div className="mt-3 grid gap-2 md:grid-cols-2">
+                {subscriptionProducts.map((product) => (
+                  <div key={product.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs">
+                    <p className="text-sm font-semibold text-slate-900">{product.name}</p>
+                    <p className="mt-1 text-slate-600">{product.description}</p>
+                    <p className="mt-2 font-semibold text-indigo-600">{formatCurrency(product.price, product.currency)} · {product.billingPeriod}</p>
+                    <p className="text-[11px] text-slate-500">Challenge access: {product.includesChallengeAccess ? 'Yes' : 'Add-on only'}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 rounded-xl bg-slate-100 p-3 text-xs text-slate-600">
+                <p className="font-semibold text-slate-800">Build + maintenance envelope</p>
+                <p>Setup: {formatCurrency(developmentCostSummary.setupCostINR, 'INR')} · Monthly upkeep {formatCurrency(developmentCostSummary.monthlyMaintenanceMinINR, 'INR')} - {formatCurrency(developmentCostSummary.monthlyMaintenanceMaxINR, 'INR')}</p>
+                <ul className="mt-2 space-y-1">
+                  {developmentCostSummary.notes.map((note) => (
+                    <li key={note}>• {note}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
           <header className="mb-6">
             <h2 className="text-lg font-semibold text-slate-900">Plan designer</h2>
             <p className="text-xs text-slate-500">
               Add exercises from the library, assign each to a training day, and share the full block with an athlete.
             </p>
           </header>
+
+          <div className="mb-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <h3 className="text-sm font-semibold text-slate-800">Template quick load</h3>
+                <p className="text-xs text-slate-500">
+                  Maintain split consistency while swapping up to {templateAdjustmentLimitLabel ?? '20% of slots'} for personalisation.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <select
+                  value={activeTemplateId}
+                  onChange={(event) => setActiveTemplateId(event.target.value)}
+                  className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                >
+                  <option value="">Select template</option>
+                  {workoutTemplates.map((template) => (
+                    <option key={template.id} value={template.id}>
+                      {template.name} · {template.durationWeeks} week
+                      {template.durationWeeks === 1 ? '' : 's'}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={() => activeTemplateId && handleLoadTemplate(activeTemplateId)}
+                  className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300"
+                  disabled={!activeTemplateId}
+                >
+                  Load template
+                </button>
+              </div>
+            </div>
+            {activeTemplate ? (
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl bg-white/70 p-3">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Split</p>
+                  <p className="mt-1 text-sm text-slate-700">{activeTemplate.splitName}</p>
+                </div>
+                <div className="rounded-xl bg-white/70 p-3">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Focus</p>
+                  <p className="mt-1 text-sm text-slate-700">{activeTemplate.categoryBreakdown.join(' · ')}</p>
+                </div>
+              </div>
+            ) : null}
+          </div>
 
           <form className="space-y-6" onSubmit={handleSubmitPlan}>
             <label className="flex flex-col gap-2 text-sm font-semibold text-slate-700">
@@ -550,6 +1054,11 @@ export function AdminDashboard() {
               <p className="text-xs text-slate-500">
                 Add exercises from the library, then assign each to a week and training day.
               </p>
+              {activeTemplate && templateAdjustmentStats ? (
+                <p className="mt-1 text-xs font-semibold text-indigo-600">
+                  Template adjustments used {templateAdjustmentStats.used}/{templateAdjustmentStats.allowed} · Flex window {activeTemplate.adjustmentsAllowedPercent}%
+                </p>
+              ) : null}
               {sortedSelectedExercises.length ? (
                 <div className="mt-3 space-y-3 overflow-y-auto pr-1" style={{ maxHeight: '18rem' }}>
                   {sortedSelectedExercises.map((exercise) => (
@@ -572,6 +1081,28 @@ export function AdminDashboard() {
                           Remove
                         </button>
                       </header>
+
+                      {exercise.templateSlotId && activeTemplate ? (
+                        <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
+                          Template slot adjustment
+                          <select
+                            value={exercise.name}
+                            onChange={(event) => handleTemplateSlotChange(exercise.templateSlotId!, event.target.value)}
+                            className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                          >
+                            {(() => {
+                              const slot = templateSlotLookup.get(exercise.templateSlotId!)
+                              if (!slot) return null
+                              const baseAndAlternatives = [slot.baseExercise, ...slot.suggestedAlternatives]
+                              return baseAndAlternatives.map((option) => (
+                                <option key={option} value={option}>
+                                  {option}
+                                </option>
+                              ))
+                            })()}
+                          </select>
+                        </label>
+                      ) : null}
 
                       <div className="grid gap-3 sm:grid-cols-2">
                         <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
