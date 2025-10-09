@@ -690,71 +690,91 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
               <p className="text-sm text-slate-500">Mark your workouts and dive into the session log.</p>
             </div>
           </CardHeader>
-          <CardContent className="flex flex-col gap-3">
+          <CardContent className="space-y-4">
             {activeWeek.sessions.length ? (
-              activeWeek.sessions.map((session) => {
-                const sessionProgress = weekProgress?.[session.sessionId]
-                const state = evaluateSessionState(session, sessionProgress)
-                const isCelebrating = celebrationState?.sessionId === session.sessionId
-                return (
-                  <div
-                    key={session.sessionId}
-                    className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition hover:border-indigo-200 hover:bg-indigo-50"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <div>
-                        <p className="text-sm font-semibold text-slate-900">{session.dayTitle}</p>
-                        <p className="text-xs text-slate-500">Focus: {session.focusLabel}</p>
-                      </div>
-                      <Badge variant={statusBadgeVariant(state)} className="capitalize">
-                        {state.replace('-', ' ')}
-                      </Badge>
-                    </div>
-                    <p className="mt-2 text-xs text-slate-500">
-                      {session.exercises.length} exercises ·{' '}
-                      {session.exercises.reduce((sum, exercise) => sum + exercise.prescribedSets, 0)} sets
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      <Button variant="outline" size="sm" onClick={() => onOpenSession(activeWeek.weekIndex, session.sessionId)}>
-                        Open session
-                      </Button>
-                      <Button
-                        variant="subtle"
-                        size="sm"
-                        onClick={() => handleCelebrateSession(session, state)}
-                        disabled={markingSessionId === session.sessionId}
-                      >
-                        {markingSessionId === session.sessionId ? 'Marking…' : 'Celebrate win'}
-                      </Button>
-                    </div>
-                    {isCelebrating && celebrationState ? (
-                      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                        {Array.from({ length: 18 }).map((_, index) => {
-                          const left = Math.random() * 100
-                          const top = Math.random() * 60
-                          const color = confettiPalette[index % confettiPalette.length]
-                          return (
-                            <span
-                              key={index}
-                              className="confetti-piece"
-                              style={{
-                                '--tw-confetti-x': `${Math.random() * 160 - 80}%`,
-                                '--tw-confetti-y': `${90 + Math.random() * 30}%`,
-                                left: `${left}%`,
-                                top: `${top}%`,
-                                backgroundColor: color,
-                              } as ConfettiStyle}
-                            />
-                          )
-                        })}
-                        <div className="absolute inset-x-0 top-5 text-center text-4xl drop-shadow-sm">
-                          {celebrationState.emoji}
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {activeWeek.sessions.map((session) => {
+                  const sessionProgress = weekProgress?.[session.sessionId]
+                  const state = evaluateSessionState(session, sessionProgress)
+                  const isCelebrating = celebrationState?.sessionId === session.sessionId
+                  const totalSets = session.exercises.reduce((sum, exercise) => sum + exercise.prescribedSets, 0)
+                  return (
+                    <article
+                      key={session.sessionId}
+                      className="relative flex min-h-[160px] flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-md"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-slate-900">{session.dayTitle}</p>
+                          <p className="text-xs text-slate-500">Focus · {session.focusLabel}</p>
                         </div>
+                        <Badge variant={statusBadgeVariant(state)} className="shrink-0 capitalize">
+                          {state.replace('-', ' ')}
+                        </Badge>
                       </div>
-                    ) : null}
-                  </div>
-                )
-              })
+                      <dl className="grid grid-cols-2 gap-2 text-[11px] text-slate-500">
+                        <div>
+                          <dt className="font-medium uppercase tracking-wide">Exercises</dt>
+                          <dd className="mt-0.5 text-sm font-semibold text-slate-900">{session.exercises.length}</dd>
+                        </div>
+                        <div>
+                          <dt className="font-medium uppercase tracking-wide">Sets</dt>
+                          <dd className="mt-0.5 text-sm font-semibold text-slate-900">{totalSets}</dd>
+                        </div>
+                        {session.plannedDate ? (
+                          <div className="col-span-2">
+                            <dt className="font-medium uppercase tracking-wide">Suggested date</dt>
+                            <dd className="mt-0.5 text-xs text-slate-600">{session.plannedDate}</dd>
+                          </div>
+                        ) : null}
+                      </dl>
+                      <div className="mt-auto flex flex-wrap gap-2">
+                        <Button
+                          className="flex-1"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => onOpenSession(activeWeek.weekIndex, session.sessionId)}
+                        >
+                          Open session
+                        </Button>
+                        <Button
+                          variant="subtle"
+                          size="sm"
+                          onClick={() => handleCelebrateSession(session, state)}
+                          disabled={markingSessionId === session.sessionId}
+                        >
+                          {markingSessionId === session.sessionId ? 'Marking…' : 'Celebrate win'}
+                        </Button>
+                      </div>
+                      {isCelebrating && celebrationState ? (
+                        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                          {Array.from({ length: 18 }).map((_, index) => {
+                            const left = Math.random() * 100
+                            const top = Math.random() * 60
+                            const color = confettiPalette[index % confettiPalette.length]
+                            return (
+                              <span
+                                key={index}
+                                className="confetti-piece"
+                                style={{
+                                  '--tw-confetti-x': `${Math.random() * 160 - 80}%`,
+                                  '--tw-confetti-y': `${90 + Math.random() * 30}%`,
+                                  left: `${left}%`,
+                                  top: `${top}%`,
+                                  backgroundColor: color,
+                                } as ConfettiStyle}
+                              />
+                            )
+                          })}
+                          <div className="absolute inset-x-0 top-5 text-center text-4xl drop-shadow-sm">
+                            {celebrationState.emoji}
+                          </div>
+                        </div>
+                      ) : null}
+                    </article>
+                  )
+                })}
+              </div>
             ) : (
               <p className="text-sm text-slate-500">No sessions scheduled for this week yet.</p>
             )}

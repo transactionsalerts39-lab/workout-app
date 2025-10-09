@@ -39,6 +39,14 @@ function AppShell() {
     }
   }, [user])
 
+  useEffect(() => {
+    if (!hasAdminAccess) return
+    setView((previous) => {
+      if (previous.screen === 'admin') return previous
+      return { ...previous, screen: 'admin' }
+    })
+  }, [hasAdminAccess])
+
   const content = useMemo(() => {
     if (isLoading) {
       return (
@@ -71,22 +79,19 @@ function AppShell() {
             <div className="flex items-center gap-3">
               <span className="text-lg font-semibold text-slate-900">Coach Plan</span>
               <nav className="flex gap-2 text-sm">
-                <Button
-                  size="sm"
-                  variant={view.screen === 'dashboard' ? 'default' : 'secondary'}
-                  onClick={() => setView((prev) => ({ ...prev, screen: 'dashboard' }))}
-                >
-                  My dashboard
-                </Button>
-                {hasAdminAccess ? (
+                {!hasAdminAccess ? (
                   <Button
                     size="sm"
-                    variant={view.screen === 'admin' ? 'default' : 'secondary'}
-                    onClick={() => setView((prev) => ({ ...prev, screen: 'admin' }))}
+                    variant={view.screen === 'dashboard' ? 'default' : 'secondary'}
+                    onClick={() => setView((prev) => ({ ...prev, screen: 'dashboard' }))}
                   >
-                    Admin
+                    My dashboard
                   </Button>
-                ) : null}
+                ) : (
+                  <span className="rounded-full bg-slate-900/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700">
+                    Admin
+                  </span>
+                )}
               </nav>
             </div>
             <Button size="sm" variant="outline" onClick={logout}>
@@ -96,7 +101,7 @@ function AppShell() {
         </header>
 
         <main className="mx-auto max-w-6xl px-4 py-10">
-          {view.screen === 'dashboard' ? (
+          {!hasAdminAccess ? (
             <UserDashboard
               weekIndex={view.weekIndex}
               onSelectWeek={(weekIndex) => setView((prev) => ({ ...prev, weekIndex }))}
