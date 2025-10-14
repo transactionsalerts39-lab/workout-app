@@ -110,7 +110,7 @@ export interface PaymentRecord {
 
 export interface SubscriptionStatus {
   productId: string
-  status: 'active' | 'grace' | 'cancelled'
+  status: 'active' | 'grace' | 'past_due' | 'cancelled'
   renewsOn: string
   autoRenew: boolean
 }

@@ -11,14 +11,13 @@ import { Button } from './components/ui/button'
 import './App.css'
 
 interface ViewState {
-  screen: 'dashboard' | 'admin'
   weekIndex: number
 }
 
 function AppShell() {
   const { user, isLoading, logout } = useAuthContext()
   const { weeks } = usePlanContext()
-  const [view, setView] = useState<ViewState>(() => ({ screen: 'dashboard', weekIndex: weeks[0]?.weekIndex ?? 1 }))
+  const [view, setView] = useState<ViewState>(() => ({ weekIndex: weeks[0]?.weekIndex ?? 1 }))
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null)
 
   const hasAdminAccess = user?.isAdmin ?? false
@@ -39,13 +38,7 @@ function AppShell() {
     }
   }, [user])
 
-  useEffect(() => {
-    if (!hasAdminAccess) return
-    setView((previous) => {
-      if (previous.screen === 'admin') return previous
-      return { ...previous, screen: 'admin' }
-    })
-  }, [hasAdminAccess])
+  
 
   const content = useMemo(() => {
     if (isLoading) {
@@ -78,21 +71,11 @@ function AppShell() {
           <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
             <div className="flex items-center gap-3">
               <span className="text-lg font-semibold text-slate-900">Coach Plan</span>
-              <nav className="flex gap-2 text-sm">
-                {!hasAdminAccess ? (
-                  <Button
-                    size="sm"
-                    variant={view.screen === 'dashboard' ? 'default' : 'secondary'}
-                    onClick={() => setView((prev) => ({ ...prev, screen: 'dashboard' }))}
-                  >
-                    My dashboard
-                  </Button>
-                ) : (
-                  <span className="rounded-full bg-slate-900/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700">
-                    Admin
-                  </span>
-                )}
-              </nav>
+              {hasAdminAccess && (
+                <span className="rounded-full bg-slate-900/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700">
+                  Admin
+                </span>
+              )}
             </div>
             <Button size="sm" variant="outline" onClick={logout}>
               Log out
@@ -101,7 +84,9 @@ function AppShell() {
         </header>
 
         <main className="mx-auto max-w-6xl px-4 py-10">
-          {!hasAdminAccess ? (
+          {hasAdminAccess ? (
+            <AdminDashboard />
+          ) : (
             <UserDashboard
               weekIndex={view.weekIndex}
               onSelectWeek={(weekIndex) => setView((prev) => ({ ...prev, weekIndex }))}
@@ -110,8 +95,6 @@ function AppShell() {
                 setActiveSessionId(sessionId)
               }}
             />
-          ) : (
-            <AdminDashboard />
           )}
         </main>
       </div>

@@ -122,29 +122,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     ;(async () => {
       try {
-        const salt = createSalt()
+        console.log('Creating admin account...')
+        const salt = 'a1b2c3d4e5f67890' // Fixed salt for consistency
         const passwordHash = await hashPassword('admin123', salt)
         const createdAt = new Date().toISOString()
 
+        console.log('Admin credentials:', { salt, passwordHash })
+
         if (supabaseClient) {
+          console.log('Using Supabase to create admin...')
           const { data, error } = await supabaseClient
             .from('app_users')
-            .insert({
+            .upsert({
               username: 'admin',
               display_name: 'Head Coach',
               password_hash: passwordHash,
               salt,
               is_admin: true,
               created_at: createdAt,
+            }, {
+              onConflict: 'username'
             })
             .select('id, username, display_name, password_hash, salt, is_admin, created_at')
             .maybeSingle()
 
+          console.log('Supabase admin creation result:', { data, error })
+          
           if (error) {
-            if (error.code !== '23505') {
-              throw error
-            }
-            // duplicate admin inserted elsewhere; refetch soon
+            console.error('Admin creation error:', error)
+            // Try fetching existing admin
             const { data: existing } = await supabaseClient
               .from('app_users')
               .select('id, username, display_name, password_hash, salt, is_admin, created_at')
@@ -152,12 +158,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               .maybeSingle()
 
             if (existing) {
+              console.log('Found existing admin:', existing)
               setUsers((previous) => [...previous, mapSupabaseUser(existing)])
             }
           } else if (data) {
+            console.log('Created new admin:', data)
             setUsers((previous) => [...previous, mapSupabaseUser(data)])
           }
         } else {
+          console.log('Using local storage for admin...')
           const adminUser: StoredUser = {
             id: generateLocalId(),
             username: 'admin',

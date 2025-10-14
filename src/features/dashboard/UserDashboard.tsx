@@ -692,7 +692,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
           </CardHeader>
           <CardContent className="space-y-4">
             {activeWeek.sessions.length ? (
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-3 gap-3">
                 {activeWeek.sessions.map((session) => {
                   const sessionProgress = weekProgress?.[session.sessionId]
                   const state = evaluateSessionState(session, sessionProgress)
@@ -701,54 +701,58 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                   return (
                     <article
                       key={session.sessionId}
-                      className="relative flex min-h-[160px] flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-md"
+                      className="relative flex min-h-[140px] flex-col gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-md cursor-pointer"
+                      onClick={() => onOpenSession(activeWeek.weekIndex, session.sessionId)}
                     >
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <p className="text-sm font-semibold text-slate-900">{session.dayTitle}</p>
-                          <p className="text-xs text-slate-500">Focus · {session.focusLabel}</p>
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-slate-900 truncate">{session.dayTitle}</p>
+                          <p className="text-xs text-slate-500 truncate">{session.focusLabel}</p>
                         </div>
-                        <Badge variant={statusBadgeVariant(state)} className="shrink-0 capitalize">
+                        <Badge variant={statusBadgeVariant(state)} className="shrink-0 capitalize text-xs">
                           {state.replace('-', ' ')}
                         </Badge>
                       </div>
-                      <dl className="grid grid-cols-2 gap-2 text-[11px] text-slate-500">
-                        <div>
-                          <dt className="font-medium uppercase tracking-wide">Exercises</dt>
-                          <dd className="mt-0.5 text-sm font-semibold text-slate-900">{session.exercises.length}</dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium uppercase tracking-wide">Sets</dt>
-                          <dd className="mt-0.5 text-sm font-semibold text-slate-900">{totalSets}</dd>
-                        </div>
-                        {session.plannedDate ? (
-                          <div className="col-span-2">
-                            <dt className="font-medium uppercase tracking-wide">Suggested date</dt>
-                            <dd className="mt-0.5 text-xs text-slate-600">{session.plannedDate}</dd>
+                      <div className="mt-auto space-y-2">
+                        <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-500">
+                          <div className="text-center">
+                            <div className="font-semibold text-slate-900">{session.exercises.length}</div>
+                            <div className="text-xs">Exercises</div>
                           </div>
-                        ) : null}
-                      </dl>
-                      <div className="mt-auto flex flex-wrap gap-2">
-                        <Button
-                          className="flex-1"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => onOpenSession(activeWeek.weekIndex, session.sessionId)}
-                        >
-                          Open session
-                        </Button>
-                        <Button
-                          variant="subtle"
-                          size="sm"
-                          onClick={() => handleCelebrateSession(session, state)}
-                          disabled={markingSessionId === session.sessionId}
-                        >
-                          {markingSessionId === session.sessionId ? 'Marking…' : 'Celebrate win'}
-                        </Button>
+                          <div className="text-center">
+                            <div className="font-semibold text-slate-900">{totalSets}</div>
+                            <div className="text-xs">Sets</div>
+                          </div>
+                        </div>
+                        <div className="flex gap-1">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="flex-1 text-xs h-7"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              onOpenSession(activeWeek.weekIndex, session.sessionId)
+                            }}
+                          >
+                            Open
+                          </Button>
+                          <Button
+                            variant="subtle"
+                            size="sm"
+                            className="flex-1 text-xs h-7"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleCelebrateSession(session, state)
+                            }}
+                            disabled={markingSessionId === session.sessionId}
+                          >
+                            {markingSessionId === session.sessionId ? '…' : '✓'}
+                          </Button>
+                        </div>
                       </div>
                       {isCelebrating && celebrationState ? (
                         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                          {Array.from({ length: 18 }).map((_, index) => {
+                          {Array.from({ length: 12 }).map((_, index) => {
                             const left = Math.random() * 100
                             const top = Math.random() * 60
                             const color = confettiPalette[index % confettiPalette.length]
@@ -766,7 +770,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                               />
                             )
                           })}
-                          <div className="absolute inset-x-0 top-5 text-center text-4xl drop-shadow-sm">
+                          <div className="absolute inset-x-0 top-3 text-center text-2xl drop-shadow-sm">
                             {celebrationState.emoji}
                           </div>
                         </div>

@@ -4,9 +4,6 @@ import type {
   ClientCheckIn,
   ProgressPhoto,
   PaymentRecord,
-  SubscriptionProduct,
-  ChallengeProgram,
-  WorkoutTemplate,
   ClientProfileSettings,
 } from '../types/program'
 
@@ -43,7 +40,8 @@ export interface Database {
           timezone?: string
           created_at?: string
           updated_at?: string
-        }
+        },
+        Relationships: []
       }
       client_profiles: {
         Row: {
@@ -111,7 +109,8 @@ export interface Database {
           emergency_contact?: string | null
           created_at?: string
           updated_at?: string
-        }
+        },
+        Relationships: []
       }
       session_progress: {
         Row: {
@@ -123,7 +122,7 @@ export interface Database {
           exercise_id: string
           completed_sets: number
           total_sets: number
-          set_entries: any
+          set_entries: string[]
           notes: string | null
           completed_at: string | null
           celebration_emoji: string | null
@@ -140,7 +139,7 @@ export interface Database {
           exercise_id: string
           completed_sets?: number
           total_sets: number
-          set_entries?: any
+          set_entries?: string[]
           notes?: string | null
           completed_at?: string | null
           celebration_emoji?: string | null
@@ -157,14 +156,15 @@ export interface Database {
           exercise_id?: string
           completed_sets?: number
           total_sets?: number
-          set_entries?: any
+          set_entries?: string[]
           notes?: string | null
           completed_at?: string | null
           celebration_emoji?: string | null
           points_earned?: number
           created_at?: string
           updated_at?: string
-        }
+        },
+        Relationships: []
       }
       chat_messages: {
         Row: {
@@ -196,7 +196,8 @@ export interface Database {
           sent_at?: string
           read_at?: string | null
           message_type?: string
-        }
+        },
+        Relationships: []
       }
       notifications: {
         Row: {
@@ -228,7 +229,8 @@ export interface Database {
           read_at?: string | null
           action_url?: string | null
           created_at?: string
-        }
+        },
+        Relationships: []
       }
       client_check_ins: {
         Row: {
@@ -236,8 +238,8 @@ export interface Database {
           client_id: string
           week_index: number
           submitted_at: string
-          energy_level: number
-          stress_level: number
+          energy_level: 1 | 2 | 3 | 4 | 5
+          stress_level: 1 | 2 | 3 | 4 | 5
           weight_kg: number | null
           notes: string | null
           attachments: string[]
@@ -247,8 +249,8 @@ export interface Database {
           client_id: string
           week_index: number
           submitted_at?: string
-          energy_level: number
-          stress_level: number
+          energy_level: 1 | 2 | 3 | 4 | 5
+          stress_level: 1 | 2 | 3 | 4 | 5
           weight_kg?: number | null
           notes?: string | null
           attachments?: string[]
@@ -258,12 +260,13 @@ export interface Database {
           client_id?: string
           week_index?: number
           submitted_at?: string
-          energy_level?: number
-          stress_level?: number
+          energy_level?: 1 | 2 | 3 | 4 | 5
+          stress_level?: 1 | 2 | 3 | 4 | 5
           weight_kg?: number | null
           notes?: string | null
           attachments?: string[]
-        }
+        },
+        Relationships: []
       }
       progress_photos: {
         Row: {
@@ -292,7 +295,8 @@ export interface Database {
           image_url?: string
           content_type?: string | null
           size_bytes?: number | null
-        }
+        },
+        Relationships: []
       }
       payment_records: {
         Row: {
@@ -327,10 +331,29 @@ export interface Database {
           recorded_at?: string
           description?: string | null
           invoice_url?: string | null
-        }
+        },
+        Relationships: []
       }
-    }
+    },
+    Views: {
+      [_ in never]: never
+    },
+    Functions: {
+      [_ in never]: never
+    },
+    Enums: {
+      [_ in never]: never
+    },
+    CompositeTypes: {
+      [_ in never]: never
+    },
   }
+}
+
+type ClientProfileRow = Database['public']['Tables']['client_profiles']['Row'] & {
+  client_check_ins?: Database['public']['Tables']['client_check_ins']['Row'][] | null
+  progress_photos?: Database['public']['Tables']['progress_photos']['Row'][] | null
+  payment_records?: Database['public']['Tables']['payment_records']['Row'][] | null
 }
 
 export class SupabaseRepository {
@@ -417,7 +440,7 @@ export class SupabaseRepository {
 
     if (error) throw error
 
-    return data.map(this.mapClientProfile)
+    return data.map((row) => this.mapClientProfile(row as unknown as ClientProfileRow))
   }
 
   async getClientProfile(userId: string): Promise<ClientProfile | null> {
@@ -437,7 +460,7 @@ export class SupabaseRepository {
       throw error
     }
 
-    return this.mapClientProfile(data)
+    return this.mapClientProfile(data as unknown as ClientProfileRow)
   }
 
   async updateClientSettings(clientId: string, settings: Partial<ClientProfileSettings>) {
@@ -661,7 +684,7 @@ export class SupabaseRepository {
   }
 
   // Helper methods
-  private mapClientProfile(data: any): ClientProfile {
+  private mapClientProfile(data: ClientProfileRow): ClientProfile {
     return {
       id: data.id,
       userId: data.user_id,
@@ -671,9 +694,9 @@ export class SupabaseRepository {
       timezone: 'UTC', // Default timezone
       planStartDate: data.plan_start_date || '',
       planEndDate: data.plan_end_date || '',
-      assignedTemplateId: data.assigned_template_id,
+      assignedTemplateId: data.assigned_template_id ?? undefined,
       templateAdjustments: [], // TODO: Implement template adjustments
-      activeChallengeId: data.active_challenge_id,
+      activeChallengeId: data.active_challenge_id ?? undefined,
       adherenceRate: data.adherence_rate,
       completedSessions: data.completed_sessions,
       totalSessions: data.total_sessions,
@@ -683,27 +706,27 @@ export class SupabaseRepository {
         renewsOn: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
         autoRenew: true,
       },
-      checkIns: (data.client_check_ins || []).map((checkIn: any) => ({
+      checkIns: (data.client_check_ins ?? []).map((checkIn) => ({
         id: checkIn.id,
         clientId: checkIn.client_id,
         weekIndex: checkIn.week_index,
         submittedAt: checkIn.submitted_at,
         energyLevel: checkIn.energy_level,
         stressLevel: checkIn.stress_level,
-        weightKg: checkIn.weight_kg,
-        notes: checkIn.notes,
-        attachments: checkIn.attachments || [],
+        weightKg: checkIn.weight_kg ?? undefined,
+        notes: checkIn.notes ?? undefined,
+        attachments: checkIn.attachments ?? [],
       })),
-      progressPhotos: (data.progress_photos || []).map((photo: any) => ({
+      progressPhotos: (data.progress_photos ?? []).map((photo) => ({
         id: photo.id,
         clientId: photo.client_id,
         label: photo.label,
         uploadedAt: photo.uploaded_at,
         imageUrl: photo.image_url,
-        contentType: photo.content_type,
-        sizeBytes: photo.size_bytes,
+        contentType: photo.content_type ?? undefined,
+        sizeBytes: photo.size_bytes ?? undefined,
       })),
-      payments: (data.payment_records || []).map((payment: any) => ({
+      payments: (data.payment_records ?? []).map((payment) => ({
         id: payment.id,
         clientId: payment.client_id,
         type: payment.type,
@@ -711,16 +734,16 @@ export class SupabaseRepository {
         currency: payment.currency,
         status: payment.status,
         recordedAt: payment.recorded_at,
-        description: payment.description,
-        invoiceUrl: payment.invoice_url,
+        description: payment.description ?? '',
+        invoiceUrl: payment.invoice_url ?? undefined,
       })),
-      lastCheckInAt: data.last_check_in_at,
+      lastCheckInAt: data.last_check_in_at ?? undefined,
       profileSettings: {
-        preferredName: data.preferred_name,
-        birthDate: data.birth_date,
-        age: data.age,
-        healthNotes: data.health_notes,
-        emergencyContact: data.emergency_contact,
+        preferredName: data.preferred_name ?? undefined,
+        birthDate: data.birth_date ?? undefined,
+        age: data.age ?? undefined,
+        healthNotes: data.health_notes ?? undefined,
+        emergencyContact: data.emergency_contact ?? undefined,
       },
     }
   }
