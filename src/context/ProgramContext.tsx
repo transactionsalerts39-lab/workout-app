@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useAuthContext } from './AuthContext'
 import {
   challengePrograms,
@@ -59,6 +59,8 @@ interface ProgramContextValue {
   revenueSnapshot: RevenueSnapshot
   renewalReminders: PlanRenewalReminder[]
   developmentCostSummary: typeof developmentCostSummary
+  currentMonthRevenueOverride: number | null
+  setManualRevenueForCurrentMonth: (amount: number | null) => void
   assignTemplate: (clientId: string, templateId: string) => void
   swapTemplateSlot: (clientId: string, templateId: string, dayId: string, slotId: string, replacement: string) => boolean
   logCheckIn: (input: LogCheckInInput) => void
@@ -78,6 +80,12 @@ function generateId(prefix: string) {
     return `${prefix}_${crypto.randomUUID()}`
   }
   return `${prefix}_${Math.random().toString(36).slice(2, 10)}`
+}
+
+function getMonthKey(date: Date): string {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  return `${year}-${month}`
 }
 
 function cloneClientProfile(profile: ClientProfile): ClientProfile {
@@ -153,6 +161,8 @@ function computeRevenueSnapshot(clients: ClientProfile[], products: Subscription
   return {
     monthlyRecurringRevenue: recurringRevenue,
     totalCollectedThisMonth: paidThisMonth,
+    computedCollectedThisMonth: paidThisMonth,
+    manualCollectedThisMonth: null,
     upcomingRenewals,
     activeSubscriptions,
     pendingInvoices,
@@ -200,6 +210,7 @@ function defaultClientForUser(userId: string, displayName: string): ClientProfil
 export function ProgramProvider({ children }: { children: React.ReactNode }) {
   const { users } = useAuthContext()
   const [clients, setClients] = useState<ClientProfile[]>(() => fallbackClients.map(cloneClientProfile))
+  const [manualRevenueOverrides, setManualRevenueOverrides] = useState<Record<string, number>>({})
 
   useEffect(() => {
     const nonAdminUsers = users.filter((user) => !user.isAdmin)
@@ -449,8 +460,37 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
     return success
   }
 
-  const revenueSnapshot = useMemo(() => computeRevenueSnapshot(clients, subscriptionProducts), [clients])
+  const revenueSnapshot = useMemo(() => {
+    const snapshot = computeRevenueSnapshot(clients, subscriptionProducts)
+    const key = getMonthKey(new Date())
+    const override = manualRevenueOverrides[key]
+
+    if (typeof override === 'number') {
+      return {
+        ...snapshot,
+        manualCollectedThisMonth: override,
+        totalCollectedThisMonth: override,
+      }
+    }
+
+    return snapshot
+  }, [clients, manualRevenueOverrides, subscriptionProducts])
   const renewalReminders = useMemo(() => buildRenewalReminders(clients), [clients])
+
+  const currentMonthKey = getMonthKey(new Date())
+  const currentMonthRevenueOverride = manualRevenueOverrides[currentMonthKey] ?? null
+
+  const setManualRevenueForCurrentMonth = useCallback((amount: number | null) => {
+    setManualRevenueOverrides((previous) => {
+      const next = { ...previous }
+      if (amount === null) {
+        delete next[currentMonthKey]
+      } else {
+        next[currentMonthKey] = amount
+      }
+      return next
+    })
+  }, [currentMonthKey])
 
   const value = useMemo<ProgramContextValue>(() => ({
     strengthCategories,
@@ -461,6 +501,8 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
     revenueSnapshot,
     renewalReminders,
     developmentCostSummary,
+    currentMonthRevenueOverride,
+    setManualRevenueForCurrentMonth,
     assignTemplate,
     swapTemplateSlot,
     logCheckIn,
@@ -471,7 +513,7 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
     unlockChallenge,
     recordPayment,
     findClientByUserId: (userId: string) => clients.find((client) => client.userId === userId),
-  }), [clients, revenueSnapshot, renewalReminders])
+  }), [clients, revenueSnapshot, renewalReminders, currentMonthRevenueOverride, setManualRevenueForCurrentMonth])
 
   return <ProgramContext.Provider value={value}>{children}</ProgramContext.Provider>
 }

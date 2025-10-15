@@ -3,14 +3,22 @@ import { useAuthContext } from '../../context/AuthContext'
 import { useProgressContext } from '../../context/ProgressContext'
 import { useProgramContext } from '../../context/ProgramContext'
 import type { Currency, TemplateExerciseSlot, WorkoutTemplate } from '../../types/program'
+import {
+  FALLBACK_EXERCISES,
+  fetchExerciseLibrary,
+  type ExerciseLibraryEntry,
+} from '../../lib/exerciseLibrary'
+
+type ExerciseSource = ExerciseLibraryEntry['source'] | 'template'
 
 interface ExerciseDefinition {
   id: string
   name: string
-  focus: string
+  primaryFocus: string
   equipment: string
-  pattern: string
-  intensity: string
+  movementType: string
+  muscleGroup: string
+  source: ExerciseSource
 }
 
 interface SelectedExercise extends ExerciseDefinition {
@@ -47,60 +55,6 @@ interface NotificationRecord {
   read: boolean
 }
 
-const EXERCISE_MODIFIERS = [
-  '(Tempo)',
-  '(Iso Hold)',
-  '(Speed)',
-  '(Contrast)',
-  '(Regression)',
-  '(Paused)',
-  '(Assisted)',
-  '(Single-Arm)',
-  '(Cluster)',
-  '(Drop Set)',
-  '(Eccentric)',
-  '(Power)',
-  '(Complex)',
-  '(Primer)',
-  '(Stability)',
-]
-
-const BASE_EXERCISES: Array<Omit<ExerciseDefinition, 'id'>> = [
-  { name: 'Back Squat', focus: 'Lower Body Strength', equipment: 'Barbell', pattern: 'Squat', intensity: 'Heavy' },
-  { name: 'Bench Press', focus: 'Upper Body Strength', equipment: 'Barbell', pattern: 'Press', intensity: 'Moderate' },
-  { name: 'Deadlift', focus: 'Posterior Chain', equipment: 'Barbell', pattern: 'Hinge', intensity: 'Heavy' },
-  { name: 'Romanian Deadlift', focus: 'Hamstrings', equipment: 'Barbell', pattern: 'Hinge', intensity: 'Moderate' },
-  { name: 'Pull-Up', focus: 'Upper Body Pull', equipment: 'Bodyweight', pattern: 'Pull', intensity: 'Bodyweight' },
-  { name: 'Seated Row', focus: 'Upper Body Pull', equipment: 'Cable', pattern: 'Pull', intensity: 'Moderate' },
-  { name: 'Split Squat', focus: 'Single-Leg Strength', equipment: 'Dumbbell', pattern: 'Lunge', intensity: 'Moderate' },
-  { name: 'Hip Thrust', focus: 'Glute Power', equipment: 'Barbell', pattern: 'Bridge', intensity: 'Heavy' },
-  { name: 'Box Jump', focus: 'Explosive Power', equipment: 'Plyo Box', pattern: 'Jump', intensity: 'Power' },
-  { name: 'Medicine Ball Slam', focus: 'Core Power', equipment: 'Medicine Ball', pattern: 'Slam', intensity: 'Power' },
-  { name: 'Plank', focus: 'Core Stability', equipment: 'Bodyweight', pattern: 'Hold', intensity: 'Stability' },
-  { name: 'Hollow Rock', focus: 'Core Stability', equipment: 'Bodyweight', pattern: 'Hold', intensity: 'Stability' },
-  { name: 'Farmer Carry', focus: 'Grip & Core', equipment: 'Kettlebell', pattern: 'Carry', intensity: 'Conditioning' },
-  { name: 'Assault Bike', focus: 'Conditioning', equipment: 'Machine', pattern: 'Ride', intensity: 'Aerobic' },
-  { name: 'Tempo Push-Up', focus: 'Upper Body Strength', equipment: 'Bodyweight', pattern: 'Press', intensity: 'Tempo' },
-  { name: 'Trap Bar Deadlift', focus: 'Total Strength', equipment: 'Trap Bar', pattern: 'Hinge', intensity: 'Heavy' },
-  { name: 'Overhead Press', focus: 'Shoulders', equipment: 'Barbell', pattern: 'Press', intensity: 'Moderate' },
-  { name: 'Lat Pulldown', focus: 'Upper Body Pull', equipment: 'Cable', pattern: 'Pull', intensity: 'Moderate' },
-  { name: 'Sled Push', focus: 'Power & Drive', equipment: 'Sled', pattern: 'Push', intensity: 'Conditioning' },
-  { name: 'Nordic Curl', focus: 'Hamstrings', equipment: 'Assisted', pattern: 'Hinge', intensity: 'Eccentric' },
-]
-
-const EXERCISE_LIBRARY: ExerciseDefinition[] = Array.from({ length: 300 }).map((_, index) => {
-  const template = BASE_EXERCISES[index % BASE_EXERCISES.length]
-  const modifier = EXERCISE_MODIFIERS[Math.floor(index / BASE_EXERCISES.length) % EXERCISE_MODIFIERS.length] ?? ''
-  return {
-    id: `EX-${String(index + 1).padStart(3, '0')}`,
-    name: `${template.name} ${modifier}`.trim(),
-    focus: template.focus,
-    equipment: template.equipment,
-    pattern: template.pattern,
-    intensity: template.intensity,
-  }
-})
-
 const TEMPLATE_PATTERN_LABEL: Record<TemplateExerciseSlot['pattern'], string> = {
   compound: 'Compound Strength',
   accessory: 'Accessory Focus',
@@ -109,16 +63,7 @@ const TEMPLATE_PATTERN_LABEL: Record<TemplateExerciseSlot['pattern'], string> = 
   conditioning: 'Conditioning',
 }
 
-const TEMPLATE_INTENSITY_LABEL: Record<TemplateExerciseSlot['pattern'], string> = {
-  compound: 'Heavy',
-  accessory: 'Moderate',
-  power: 'Power',
-  isolation: 'Tempo',
-  conditioning: 'Conditioning',
-}
-
-const FOCUS_OPTIONS = Array.from(new Set(EXERCISE_LIBRARY.map((exercise) => exercise.focus))).sort()
-const EQUIPMENT_OPTIONS = Array.from(new Set(EXERCISE_LIBRARY.map((exercise) => exercise.equipment))).sort()
+const FALLBACK_LIBRARY: ExerciseDefinition[] = FALLBACK_EXERCISES.map((exercise) => ({ ...exercise }))
 
 const FALLBACK_ATHLETES: AthleteProfile[] = [
   { id: 'ath_001', name: 'Maya Chen', goal: 'Marathon debut', timezone: 'EST' },
@@ -250,6 +195,8 @@ export function AdminDashboard() {
     revenueSnapshot,
     renewalReminders,
     developmentCostSummary,
+    currentMonthRevenueOverride,
+    setManualRevenueForCurrentMonth,
     assignTemplate,
     swapTemplateSlot,
     toggleAutoRenew,
@@ -331,11 +278,87 @@ export function AdminDashboard() {
   }, [workoutTemplates])
 
   const clientByUserId = useMemo(() => new Map(clients.map((client) => [client.userId, client])), [clients])
+  const currencyForDisplay = useMemo(() => (subscriptionProducts[0]?.currency ?? 'INR') as Currency, [subscriptionProducts])
+  const activeClientCount = useMemo(
+    () => clients.filter((client) => client.subscription.status === 'active').length,
+    [clients],
+  )
+  const pastDueClientCount = useMemo(
+    () => clients.filter((client) => client.subscription.status === 'past_due').length,
+    [clients],
+  )
+  const completionSamples = useMemo(() => {
+    const completionValues = clientRoster
+      .map(({ progress }) => progress?.completionPercent)
+      .filter((value): value is number => typeof value === 'number')
+    if (!completionValues.length) {
+      return { percent: null, sampleSize: 0 }
+    }
+    const percent = Math.round(completionValues.reduce((sum, value) => sum + value, 0) / completionValues.length)
+    return { percent, sampleSize: completionValues.length }
+  }, [clientRoster])
+  const recentlyActiveCount = useMemo(() => {
+    const cutoff = Date.now() - 1000 * 60 * 60 * 24 * 7
+    return clientRoster.reduce((count, { progress }) => {
+      if (!progress?.lastActiveAt) return count
+      const lastUpdated = new Date(progress.lastActiveAt).getTime()
+      return Number.isFinite(lastUpdated) && lastUpdated >= cutoff ? count + 1 : count
+    }, 0)
+  }, [clientRoster])
+  const highImpactMetrics = useMemo(
+    () => [
+      {
+        label: 'Monthly recurring revenue',
+        value: formatCurrency(revenueSnapshot.monthlyRecurringRevenue, currencyForDisplay),
+        helper: 'Across active subscriptions',
+      },
+      {
+        label: 'Active clients',
+        value: String(activeClientCount),
+        helper: `${clients.length} total coached athletes`,
+      },
+      {
+        label: 'Average completion',
+        value: completionSamples.percent !== null ? `${completionSamples.percent}%` : '—',
+        helper:
+          completionSamples.sampleSize > 0
+            ? `Based on ${completionSamples.sampleSize} tracked athletes`
+            : 'No workout logs captured yet',
+      },
+      {
+        label: 'Active this week',
+        value: String(recentlyActiveCount),
+        helper: 'Updated progress in the last 7 days',
+      },
+      {
+        label: 'Upcoming renewals',
+        value: String(revenueSnapshot.upcomingRenewals),
+        helper: 'Due within the next 14 days',
+      },
+      {
+        label: 'Open invoices',
+        value: String(revenueSnapshot.pendingInvoices),
+        helper: pastDueClientCount ? `${pastDueClientCount} clients past due` : 'All accounts current',
+      },
+    ],
+    [
+      activeClientCount,
+      clients.length,
+      completionSamples,
+      currencyForDisplay,
+      pastDueClientCount,
+      recentlyActiveCount,
+      revenueSnapshot,
+    ],
+  )
 
+  const [exerciseLibrary, setExerciseLibrary] = useState<ExerciseDefinition[]>(FALLBACK_LIBRARY)
+  const [exerciseLibraryStatus, setExerciseLibraryStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [exerciseFetchError, setExerciseFetchError] = useState<string | null>(null)
   const [exerciseQuery, setExerciseQuery] = useState('')
   const [focusFilter, setFocusFilter] = useState('')
   const [equipmentFilter, setEquipmentFilter] = useState('')
-  const [visibleCount, setVisibleCount] = useState(60)
+  const [visibleCount, setVisibleCount] = useState(5)
   const [selectedExercises, setSelectedExercises] = useState<SelectedExercise[]>([])
   const [activeTemplateId, setActiveTemplateId] = useState('')
   const [selectedAthleteId, setSelectedAthleteId] = useState('')
@@ -356,6 +379,9 @@ export function AdminDashboard() {
   const [planSearch, setPlanSearch] = useState('')
   const [planTimeframe, setPlanTimeframe] = useState<'all' | '7' | '30' | '90'>('30')
   const [notificationFilter, setNotificationFilter] = useState<'all' | 'unread'>('all')
+  const [isEditingMonthlyRevenue, setIsEditingMonthlyRevenue] = useState(false)
+  const [monthlyRevenueDraft, setMonthlyRevenueDraft] = useState('')
+  const [monthlyRevenueError, setMonthlyRevenueError] = useState<string | null>(null)
 
   const activeTemplate = useMemo(
     () => workoutTemplates.find((template) => template.id === activeTemplateId),
@@ -382,17 +408,81 @@ export function AdminDashboard() {
     return clientByUserId.get(selectedAthleteId) ?? null
   }, [clientByUserId, selectedAthleteId])
 
+  const focusOptions = useMemo(() => {
+    const options = new Set<string>()
+    exerciseLibrary.forEach((exercise) => {
+      if (exercise.primaryFocus) {
+        options.add(exercise.primaryFocus)
+      }
+    })
+    return Array.from(options).sort((a, b) => a.localeCompare(b))
+  }, [exerciseLibrary])
+
+  const equipmentOptions = useMemo(() => {
+    const options = new Set<string>()
+    exerciseLibrary.forEach((exercise) => {
+      const tokens = exercise.equipment.split(/,\s*/)
+      tokens.forEach((token) => {
+        if (token) {
+          options.add(token)
+        }
+      })
+    })
+    return Array.from(options).sort((a, b) => a.localeCompare(b))
+  }, [exerciseLibrary])
+
+  const selectedExerciseSummary = useMemo(() => {
+    if (!selectedExercises.length) return null
+    const weekMap = new Map<number, number>()
+    const focusMap = new Map<string, number>()
+    selectedExercises.forEach((exercise) => {
+      weekMap.set(exercise.week, (weekMap.get(exercise.week) ?? 0) + 1)
+      focusMap.set(exercise.primaryFocus, (focusMap.get(exercise.primaryFocus) ?? 0) + 1)
+    })
+
+    const weekBadges = Array.from(weekMap.entries())
+      .sort((a, b) => a[0] - b[0])
+      .map(([week, count]) => `Week ${week}: ${count}`)
+
+    const focusBadges = Array.from(focusMap.entries())
+      .sort((a, b) => {
+        if (b[1] === a[1]) {
+          return a[0].localeCompare(b[0])
+        }
+        return b[1] - a[1]
+      })
+      .slice(0, 3)
+      .map(([focus, count]) => `${focus} (${count})`)
+
+    return {
+      total: selectedExercises.length,
+      weekBadges,
+      focusBadges,
+    }
+  }, [selectedExercises])
+
   const filteredExercises = useMemo(() => {
     const query = exerciseQuery.trim().toLowerCase()
-    return EXERCISE_LIBRARY.filter((exercise) => {
-      const matchesFocus = focusFilter ? exercise.focus === focusFilter : true
-      const matchesEquipment = equipmentFilter ? exercise.equipment === equipmentFilter : true
+    return exerciseLibrary.filter((exercise) => {
+      const matchesFocus = focusFilter ? exercise.primaryFocus === focusFilter : true
+      const matchesEquipment = equipmentFilter
+        ? exercise.equipment.toLowerCase().split(/,\s*/).includes(equipmentFilter.toLowerCase())
+        : true
       const matchesQuery = query
-        ? `${exercise.name} ${exercise.focus} ${exercise.pattern} ${exercise.equipment}`.toLowerCase().includes(query)
+        ? [
+            exercise.name,
+            exercise.primaryFocus,
+            exercise.movementType,
+            exercise.muscleGroup,
+            exercise.equipment,
+          ]
+            .join(' ')
+            .toLowerCase()
+            .includes(query)
         : true
       return matchesFocus && matchesEquipment && matchesQuery
     })
-  }, [equipmentFilter, exerciseQuery, focusFilter])
+  }, [equipmentFilter, exerciseLibrary, exerciseQuery, focusFilter])
 
   const visibleExercises = useMemo(
     () => filteredExercises.slice(0, visibleCount),
@@ -502,8 +592,39 @@ export function AdminDashboard() {
   const canSubmitPlan = Boolean(selectedAthleteId && planName.trim() && startDate && selectedExercises.length)
 
   useEffect(() => {
-    setVisibleCount(60)
-  }, [equipmentFilter, exerciseQuery, focusFilter])
+    let isActive = true
+    const controller = new AbortController()
+
+    async function loadExercises() {
+      setExerciseLibraryStatus('loading')
+      setExerciseFetchError(null)
+      try {
+        const data = await fetchExerciseLibrary(controller.signal)
+        if (!isActive) return
+        if (data.length) {
+          setExerciseLibrary(data.map((entry) => ({ ...entry })))
+        }
+        setExerciseLibraryStatus('success')
+      } catch (error) {
+        console.error('Failed to load exercise library', error)
+        if (!isActive) return
+        setExerciseLibraryStatus('error')
+        setExerciseFetchError(error instanceof Error ? error.message : 'Unknown error')
+        setExerciseLibrary(FALLBACK_LIBRARY)
+      }
+    }
+
+    loadExercises()
+
+    return () => {
+      isActive = false
+      controller.abort()
+    }
+  }, [])
+
+  useEffect(() => {
+    setVisibleCount(5)
+  }, [equipmentFilter, exerciseLibrary, exerciseQuery, focusFilter])
 
   useEffect(() => {
     if (!toastMessage) return
@@ -544,6 +665,15 @@ export function AdminDashboard() {
     )
   }
 
+  const handleClearSelected = () => {
+    if (!selectedExercises.length) return
+    const shouldClear = typeof window === 'undefined' || window.confirm('Remove all selected exercises?')
+    if (!shouldClear) {
+      return
+    }
+    setSelectedExercises([])
+  }
+
   const handleLoadTemplate = (templateId: string) => {
     if (selectedExercises.length > 0) {
       const shouldReplace = typeof window === 'undefined' || window.confirm('Loading a template will replace your current exercises. Continue?')
@@ -560,10 +690,11 @@ export function AdminDashboard() {
         nextExercises.push({
           id: `${template.id}_${slot.slotId}`,
           name: slot.baseExercise,
-          focus: `${day.emphasis}`,
+          primaryFocus: `${day.emphasis}`,
           equipment: slot.equipment,
-          pattern: TEMPLATE_PATTERN_LABEL[slot.pattern],
-          intensity: TEMPLATE_INTENSITY_LABEL[slot.pattern],
+          movementType: TEMPLATE_PATTERN_LABEL[slot.pattern],
+          muscleGroup: slot.focusTag || day.emphasis || TEMPLATE_PATTERN_LABEL[slot.pattern],
+          source: 'template',
           week: 1,
           day: Math.min(dayIndex + 1, 7),
           templateSlotId: slot.slotId,
@@ -612,7 +743,7 @@ export function AdminDashboard() {
       return
     }
 
-    const focusBreakdown = Array.from(new Set(selectedExercises.map((exercise) => exercise.focus)))
+    const focusBreakdown = Array.from(new Set(selectedExercises.map((exercise) => exercise.primaryFocus)))
 
     const newPlan: PlanHistoryRecord = {
       id: generateId('plan'),
@@ -688,6 +819,23 @@ export function AdminDashboard() {
 
   const overviewContent = (
     <div className="space-y-6">
+      <section className="rounded-3xl border border-slate-900/15 bg-slate-900 p-6 text-white shadow-card">
+        <header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-lg font-semibold">Performance at a glance</h2>
+            <p className="text-sm text-white/70">Track the KPIs that matter before diving into programme details.</p>
+          </div>
+        </header>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {highImpactMetrics.map((metric) => (
+            <article key={metric.label} className="rounded-2xl bg-white/10 p-4 shadow-inner backdrop-blur-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-white/70">{metric.label}</p>
+              <p className="mt-2 text-2xl font-semibold text-white">{metric.value}</p>
+              {metric.helper ? <p className="mt-2 text-xs text-white/60">{metric.helper}</p> : null}
+            </article>
+          ))}
+        </div>
+      </section>
       <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -762,6 +910,7 @@ export function AdminDashboard() {
           </div>
         )}
       </section>
+
 
       <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
         <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -884,12 +1033,22 @@ export function AdminDashboard() {
   )
 
   const planningContent = (
-    <div className="grid gap-6 xl:grid-cols-[minmax(320px,360px)_1fr]">
+    <div className="grid gap-6 xl:grid-cols-[minmax(320px,360px)_minmax(320px,360px)_minmax(0,1fr)]">
       <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card xl:sticky xl:top-24 xl:max-h-[calc(100vh-8rem)] xl:overflow-hidden">
-        <header className="mb-4 flex items-center justify-between">
+        <header className="mb-4 flex items-center justify-between gap-3">
           <div>
             <h2 className="text-lg font-semibold text-slate-900">Exercise library</h2>
             <p className="text-xs text-slate-500 leading-relaxed">Search, filter, and add exercises into the weekly schedule.</p>
+            {exerciseLibraryStatus === 'loading' ? (
+              <span className="mt-2 inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-[11px] font-semibold text-indigo-600">
+                Syncing live exercise data…
+              </span>
+            ) : null}
+            {exerciseLibraryStatus === 'error' ? (
+              <span className="mt-2 inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-[11px] font-semibold text-amber-700">
+                Using fallback library{exerciseFetchError ? ` · ${exerciseFetchError}` : ''}
+              </span>
+            ) : null}
           </div>
           <span className="text-xs font-semibold text-slate-500">{filteredExercises.length} matches</span>
         </header>
@@ -925,7 +1084,7 @@ export function AdminDashboard() {
                 className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
               >
                 <option value="">All focuses</option>
-                {FOCUS_OPTIONS.map((option) => (
+                {focusOptions.map((option) => (
                   <option key={option} value={option}>
                     {option}
                   </option>
@@ -940,7 +1099,7 @@ export function AdminDashboard() {
                 className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
               >
                 <option value="">All equipment</option>
-                {EQUIPMENT_OPTIONS.map((option) => (
+                {equipmentOptions.map((option) => (
                   <option key={option} value={option}>
                     {option}
                   </option>
@@ -962,10 +1121,10 @@ export function AdminDashboard() {
                   <div className="space-y-2">
                     <h3 className="text-base font-semibold text-slate-900 break-words">{exercise.name}</h3>
                     <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
-                      <span className="rounded-full bg-indigo-100 px-3 py-1 text-indigo-600">{exercise.focus}</span>
-                      <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-700">{exercise.pattern}</span>
-                      <span className="rounded-full bg-violet-100 px-3 py-1 text-violet-700">{exercise.equipment}</span>
-                      <span className="rounded-full bg-slate-200 px-3 py-1 text-slate-700">{exercise.intensity}</span>
+                      <span className="rounded-full bg-indigo-100 px-3 py-1 text-indigo-600">{exercise.primaryFocus}</span>
+                      <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-700">{exercise.movementType}</span>
+                      <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-700">{exercise.muscleGroup}</span>
+                      <span className="rounded-full bg-slate-200 px-3 py-1 text-slate-700">{exercise.equipment}</span>
                     </div>
                   </div>
                   <button
@@ -993,19 +1152,185 @@ export function AdminDashboard() {
         {visibleCount < filteredExercises.length ? (
           <button
             type="button"
-            onClick={() => setVisibleCount((count) => count + 40)}
+            onClick={() => setVisibleCount((count) => count + 5)}
             className="mt-4 w-full rounded-xl border border-indigo-200 bg-indigo-50 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100"
           >
-            Load 40 more
+            Load 5 more
           </button>
         ) : null}
+      </section>
+
+      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card xl:sticky xl:top-24 xl:max-h-[calc(100vh-8rem)] xl:overflow-hidden">
+        <header className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">Selected exercises</h2>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Review selections in real time, tweak weeks and days, and prep the block before assigning it.
+            </p>
+            {activeTemplate && templateAdjustmentStats ? (
+              <p className="mt-1 text-xs font-semibold text-indigo-600">
+                Template adjustments used {templateAdjustmentStats.used}/{templateAdjustmentStats.allowed} · Flex window {activeTemplate.adjustmentsAllowedPercent}%
+              </p>
+            ) : null}
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-slate-900/5 px-3 py-1 text-xs font-semibold text-slate-700">
+              {(selectedExerciseSummary?.total ?? selectedExercises.length)} selected
+            </span>
+            {selectedExercises.length ? (
+              <button
+                type="button"
+                onClick={handleClearSelected}
+                className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-rose-200 hover:text-rose-500"
+              >
+                Clear all
+              </button>
+            ) : null}
+          </div>
+        </header>
+
+        {selectedExercises.length ? (
+          <>
+            {selectedExerciseSummary ? (
+              <div className="mb-4 flex flex-wrap gap-2 text-[11px] font-semibold">
+                {selectedExerciseSummary.weekBadges.map((label) => (
+                  <span key={`week-${label}`} className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">
+                    {label}
+                  </span>
+                ))}
+                {selectedExerciseSummary.focusBadges.map((label) => (
+                  <span key={`focus-${label}`} className="rounded-full bg-indigo-50 px-3 py-1 text-indigo-600">
+                    {label}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+
+            <div className="space-y-3 overflow-y-auto pr-1 xl:max-h-[calc(100vh-22rem)]">
+              {sortedSelectedExercises.map((exercise) => {
+                const sourceLabel =
+                  exercise.source === 'template'
+                    ? 'Template slot'
+                    : exercise.source === 'api'
+                      ? 'Library · API'
+                      : 'Library · Fallback'
+                return (
+                  <article key={exercise.id} className="space-y-3 rounded-2xl border border-slate-200 px-4 py-3">
+                    <header className="flex flex-col gap-2">
+                      <div className="flex items-start justify-between gap-3">
+                        <h4 className="text-base font-semibold text-slate-900 break-words">{exercise.name}</h4>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveExercise(exercise.id)}
+                          className="text-xs font-semibold text-rose-500 transition hover:text-rose-600"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                      <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
+                        <span className="rounded-full bg-indigo-100 px-3 py-1 text-indigo-600">{exercise.primaryFocus}</span>
+                        <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-700">{exercise.movementType}</span>
+                        <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-700">{exercise.muscleGroup}</span>
+                        <span className="rounded-full bg-slate-200 px-3 py-1 text-slate-700">{exercise.equipment}</span>
+                        <span className="rounded-full bg-slate-900/10 px-3 py-1 text-slate-700">{sourceLabel}</span>
+                      </div>
+                    </header>
+
+                    {exercise.templateSlotId && activeTemplate ? (
+                      <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
+                        Template slot adjustment
+                        <select
+                          value={exercise.name}
+                          onChange={(event) => handleTemplateSlotChange(exercise.templateSlotId!, event.target.value)}
+                          className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                        >
+                          {(() => {
+                            const slot = templateSlotLookup.get(exercise.templateSlotId!)
+                            if (!slot) return null
+                            const baseAndAlternatives = [slot.baseExercise, ...slot.suggestedAlternatives]
+                            return baseAndAlternatives.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))
+                          })()}
+                        </select>
+                      </label>
+                    ) : null}
+
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
+                        Week
+                        <select
+                          value={exercise.week}
+                          onChange={(event) => handleWeekChange(exercise.id, Number(event.target.value))}
+                          className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                        >
+                          {Array.from({ length: weekCount }).map((_, index) => (
+                            <option key={index + 1} value={index + 1}>
+                              Week {index + 1}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
+                        Day
+                        <select
+                          value={exercise.day}
+                          onChange={(event) => handleDayChange(exercise.id, Number(event.target.value))}
+                          className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                        >
+                          {Array.from({ length: 7 }).map((_, index) => (
+                            <option key={index + 1} value={index + 1}>
+                              Day {index + 1}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+
+            {groupedSchedule.size ? (
+              <div className="mt-4 space-y-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Schedule preview</p>
+                {[...groupedSchedule.keys()]
+                  .sort((a, b) => a - b)
+                  .map((week) => {
+                    const dayMap = groupedSchedule.get(week) ?? new Map<number, SelectedExercise[]>()
+                    return (
+                      <div key={week} className="space-y-1 text-xs text-slate-600 leading-relaxed">
+                        <p className="font-semibold text-slate-700">Week {week}</p>
+                        {[...dayMap.keys()]
+                          .sort((a, b) => a - b)
+                          .map((day) => {
+                            const items = dayMap.get(day) ?? []
+                            return (
+                              <p key={day}>
+                                <span className="font-semibold text-slate-600">Day {day}:</span> {items.map((item) => item.name).join(', ')}
+                              </p>
+                            )
+                          })}
+                      </div>
+                    )
+                  })}
+              </div>
+            ) : null}
+          </>
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-10 text-center text-sm text-slate-500">
+            No exercises added yet. Use the library to start building the training stack.
+          </div>
+        )}
       </section>
 
       <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
         <header className="mb-6">
           <h2 className="text-lg font-semibold text-slate-900">Plan designer</h2>
           <p className="text-xs text-slate-500 leading-relaxed">
-            Add exercises from the library, assign each to a training day, and share the full block with an athlete.
+            Finalise the block by assigning it to an athlete, setting dates, and adding coaching notes.
           </p>
         </header>
 
@@ -1056,6 +1381,9 @@ export function AdminDashboard() {
         </div>
 
         <form className="space-y-6" onSubmit={handleSubmitPlan}>
+          <p className="rounded-xl bg-indigo-50 px-3 py-2 text-[11px] font-semibold text-indigo-600">
+            Manage the exercise list beside the library, then complete the details below to assign the plan.
+          </p>
           <label className="flex flex-col gap-2 text-sm font-semibold text-slate-700">
             Assign to athlete
             <select
@@ -1122,125 +1450,6 @@ export function AdminDashboard() {
             />
           </label>
 
-          <div>
-            <h3 className="text-sm font-semibold text-slate-800">Selected exercises</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Add exercises from the library, then assign each to a week and training day.
-            </p>
-            {activeTemplate && templateAdjustmentStats ? (
-              <p className="mt-1 text-xs font-semibold text-indigo-600">
-                Template adjustments used {templateAdjustmentStats.used}/{templateAdjustmentStats.allowed} · Flex window {activeTemplate.adjustmentsAllowedPercent}%
-              </p>
-            ) : null}
-            {sortedSelectedExercises.length ? (
-              <div className="mt-3 space-y-3 overflow-y-auto pr-1 lg:max-h-[22rem]">
-                {sortedSelectedExercises.map((exercise) => (
-                  <article key={exercise.id} className="space-y-3 rounded-2xl border border-slate-200 px-4 py-3">
-                    <header className="flex items-start justify-between gap-3">
-                      <div>
-                        <h4 className="text-base font-semibold text-slate-900 break-words">{exercise.name}</h4>
-                        <div className="mt-2 flex flex-wrap gap-2 text-[11px] font-semibold">
-                          <span className="rounded-full bg-indigo-100 px-3 py-1 text-indigo-600">{exercise.focus}</span>
-                          <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-700">{exercise.pattern}</span>
-                          <span className="rounded-full bg-violet-100 px-3 py-1 text-violet-700">{exercise.equipment}</span>
-                          <span className="rounded-full bg-slate-200 px-3 py-1 text-slate-700">{exercise.intensity}</span>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveExercise(exercise.id)}
-                        className="text-xs font-semibold text-rose-500 transition hover:text-rose-600"
-                      >
-                        Remove
-                      </button>
-                    </header>
-
-                    {exercise.templateSlotId && activeTemplate ? (
-                      <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
-                        Template slot adjustment
-                        <select
-                          value={exercise.name}
-                          onChange={(event) => handleTemplateSlotChange(exercise.templateSlotId!, event.target.value)}
-                          className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-                        >
-                          {(() => {
-                            const slot = templateSlotLookup.get(exercise.templateSlotId!)
-                            if (!slot) return null
-                            const baseAndAlternatives = [slot.baseExercise, ...slot.suggestedAlternatives]
-                            return baseAndAlternatives.map((option) => (
-                              <option key={option} value={option}>
-                                {option}
-                              </option>
-                            ))
-                          })()}
-                        </select>
-                      </label>
-                    ) : null}
-
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
-                        Week
-                        <select
-                          value={exercise.week}
-                          onChange={(event) => handleWeekChange(exercise.id, Number(event.target.value))}
-                          className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-                        >
-                          {Array.from({ length: weekCount }).map((_, index) => (
-                            <option key={index + 1} value={index + 1}>
-                              Week {index + 1}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                      <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
-                        Day
-                        <select
-                          value={exercise.day}
-                          onChange={(event) => handleDayChange(exercise.id, Number(event.target.value))}
-                          className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-                        >
-                          {Array.from({ length: 7 }).map((_, index) => (
-                            <option key={index + 1} value={index + 1}>
-                              Day {index + 1}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            ) : (
-              <div className="mt-3 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-10 text-center text-sm text-slate-500">
-                No exercises added yet. Use the library to build the training stack.
-              </div>
-            )}
-          </div>
-
-          {groupedSchedule.size ? (
-            <div className="space-y-3">
-              {[...groupedSchedule.keys()].sort((a, b) => a - b).map((week) => {
-                const dayMap = groupedSchedule.get(week) ?? new Map<number, SelectedExercise[]>()
-                return (
-                  <article key={week} className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                    <h4 className="text-sm font-semibold text-slate-800">Week {week}</h4>
-                    <div className="mt-2 space-y-1 text-xs text-slate-600 leading-relaxed">
-                      {[...dayMap.keys()]
-                        .sort((a, b) => a - b)
-                        .map((day) => {
-                          const items = dayMap.get(day) ?? []
-                          return (
-                            <p key={day}>
-                              <span className="font-semibold text-slate-700">Day {day}:</span> {items.map((item) => item.name).join(', ')}
-                            </p>
-                          )
-                        })}
-                    </div>
-                  </article>
-                )
-              })}
-            </div>
-          ) : null}
 
           <div className="flex justify-end">
             <button
@@ -1332,6 +1541,7 @@ export function AdminDashboard() {
               progress?.completionPercent ??
               (client.totalSessions ? Math.round((client.completedSessions / client.totalSessions) * 100) : 0)
             const renewDate = new Date(client.subscription.renewsOn).toLocaleDateString()
+            const startDate = client.planStartDate ? new Date(client.planStartDate).toLocaleDateString() : null
             return (
               <article key={client.id} className="rounded-2xl border border-slate-200 p-4 shadow-sm">
                 <header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -1373,7 +1583,9 @@ export function AdminDashboard() {
                     </p>
                   </div>
                   <div>
-                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Next renewal</p>
+                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Start date</p>
+                    <p className="mt-2 text-sm font-semibold text-slate-800">{startDate ?? 'Not set'}</p>
+                    <p className="mt-4 text-[11px] uppercase tracking-wide text-slate-500">Next renewal</p>
                     <p className="mt-2 text-sm font-semibold text-slate-800">{renewDate}</p>
                     <button
                       type="button"
@@ -1418,6 +1630,58 @@ export function AdminDashboard() {
     </section>
   )
 
+  const monthFormatter = useMemo(
+    () => new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }),
+    [],
+  )
+  const currentMonthLabel = monthFormatter.format(new Date())
+  const hasManualRevenueOverride = revenueSnapshot.manualCollectedThisMonth !== null
+
+  const handleStartMonthlyRevenueEdit = () => {
+    const baseline = currentMonthRevenueOverride ?? revenueSnapshot.computedCollectedThisMonth
+    const safeBaseline = Number.isFinite(baseline) && baseline > 0 ? baseline : 0
+    setMonthlyRevenueDraft(String(safeBaseline))
+    setMonthlyRevenueError(null)
+    setIsEditingMonthlyRevenue(true)
+  }
+
+  const handleCancelMonthlyRevenueEdit = () => {
+    setIsEditingMonthlyRevenue(false)
+    setMonthlyRevenueError(null)
+    setMonthlyRevenueDraft('')
+  }
+
+  const handleSaveMonthlyRevenue = () => {
+    const trimmed = monthlyRevenueDraft.trim()
+    if (!trimmed) {
+      setMonthlyRevenueError('Enter a value before saving')
+      return
+    }
+    const numericValue = Number(trimmed.replace(/,/g, ''))
+    if (!Number.isFinite(numericValue) || numericValue < 0) {
+      setMonthlyRevenueError('Enter a valid non-negative amount')
+      return
+    }
+    setManualRevenueForCurrentMonth(numericValue)
+    setIsEditingMonthlyRevenue(false)
+    setMonthlyRevenueError(null)
+    setMonthlyRevenueDraft('')
+    setToastMessage(`Updated collected revenue to ${formatCurrency(numericValue, 'INR')}`)
+  }
+
+  const handleResetMonthlyRevenue = () => {
+    setManualRevenueForCurrentMonth(null)
+    setIsEditingMonthlyRevenue(false)
+    setMonthlyRevenueError(null)
+    setMonthlyRevenueDraft('')
+    setToastMessage('Reset collected revenue to recorded payments')
+  }
+
+  const handleSubmitMonthlyRevenue = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    handleSaveMonthlyRevenue()
+  }
+
   const operationsContent = (
     <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
       <header className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
@@ -1434,6 +1698,77 @@ export function AdminDashboard() {
         <article className="rounded-2xl border border-slate-200 bg-slate-900/5 p-4">
           <p className="text-[11px] uppercase tracking-wide text-slate-500">Collected this month</p>
           <p className="mt-2 text-xl font-semibold text-slate-900">{formatCurrency(revenueSnapshot.totalCollectedThisMonth, 'INR')}</p>
+          <p className={`mt-1 text-[11px] ${hasManualRevenueOverride ? 'text-amber-600 font-semibold' : 'text-slate-500'}`}>
+            {hasManualRevenueOverride ? `Manual override for ${currentMonthLabel}` : 'Auto-calculated from recorded payments'}
+          </p>
+          {hasManualRevenueOverride ? (
+            <p className="mt-1 text-[11px] text-slate-500">
+              Recorded payments total {formatCurrency(revenueSnapshot.computedCollectedThisMonth, 'INR')}
+            </p>
+          ) : null}
+          {isEditingMonthlyRevenue ? (
+            <form onSubmit={handleSubmitMonthlyRevenue} className="mt-3 space-y-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <label className="flex flex-col text-[11px] font-semibold text-slate-600">
+                  Amount (INR)
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={monthlyRevenueDraft}
+                    onChange={(event) => setMonthlyRevenueDraft(event.target.value)}
+                    className="mt-1 w-40 rounded-xl border border-slate-200 bg-white px-3 py-1 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                  />
+                </label>
+                <button
+                  type="submit"
+                  className="rounded-full bg-indigo-600 px-3 py-1 text-[11px] font-semibold text-white shadow-sm transition hover:bg-indigo-500"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCancelMonthlyRevenueEdit}
+                  className="rounded-full border border-slate-200 px-3 py-1 text-[11px] font-semibold text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600"
+                >
+                  Cancel
+                </button>
+              </div>
+              {monthlyRevenueError ? (
+                <p className="text-[11px] font-semibold text-rose-600">{monthlyRevenueError}</p>
+              ) : null}
+              <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
+                {hasManualRevenueOverride ? (
+                  <button
+                    type="button"
+                    onClick={handleResetMonthlyRevenue}
+                    className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-amber-700 transition hover:border-amber-300"
+                  >
+                    Reset to recorded amount
+                  </button>
+                ) : null}
+              </div>
+            </form>
+          ) : (
+            <div className="mt-3 flex flex-wrap gap-2 text-[11px] font-semibold">
+              <button
+                type="button"
+                onClick={handleStartMonthlyRevenueEdit}
+                className="rounded-full border border-slate-200 px-3 py-1 text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600"
+              >
+                Adjust revenue
+              </button>
+              {hasManualRevenueOverride ? (
+                <button
+                  type="button"
+                  onClick={handleResetMonthlyRevenue}
+                  className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-amber-700 transition hover:border-amber-300"
+                >
+                  Reset override
+                </button>
+              ) : null}
+            </div>
+          )}
         </article>
         <article className="rounded-2xl border border-slate-200 bg-slate-900/5 p-4">
           <p className="text-[11px] uppercase tracking-wide text-slate-500">Active subscriptions</p>

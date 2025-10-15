@@ -148,6 +148,8 @@ export interface ClientProfile {
 export interface RevenueSnapshot {
   monthlyRecurringRevenue: number
   totalCollectedThisMonth: number
+  computedCollectedThisMonth: number
+  manualCollectedThisMonth: number | null
   upcomingRenewals: number
   activeSubscriptions: number
   pendingInvoices: number
