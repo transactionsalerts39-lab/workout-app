@@ -6,8 +6,10 @@ import { ProgramProvider } from './context/ProgramContext'
 import { AuthScreen } from './features/auth/AuthScreen'
 import { AdminDashboard } from './features/admin/AdminDashboard'
 import { UserDashboard } from './features/dashboard/UserDashboard'
+import { UserSettingsScreen } from './features/user/UserSettingsScreen'
 import { WorkoutSessionView } from './features/workout/WorkoutSessionView'
 import { Button } from './components/ui/button'
+import { Badge } from './components/ui/badge'
 import './App.css'
 
 interface ViewState {
@@ -19,6 +21,7 @@ function AppShell() {
   const { weeks } = usePlanContext()
   const [view, setView] = useState<ViewState>(() => ({ weekIndex: weeks[0]?.weekIndex ?? 1 }))
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null)
+  const [userScreen, setUserScreen] = useState<'dashboard' | 'settings'>('dashboard')
 
   const hasAdminAccess = user?.isAdmin ?? false
 
@@ -38,13 +41,21 @@ function AppShell() {
     }
   }, [user])
 
+  useEffect(() => {
+    if (!user || hasAdminAccess) {
+      setUserScreen('dashboard')
+    }
+  }, [user, hasAdminAccess])
+
   
 
   const content = useMemo(() => {
     if (isLoading) {
       return (
         <div className="flex min-h-screen items-center justify-center">
-          <span className="text-sm text-slate-500">Loading…</span>
+          <div className="surface-panel px-6 py-4 text-sm text-neutral-300">
+            Warming up your dashboard…
+          </div>
         </div>
       )
     }
@@ -53,49 +64,141 @@ function AppShell() {
       return <AuthScreen />
     }
 
+    const heroTitle = hasAdminAccess ? 'Coach Command Center' : 'Daily Performance Hub'
+    const heroSubtitle = hasAdminAccess
+      ? 'Monitor athlete readiness, unlock challenges, and keep revenue pulses in one view.'
+      : 'Track your sessions, spot trends, and let the AI engine fine-tune every progression.'
+
     if (activeSessionId) {
       return (
-        <main className="mx-auto max-w-5xl px-4 py-10">
-          <WorkoutSessionView
-            weekIndex={view.weekIndex}
-            sessionId={activeSessionId}
-            onBack={() => setActiveSessionId(null)}
-          />
-        </main>
+        <div className="relative flex min-h-screen flex-col">
+          <header className="sticky top-0 z-40 border-b border-white/10 bg-neutral-950/60 backdrop-blur-18">
+            <div className="container flex items-center justify-between py-5">
+              <div className="flex items-center gap-3">
+                <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 font-display text-lg text-white">
+                  WP
+                </div>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-neutral-400">Workout App</p>
+                  <p className="font-display text-base text-white">Live Session</p>
+                </div>
+              </div>
+              <Button size="sm" variant="outline" onClick={logout}>
+                Log out
+              </Button>
+            </div>
+          </header>
+
+          <main className="container flex-1 py-12">
+            <div className="mb-8 flex items-center justify-between">
+              <div>
+                <Badge variant="secondary" className="mb-3">
+                  Guided session
+                </Badge>
+                <h1 className="font-display text-3xl font-semibold text-neutral-50">Go smash today&apos;s plan</h1>
+                <p className="mt-2 max-w-2xl text-sm text-neutral-300">
+                  Focus mode keeps coaching cues, progression insights, and completion stats in one place.
+                </p>
+              </div>
+            </div>
+            <div className="surface-panel px-6 py-4">
+              <WorkoutSessionView
+                weekIndex={view.weekIndex}
+                sessionId={activeSessionId}
+                onBack={() => setActiveSessionId(null)}
+              />
+            </div>
+          </main>
+        </div>
       )
     }
 
     return (
-      <div className="min-h-screen bg-slate-100">
-        <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/80 backdrop-blur">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-            <div className="flex items-center gap-3">
-              <span className="text-lg font-semibold text-slate-900">Coach Plan</span>
-              {hasAdminAccess && (
-                <span className="rounded-full bg-slate-900/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700">
-                  Admin
-                </span>
-              )}
+      <div className="relative flex min-h-screen flex-col">
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-gradient-primary opacity-30 blur-[120px]" />
+        <header className="sticky top-0 z-40 border-b border-white/10 bg-neutral-950/60 backdrop-blur-18">
+          <div className="container flex items-center justify-between py-5">
+            <div className="flex items-center gap-4">
+              <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 font-display text-lg text-white">
+                WP
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.32em] text-neutral-400">Workout App</p>
+                <p className="font-display text-xl text-white">AI Fitness Companion</p>
+              </div>
+              {hasAdminAccess && <Badge>Admin access</Badge>}
             </div>
-            <Button size="sm" variant="outline" onClick={logout}>
-              Log out
-            </Button>
+            <div className="flex items-center gap-3">
+              {!hasAdminAccess ? (
+                <Button
+                  size="sm"
+                  variant={userScreen === 'settings' ? 'default' : 'secondary'}
+                  onClick={() =>
+                    setUserScreen((previous) => (previous === 'settings' ? 'dashboard' : 'settings'))
+                  }
+                >
+                  {userScreen === 'settings' ? 'Back to dashboard' : 'Settings'}
+                </Button>
+              ) : null}
+              <Button size="sm" variant="secondary" onClick={logout}>
+                Log out
+              </Button>
+            </div>
           </div>
         </header>
 
-        <main className="mx-auto max-w-6xl px-4 py-10">
-          {hasAdminAccess ? (
-            <AdminDashboard />
-          ) : (
-            <UserDashboard
-              weekIndex={view.weekIndex}
-              onSelectWeek={(weekIndex) => setView((prev) => ({ ...prev, weekIndex }))}
-              onOpenSession={(weekIndex, sessionId) => {
-                setView((prev) => ({ ...prev, weekIndex }))
-                setActiveSessionId(sessionId)
-              }}
-            />
-          )}
+        <main className="container relative z-10 flex-1 py-12">
+          <section className="mb-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+            <div className="surface-panel p-8">
+              <Badge variant="secondary" className="mb-4">
+                {hasAdminAccess ? 'Coach mode' : 'Athlete insights'}
+              </Badge>
+              <h1 className="font-display text-3xl font-semibold text-neutral-50">{heroTitle}</h1>
+              <p className="mt-4 max-w-2xl text-base text-neutral-300">{heroSubtitle}</p>
+              <div className="mt-6 flex flex-wrap items-center gap-3 text-xs text-neutral-300/80">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2">
+                  <span className="h-2 w-2 rounded-full bg-accent-teal" /> Adaptive programming engine
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2">
+                  <span className="h-2 w-2 rounded-full bg-brand-400" /> Real-time readiness scoring
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2">
+                  <span className="h-2 w-2 rounded-full bg-accent-coral" /> Gamified streaks &amp; rewards
+                </span>
+              </div>
+            </div>
+            <div className="surface-panel flex h-full flex-col justify-between p-6">
+              <div>
+                <p className="text-xs uppercase tracking-[0.24em] text-neutral-400">Snapshot</p>
+                <p className="mt-2 font-display text-2xl text-white">
+                  {hasAdminAccess ? '8 active programs' : 'Week ' + view.weekIndex}
+                </p>
+                <p className="mt-2 text-sm text-neutral-300/90">
+                  {hasAdminAccess
+                    ? 'Keep athletes aligned with unlocks, renewals, and check-ins without tab fatigue.'
+                    : 'Stay consistent—every session logged sharpens the personalization engine.'}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="space-y-10">
+            {hasAdminAccess ? (
+              <AdminDashboard />
+            ) : userScreen === 'settings' ? (
+              <UserSettingsScreen onBack={() => setUserScreen('dashboard')} />
+            ) : (
+              <UserDashboard
+                weekIndex={view.weekIndex}
+                onSelectWeek={(weekIndex) => setView((prev) => ({ ...prev, weekIndex }))}
+                onOpenSession={(weekIndex, sessionId) => {
+                  setUserScreen('dashboard')
+                  setView((prev) => ({ ...prev, weekIndex }))
+                  setActiveSessionId(sessionId)
+                }}
+              />
+            )}
+          </section>
         </main>
       </div>
     )

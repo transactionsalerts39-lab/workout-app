@@ -29,16 +29,16 @@
   - [x] 2.3 Implement Supabase query to verify current password (using `verifyPassword`) before allowing username updates; update stored username and display name on success.
   - [x] 2.4 Create admin password-change form with current/new/confirm fields, applying password strength checks and matching validation.
   - [x] 2.5 Update Supabase repository to hash and persist new password/salt after verification; surface success/error feedback in the panel.
-- [ ] 3.0 Integrate admin billing summary display and Supabase Storage-backed avatar upload with preview/retry handling.
+- [x] 3.0 Integrate admin billing summary display and Supabase Storage-backed avatar upload with preview/retry handling.
   - [x] 3.1 Fetch billing snapshot data (existing context or new query) and render a read-only card inside the admin settings.
   - [x] 3.2 Implement avatar upload flow: file picker, size/type validation, preview, and call to Supabase Storage bucket.
   - [x] 3.3 Persist returned avatar URL to `app_users`, update local auth state, and show optimistic preview with rollback on failure.
   - [x] 3.4 Add ability to remove/replace the avatar, resetting to default while updating Supabase as needed.
 - [ ] 4.0 Deliver the dedicated user Settings screen with navigation entry, reusing styling and credential/photo flows tailored for athletes.
-  - [ ] 4.1 Add routing/navigation hook (e.g., button in header or avatar dropdown) that routes users to a new `/settings` screen.
-  - [ ] 4.2 Implement `UserSettingsScreen` mirroring dashboard styling with cards for username/password change (requiring current password).
-  - [ ] 4.3 Reuse shared hooks/utilities for credential updates; ensure success/error messages align with admin flows.
-  - [ ] 4.4 Integrate avatar upload UI for users, leveraging the same Supabase Storage logic while scoping to current user.
+  - [x] 4.1 Add routing/navigation hook (e.g., button in header or avatar dropdown) that routes users to a new `/settings` screen.
+  - [x] 4.2 Implement `UserSettingsScreen` mirroring dashboard styling with cards for username/password change (requiring current password).
+  - [x] 4.3 Reuse shared hooks/utilities for credential updates; ensure success/error messages align with admin flows.
+  - [x] 4.4 Integrate avatar upload UI for users, leveraging the same Supabase Storage logic while scoping to current user.
 - [ ] 5.0 Update shared auth/data utilities, persistence, and tests to keep UI state in sync after credential or profile updates.
   - [ ] 5.1 Enhance `AuthContext` to refresh `user` and `users` arrays after any update (username/password/avatar).
   - [ ] 5.2 Update local storage persistence (`persistUsers`) to store new fields when Supabase is unavailable.
