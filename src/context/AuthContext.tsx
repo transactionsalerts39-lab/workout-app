@@ -13,6 +13,8 @@ interface AuthContextValue {
   signup: (payload: SignupPayload) => Promise<{ success: true } | { success: false; error: string }>
   login: (payload: LoginPayload) => Promise<{ success: true } | { success: false; error: string }>
   logout: () => void
+  updateUsername: (payload: { currentPassword: string; newUsername: string }) => Promise<{ success: true } | { success: false; error: string }>
+  updatePassword: (payload: { currentPassword: string; newPassword: string }) => Promise<{ success: true } | { success: false; error: string }>
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
@@ -378,6 +380,127 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     },
     logout: () => {
       setUser(null)
+    },
+    updateUsername: async ({ currentPassword, newUsername }) => {
+      if (!user) {
+        return { success: false, error: 'You need to be signed in to update your username.' }
+      }
+
+      const nextUsername = normaliseUsername(newUsername)
+      if (!nextUsername) {
+        return { success: false, error: 'Choose a new username before saving.' }
+      }
+      if (!currentPassword.trim()) {
+        return { success: false, error: 'Current password is required to confirm this change.' }
+      }
+      if (nextUsername === user.username) {
+        return { success: false, error: 'That is already your username.' }
+      }
+      if (users.some((entry) => entry.username === nextUsername && entry.id !== user.id)) {
+        return { success: false, error: 'That username is already taken.' }
+      }
+
+      const valid = await verifyPassword(currentPassword, user.salt, user.passwordHash)
+      if (!valid) {
+        return { success: false, error: 'Incorrect current password.' }
+      }
+
+      try {
+        if (supabaseClient) {
+          const { data, error } = await supabaseClient
+            .from('app_users')
+            .update({
+              username: nextUsername,
+            })
+            .eq('id', user.id)
+            .select(
+              'id, username, display_name, password_hash, salt, is_admin, created_at, avatar_url, plan_name, billing_interval, renewal_date',
+            )
+            .maybeSingle()
+
+          if (error) throw error
+          if (!data) throw new Error('No data returned while updating username')
+
+          const updatedUser = mapSupabaseUser(data)
+          setUsers((previous) => previous.map((entry) => (entry.id === updatedUser.id ? updatedUser : entry)))
+          setUser(updatedUser)
+        } else {
+          const updatedUser: StoredUser = {
+            ...user,
+            username: nextUsername,
+          }
+          setUsers((previous) => previous.map((entry) => (entry.id === updatedUser.id ? updatedUser : entry)))
+          setUser(updatedUser)
+        }
+
+        return { success: true }
+      } catch (error) {
+        console.error('Failed to update username', error)
+        return { success: false, error: 'Unable to update username right now.' }
+      }
+    },
+    updatePassword: async ({ currentPassword, newPassword }) => {
+      if (!user) {
+        return { success: false, error: 'You need to be signed in to update your password.' }
+      }
+      if (!currentPassword.trim()) {
+        return { success: false, error: 'Enter your current password to confirm the change.' }
+      }
+      if (!newPassword.trim()) {
+        return { success: false, error: 'Choose a new password before saving.' }
+      }
+      if (newPassword.length < 8) {
+        return { success: false, error: 'Passwords must be at least 8 characters long.' }
+      }
+
+      const isSameAsCurrent = await verifyPassword(newPassword, user.salt, user.passwordHash)
+      if (isSameAsCurrent) {
+        return { success: false, error: 'Pick a password that is different from your current one.' }
+      }
+
+      const validCurrent = await verifyPassword(currentPassword, user.salt, user.passwordHash)
+      if (!validCurrent) {
+        return { success: false, error: 'Incorrect current password.' }
+      }
+
+      try {
+        const nextSalt = createSalt()
+        const nextHash = await hashPassword(newPassword, nextSalt)
+
+        if (supabaseClient) {
+          const { data, error } = await supabaseClient
+            .from('app_users')
+            .update({
+              salt: nextSalt,
+              password_hash: nextHash,
+            })
+            .eq('id', user.id)
+            .select(
+              'id, username, display_name, password_hash, salt, is_admin, created_at, avatar_url, plan_name, billing_interval, renewal_date',
+            )
+            .maybeSingle()
+
+          if (error) throw error
+          if (!data) throw new Error('No data returned while updating password')
+
+          const updatedUser = mapSupabaseUser(data)
+          setUsers((previous) => previous.map((entry) => (entry.id === updatedUser.id ? updatedUser : entry)))
+          setUser(updatedUser)
+        } else {
+          const updatedUser: StoredUser = {
+            ...user,
+            salt: nextSalt,
+            passwordHash: nextHash,
+          }
+          setUsers((previous) => previous.map((entry) => (entry.id === updatedUser.id ? updatedUser : entry)))
+          setUser(updatedUser)
+        }
+
+        return { success: true }
+      } catch (error) {
+        console.error('Failed to update password', error)
+        return { success: false, error: 'Unable to update password right now.' }
+      }
     },
   }), [isLoading, supabaseClient, user, users])
 

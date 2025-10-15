@@ -18,17 +18,17 @@
 
 ## Tasks
 
-- [ ] 1.0 Prepare Supabase schema and TypeScript models for new account fields (avatar URL, billing summary data) and ensure local seed data stays in sync.
+- [x] 1.0 Prepare Supabase schema and TypeScript models for new account fields (avatar URL, billing summary data) and ensure local seed data stays in sync.
   - [x] 1.1 Create Supabase migration adding `avatar_url` (text) and billing columns (`plan_name`, `billing_interval`, `renewal_date`) to `app_users` or related tables; backfill defaults.
   - [x] 1.2 Update Supabase seed data and local mock data (`loadStoredUsers` defaults) to include the new fields.
   - [x] 1.3 Extend TypeScript types (`StoredUser`, Supabase row interfaces) to reflect added columns.
   - [x] 1.4 Refresh generated types if using Supabase codegen (or update manual definitions) and ensure repository helpers read new fields.
 - [ ] 2.0 Implement the Admin dashboard Settings tab with username/password update flows and secure current-password validation.
-  - [ ] 2.1 Add a `Settings` tab entry to `AdminDashboard.tsx` and render a new `AdminSettingsPanel`.
-  - [ ] 2.2 Build the admin account form with inputs for current password and new username; wire up validation and disable submit while pending.
-  - [ ] 2.3 Implement Supabase query to verify current password (using `verifyPassword`) before allowing username updates; update stored username and display name on success.
-  - [ ] 2.4 Create admin password-change form with current/new/confirm fields, applying password strength checks and matching validation.
-  - [ ] 2.5 Update Supabase repository to hash and persist new password/salt after verification; surface success/error feedback in the panel.
+  - [x] 2.1 Add a `Settings` tab entry to `AdminDashboard.tsx` and render a new `AdminSettingsPanel`.
+  - [x] 2.2 Build the admin account form with inputs for current password and new username; wire up validation and disable submit while pending.
+  - [x] 2.3 Implement Supabase query to verify current password (using `verifyPassword`) before allowing username updates; update stored username and display name on success.
+  - [x] 2.4 Create admin password-change form with current/new/confirm fields, applying password strength checks and matching validation.
+  - [x] 2.5 Update Supabase repository to hash and persist new password/salt after verification; surface success/error feedback in the panel.
 - [ ] 3.0 Integrate admin billing summary display and Supabase Storage-backed avatar upload with preview/retry handling.
   - [ ] 3.1 Fetch billing snapshot data (existing context or new query) and render a read-only card inside the admin settings.
   - [ ] 3.2 Implement avatar upload flow: file picker, size/type validation, preview, and call to Supabase Storage bucket.

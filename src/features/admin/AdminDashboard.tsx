@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useAuthContext } from '../../context/AuthContext'
 import { useProgressContext } from '../../context/ProgressContext'
 import { useProgramContext } from '../../context/ProgramContext'
+import { AdminSettingsPanel } from './AdminSettingsPanel'
 import type { Currency, TemplateExerciseSlot, WorkoutTemplate } from '../../types/program'
 import {
   FALLBACK_EXERCISES,
@@ -158,7 +159,7 @@ function formatCurrency(amount: number, currency: Currency) {
   }).format(amount)
 }
 
-type AdminTab = 'overview' | 'planning' | 'clients' | 'operations' | 'activity'
+type AdminTab = 'overview' | 'planning' | 'clients' | 'operations' | 'activity' | 'settings'
 
 const ADMIN_TABS: Array<{ id: AdminTab; label: string }> = [
   { id: 'overview', label: 'Overview' },
@@ -166,6 +167,7 @@ const ADMIN_TABS: Array<{ id: AdminTab; label: string }> = [
   { id: 'clients', label: 'Clients' },
   { id: 'operations', label: 'Revenue & Ops' },
   { id: 'activity', label: 'Activity' },
+  { id: 'settings', label: 'Settings' },
 ]
 
 const PLAN_HISTORY_TIMEFRAMES: Array<{ id: 'all' | '7' | '30' | '90'; label: string; days?: number }> = [
@@ -1975,6 +1977,8 @@ export function AdminDashboard() {
     </div>
   )
 
+  const settingsContent = <AdminSettingsPanel />
+
   return (
     <div className="space-y-6">
       <header className="relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-950 px-6 py-8 text-white shadow-card">
@@ -2019,6 +2023,7 @@ export function AdminDashboard() {
         {activeTab === 'clients' ? clientsContent : null}
         {activeTab === 'operations' ? operationsContent : null}
         {activeTab === 'activity' ? activityContent : null}
+        {activeTab === 'settings' ? settingsContent : null}
       </div>
 
       {toastMessage ? (
