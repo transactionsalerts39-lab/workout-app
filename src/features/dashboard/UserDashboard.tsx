@@ -77,10 +77,10 @@ const notificationIcons: Record<NotificationTone, string> = {
 }
 
 const notificationToneClasses: Record<NotificationTone, string> = {
-  success: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-  warning: 'border-amber-200 bg-amber-50 text-amber-700',
-  danger: 'border-rose-200 bg-rose-50 text-rose-700',
-  info: 'border-indigo-200 bg-indigo-50 text-indigo-700',
+  success: 'border-success/30 bg-success/15 text-success',
+  warning: 'border-warning/30 bg-warning/15 text-warning',
+  danger: 'border-danger/30 bg-danger/15 text-danger',
+  info: 'border-brand-300/25 bg-brand-500/15 text-brand-100',
 }
 
 const EMPTY_SETTINGS_FORM: SettingsFormState = {
@@ -153,31 +153,34 @@ function ProgressTrendChart({ data, activeWeekIndex }: ProgressTrendChartProps) 
   const pathD = points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x},${point.y}`).join(' ')
 
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl border border-slate-200 bg-white p-4">
+    <div className="surface-card relative w-full overflow-hidden p-5">
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-40 w-full">
         <defs>
           <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#6366F1" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#6366F1" stopOpacity="0" />
+            <stop offset="0%" stopColor="#5f4bff" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#22d3ee" stopOpacity="0" />
           </linearGradient>
         </defs>
         <path d={`${pathD} L 100,100 L 0,100 Z`} fill={`url(#${gradientId})`} stroke="none" />
-        <path d={pathD} stroke="#4338CA" strokeWidth={1.5} fill="none" strokeLinejoin="round" />
+        <path d={pathD} stroke="#5f4bff" strokeWidth={1.5} fill="none" strokeLinejoin="round" />
         {points.map((point) => {
           const isActive = point.weekIndex === activeWeekIndex
           return (
             <g key={point.weekIndex} transform={`translate(${point.x}, ${point.y})`}>
-              <circle r={2.4} fill="#4338CA" opacity={isActive ? 1 : 0.7} />
-              {isActive ? <circle r={4.2} fill="#A5B4FC" opacity={0.4} /> : null}
+              <circle r={2.4} fill="#5f4bff" opacity={isActive ? 1 : 0.7} />
+              {isActive ? <circle r={4.2} fill="#22d3ee" opacity={0.45} /> : null}
             </g>
           )
         })}
       </svg>
-      <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
+      <div className="mt-4 flex items-center justify-between text-xs text-neutral-300/80">
         {points.map((point) => (
           <span
             key={point.weekIndex}
-            className={cn('flex-1 text-center', point.weekIndex === activeWeekIndex ? 'font-semibold text-slate-700' : undefined)}
+            className={cn(
+              'flex-1 text-center transition-colors',
+              point.weekIndex === activeWeekIndex ? 'font-semibold text-neutral-100' : undefined,
+            )}
           >
             {point.label}
           </span>
@@ -641,29 +644,29 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
           <CardHeader className="gap-2">
             <span className="text-sm font-medium text-indigo-600">{userFriendlyName}</span>
             <CardTitle>Week {activeWeek.weekIndex} plan</CardTitle>
-            <p className="text-sm text-slate-500">Track your weekly momentum and celebrate each victory.</p>
+            <p className="text-sm text-neutral-300/80">Track your weekly momentum and celebrate each victory.</p>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-2xl bg-slate-900/5 p-4">
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Sessions</p>
-                <p className="mt-1 text-2xl font-semibold text-slate-900">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Sessions</p>
+                <p className="mt-3 font-display text-3xl text-neutral-50">
                   {completionSummary.completedSessions}/{completionSummary.totalSessions}
                 </p>
               </div>
-              <div className="rounded-2xl bg-slate-900/5 p-4">
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Completion</p>
-                <p className="mt-1 text-2xl font-semibold text-slate-900">{completionSummary.completionPercent}%</p>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Completion</p>
+                <p className="mt-3 font-display text-3xl text-neutral-50">{completionSummary.completionPercent}%</p>
               </div>
-              <div className="rounded-2xl bg-slate-900/5 p-4">
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Total sets</p>
-                <p className="mt-1 text-2xl font-semibold text-slate-900">{completionSummary.totalSets}</p>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Total sets</p>
+                <p className="mt-3 font-display text-3xl text-neutral-50">{completionSummary.totalSets}</p>
               </div>
             </div>
 
             {progressTrend.length ? (
               <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-slate-700">Progress journey</h3>
+                <h3 className="text-sm font-semibold text-neutral-200">Progress journey</h3>
                 <ProgressTrendChart data={progressTrend} activeWeekIndex={activeWeek.weekIndex} />
               </div>
             ) : null}
@@ -673,7 +676,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                 <Button
                   key={week.weekIndex}
                   size="sm"
-                  variant={week.weekIndex === activeWeek.weekIndex ? 'subtle' : 'outline'}
+                  variant={week.weekIndex === activeWeek.weekIndex ? 'secondary' : 'outline'}
                   onClick={() => onSelectWeek(week.weekIndex)}
                 >
                   {week.label}
@@ -687,7 +690,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
           <CardHeader className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <CardTitle className="text-lg">Sessions this week</CardTitle>
-              <p className="text-sm text-slate-500">Mark your workouts and dive into the session log.</p>
+              <p className="text-sm text-neutral-300/85">Mark your workouts and dive into the session log.</p>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -701,78 +704,71 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                   return (
                     <article
                       key={session.sessionId}
-                      className="relative flex min-h-[140px] flex-col gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-md cursor-pointer"
+                      className="surface-card relative flex min-h-[160px] flex-col gap-4 cursor-pointer border-white/15 p-4 transition-transform duration-200 hover:-translate-y-1 hover:shadow-soft"
                       onClick={() => onOpenSession(activeWeek.weekIndex, session.sessionId)}
                     >
-                      <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-start justify-between gap-3">
                         <div className="flex-1">
-                          <p className="text-sm font-semibold text-slate-900 truncate">{session.dayTitle}</p>
-                          <p className="text-xs text-slate-500 truncate">{session.focusLabel}</p>
+                          <p className="truncate text-sm font-semibold text-neutral-50">{session.dayTitle}</p>
+                          <p className="truncate text-xs text-neutral-300/80">{session.focusLabel}</p>
                         </div>
-                        <Badge variant={statusBadgeVariant(state)} className="shrink-0 capitalize text-xs">
+                        <Badge variant={statusBadgeVariant(state)} className="shrink-0 text-[10px] capitalize">
                           {state.replace('-', ' ')}
                         </Badge>
                       </div>
-                      <div className="mt-auto space-y-2">
-                        <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-500">
-                          <div className="text-center">
-                            <div className="font-semibold text-slate-900">{session.exercises.length}</div>
-                            <div className="text-xs">Exercises</div>
-                          </div>
-                          <div className="text-center">
-                            <div className="font-semibold text-slate-900">{totalSets}</div>
-                            <div className="text-xs">Sets</div>
-                          </div>
+                      <div className="grid grid-cols-2 gap-3 text-center text-[11px] text-neutral-300/75">
+                        <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                          <div className="font-display text-xl text-neutral-50">{session.exercises.length}</div>
+                          <div className="mt-1 text-[10px] uppercase tracking-[0.24em] text-neutral-400">Exercises</div>
                         </div>
-                        <div className="flex gap-1">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="flex-1 text-xs h-7"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              onOpenSession(activeWeek.weekIndex, session.sessionId)
-                            }}
-                          >
-                            Open
-                          </Button>
-                          <Button
-                            variant="subtle"
-                            size="sm"
-                            className="flex-1 text-xs h-7"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleCelebrateSession(session, state)
-                            }}
-                            disabled={markingSessionId === session.sessionId}
-                          >
-                            {markingSessionId === session.sessionId ? '…' : '✓'}
-                          </Button>
+                        <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                          <div className="font-display text-xl text-neutral-50">{totalSets}</div>
+                          <div className="mt-1 text-[10px] uppercase tracking-[0.24em] text-neutral-400">Sets</div>
                         </div>
+                      </div>
+                      <div className="mt-auto flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1 text-[11px]"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onOpenSession(activeWeek.weekIndex, session.sessionId)
+                          }}
+                        >
+                          Open session
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="flex-1 text-[11px]"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleCelebrateSession(session, state)
+                          }}
+                          disabled={markingSessionId === session.sessionId}
+                        >
+                          {markingSessionId === session.sessionId ? 'Saving…' : 'Mark complete'}
+                        </Button>
                       </div>
                       {isCelebrating && celebrationState ? (
                         <div className="pointer-events-none absolute inset-0 overflow-hidden">
                           {Array.from({ length: 12 }).map((_, index) => {
                             const left = Math.random() * 100
                             const top = Math.random() * 60
-                            const color = confettiPalette[index % confettiPalette.length]
+                            const confettiColor = confettiPalette[(index + session.sessionId.length) % confettiPalette.length]
                             return (
                               <span
-                                key={index}
+                                key={`${session.sessionId}_confetti_${index}`}
                                 className="confetti-piece"
                                 style={{
-                                  '--tw-confetti-x': `${Math.random() * 160 - 80}%`,
-                                  '--tw-confetti-y': `${90 + Math.random() * 30}%`,
-                                  left: `${left}%`,
-                                  top: `${top}%`,
-                                  backgroundColor: color,
+                                  '--tw-confetti-x': `${left - 50}%`,
+                                  '--tw-confetti-y': `${top + 120}%`,
+                                  backgroundColor: confettiColor,
                                 } as ConfettiStyle}
                               />
                             )
                           })}
-                          <div className="absolute inset-x-0 top-3 text-center text-2xl drop-shadow-sm">
-                            {celebrationState.emoji}
-                          </div>
                         </div>
                       ) : null}
                     </article>
@@ -780,7 +776,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                 })}
               </div>
             ) : (
-              <p className="text-sm text-slate-500">No sessions scheduled for this week yet.</p>
+              <p className="text-sm text-neutral-300/80">No sessions scheduled for this week yet.</p>
             )}
           </CardContent>
         </Card>
@@ -791,31 +787,33 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
               <CardHeader className="mb-4 space-y-0">
                 <div>
                   <CardTitle className="text-lg">Program overview</CardTitle>
-                  <p className="text-sm text-slate-500">Stay on top of your template, challenges, and renewal plan.</p>
+                  <p className="text-sm text-neutral-300/80">Stay on top of your template, challenges, and renewal plan.</p>
                 </div>
               </CardHeader>
               <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                <article className="rounded-2xl bg-slate-900/5 p-4">
-                  <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Assigned template</p>
-                  <p className="mt-2 text-base font-semibold text-slate-900">{assignedTemplate?.name ?? 'Custom coach build'}</p>
-                  <p className="mt-1 text-xs text-slate-600">Adjustments applied: {clientProfile.templateAdjustments.length}</p>
+                <article className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Assigned template</p>
+                  <p className="mt-3 text-base font-semibold text-neutral-100">{assignedTemplate?.name ?? 'Custom coach build'}</p>
+                  <p className="mt-2 text-xs text-neutral-300/80">Adjustments applied: {clientProfile.templateAdjustments.length}</p>
                 </article>
-                <article className="rounded-2xl bg-slate-900/5 p-4">
-                  <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Active challenge</p>
-                  <p className="mt-2 text-base font-semibold text-slate-900">{activeChallenge ? activeChallenge.name : 'None yet'}</p>
-                  <p className="mt-1 text-xs text-slate-600">
-                    {activeChallenge ? `${activeChallenge.durationWeeks} week focus on ${activeChallenge.focus.join(', ')}` : 'Unlock a preset to fast-track progress.'}
+                <article className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Active challenge</p>
+                  <p className="mt-3 text-base font-semibold text-neutral-100">{activeChallenge ? activeChallenge.name : 'None yet'}</p>
+                  <p className="mt-2 text-xs text-neutral-300/80">
+                    {activeChallenge
+                      ? `${activeChallenge.durationWeeks} week focus on ${activeChallenge.focus.join(', ')}`
+                      : 'Unlock a preset to fast-track progress.'}
                   </p>
                 </article>
-                <article className="rounded-2xl bg-slate-900/5 p-4">
-                  <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Subscription</p>
-                  <p className="mt-2 text-base font-semibold text-slate-900">{subscriptionProduct?.name ?? 'Coach access'}</p>
-                  <p className="mt-1 text-xs text-slate-600">{subscriptionProduct?.description ?? 'Work directly with your coach across shared plans.'}</p>
+                <article className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Subscription</p>
+                  <p className="mt-3 text-base font-semibold text-neutral-100">{subscriptionProduct?.name ?? 'Coach access'}</p>
+                  <p className="mt-2 text-xs text-neutral-300/80">{subscriptionProduct?.description ?? 'Work directly with your coach across shared plans.'}</p>
                 </article>
-                <article className="rounded-2xl bg-slate-900/5 p-4">
-                  <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Renewal</p>
-                  <p className="mt-2 text-base font-semibold text-slate-900">{clientProfile.subscription.autoRenew ? 'Auto-renew enabled' : 'Manual renewal'}</p>
-                  <p className="mt-1 text-xs text-slate-600">
+                <article className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Renewal</p>
+                  <p className="mt-3 text-base font-semibold text-neutral-100">{clientProfile.subscription.autoRenew ? 'Auto-renew enabled' : 'Manual renewal'}</p>
+                  <p className="mt-2 text-xs text-neutral-300/80">
                     {renewalDaysRemaining !== null
                       ? renewalDaysRemaining === 0
                         ? `Expired on ${new Date(clientProfile.subscription.renewsOn).toLocaleDateString()}`
@@ -841,11 +839,11 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
               <CardHeader className="mb-4 space-y-0">
                 <div>
                   <CardTitle className="text-lg">Check-ins &amp; progress photos</CardTitle>
-                  <p className="text-sm text-slate-500">Log your weekly update and keep photos to track your transformation.</p>
+                  <p className="text-sm text-neutral-300/80">Log your weekly update and keep photos to track your transformation.</p>
                 </div>
               </CardHeader>
               <CardContent className="grid gap-6 lg:grid-cols-[minmax(280px,360px)_1fr]">
-                <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div className="space-y-4 rounded-2xl border border-white/12 bg-white/5 p-5">
                   <div className="flex flex-col gap-1">
                     <Label htmlFor="check-in-energy">Energy level</Label>
                     <Select
@@ -899,7 +897,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                     <Input id="check-in-photo" type="file" accept="image/*" onChange={handlePhotoInputChange} className="file:text-xs" />
                   </div>
                   {checkInPhotoPreviewUrl ? (
-                    <div className="overflow-hidden rounded-2xl border border-slate-200">
+                    <div className="overflow-hidden rounded-2xl border border-white/10">
                       <img src={checkInPhotoPreviewUrl} alt="Progress preview" className="h-40 w-full object-cover" />
                     </div>
                   ) : null}
@@ -910,46 +908,46 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
 
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-800">Recent check-ins</h3>
+                    <h3 className="text-sm font-semibold text-neutral-200">Recent check-ins</h3>
                     {checkIns.length ? (
                       <ul className="mt-3 space-y-3 text-sm">
                         {checkIns.map((entry) => {
                           const submittedAt = new Date(entry.submittedAt)
                           return (
-                            <li key={entry.id} className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
-                              <div className="flex items-center justify-between text-xs text-slate-500">
+                            <li key={entry.id} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                              <div className="flex items-center justify-between text-xs text-neutral-300/80">
                                 <span>
                                   Checked in on {submittedAt.toLocaleDateString()} · {submittedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </span>
                                 <span>Week {entry.weekIndex}</span>
                               </div>
-                              <p className="mt-2 text-xs text-slate-600">Energy {entry.energyLevel}/5 · Stress {entry.stressLevel}/5</p>
-                              {entry.notes ? <p className="mt-2 text-sm text-slate-700">{entry.notes}</p> : null}
+                              <p className="mt-2 text-xs text-neutral-300/80">Energy {entry.energyLevel}/5 · Stress {entry.stressLevel}/5</p>
+                              {entry.notes ? <p className="mt-2 text-sm text-neutral-100">{entry.notes}</p> : null}
                             </li>
                           )
                         })}
                       </ul>
                     ) : (
-                      <p className="mt-3 text-xs text-slate-500">No check-ins logged yet — share your first update to keep coaching feedback flowing.</p>
+                      <p className="mt-3 text-xs text-neutral-400">No check-ins logged yet — share your first update to keep coaching feedback flowing.</p>
                     )}
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-800">Progress gallery</h3>
+                    <h3 className="text-sm font-semibold text-neutral-200">Progress gallery</h3>
                     {progressPhotos.length ? (
                       <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
                         {progressPhotos.map((photo) => (
-                          <figure key={photo.id} className="overflow-hidden rounded-2xl border border-slate-200">
+                          <figure key={photo.id} className="overflow-hidden rounded-2xl border border-white/10">
                             {photo.imageUrl ? (
                               <img src={photo.imageUrl} alt={photo.label} className="h-28 w-full object-cover" />
                             ) : (
-                              <div className="flex h-28 items-center justify-center bg-slate-100 text-xs text-slate-500">Photo pending</div>
+                              <div className="flex h-28 items-center justify-center bg-white/5 text-xs text-neutral-400">Photo pending</div>
                             )}
-                            <figcaption className="px-2 py-1 text-[11px] text-slate-500">{photo.label}</figcaption>
+                            <figcaption className="px-2 py-1 text-[11px] text-neutral-300/80">{photo.label}</figcaption>
                           </figure>
                         ))}
                       </div>
                     ) : (
-                      <p className="mt-3 text-xs text-slate-500">Upload your first progress photo to visualise change over time.</p>
+                      <p className="mt-3 text-xs text-neutral-400">Upload your first progress photo to visualise change over time.</p>
                     )}
                   </div>
                 </div>
@@ -960,33 +958,35 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
               <CardHeader className="mb-4 space-y-0">
                 <div>
                   <CardTitle className="text-lg">Challenge library</CardTitle>
-                  <p className="text-sm text-slate-500">Unlock preset 8–12 week blocks with in-app payments.</p>
+                  <p className="text-sm text-neutral-300/80">Unlock preset 8–12 week blocks with in-app payments.</p>
                 </div>
               </CardHeader>
               <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {activeChallenge ? (
-                  <article className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm text-emerald-700">
-                    <p className="text-xs font-semibold uppercase tracking-wide">Active</p>
-                    <h3 className="mt-1 text-base font-semibold text-emerald-900">{activeChallenge.name}</h3>
-                    <p className="mt-1 text-emerald-800">Focus: {activeChallenge.focus.join(', ')}</p>
-                    <p className="mt-1 text-xs">Duration {activeChallenge.durationWeeks} weeks · Unlock {activeChallenge.requiredSubscriptionProductId ? 'via hybrid subscription' : 'with any plan'}</p>
+                  <article className="rounded-2xl border border-success/30 bg-success/15 px-5 py-4 text-sm text-success">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-success/80">Active</p>
+                    <h3 className="mt-2 text-base font-semibold text-neutral-100">{activeChallenge.name}</h3>
+                    <p className="mt-1 text-sm text-neutral-100/90">Focus: {activeChallenge.focus.join(', ')}</p>
+                    <p className="mt-2 text-xs text-neutral-100/80">
+                      Duration {activeChallenge.durationWeeks} weeks · Unlock {activeChallenge.requiredSubscriptionProductId ? 'via hybrid subscription' : 'with any plan'}
+                    </p>
                   </article>
                 ) : null}
                 {eligibleChallenges.length ? (
                   eligibleChallenges.map((challenge) => (
-                    <article key={challenge.id} className="flex flex-col justify-between rounded-2xl border border-slate-200 px-4 py-4 text-sm">
+                    <article key={challenge.id} className="flex flex-col justify-between rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm">
                       <div className="space-y-2">
-                        <h3 className="text-base font-semibold text-slate-900">{challenge.name}</h3>
-                        <p className="text-slate-600">{challenge.summary}</p>
-                        <p className="text-xs text-slate-500">{challenge.durationWeeks} weeks · Unlock cost ₹{challenge.unlockCost}</p>
+                        <h3 className="text-base font-semibold text-neutral-100">{challenge.name}</h3>
+                        <p className="text-neutral-300/80">{challenge.summary}</p>
+                        <p className="text-xs text-neutral-400">{challenge.durationWeeks} weeks · Unlock cost ₹{challenge.unlockCost}</p>
                       </div>
-                      <Button variant="outline" size="sm" className="mt-4" onClick={() => handleUnlockChallenge(challenge.id)}>
+                      <Button variant="secondary" size="sm" className="mt-4" onClick={() => handleUnlockChallenge(challenge.id)}>
                         Unlock challenge
                       </Button>
                     </article>
                   ))
                 ) : (
-                  <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-sm text-slate-500">
+                  <div className="rounded-2xl border border-dashed border-white/20 bg-white/5 px-4 py-6 text-sm text-neutral-300/75">
                     Upgrade to a hybrid or semi-annual subscription to unlock premium preset challenges.
                   </div>
                 )}
@@ -997,7 +997,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
               <CardHeader className="mb-4 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                   <CardTitle className="text-lg">Billing &amp; invoices</CardTitle>
-                  <p className="text-sm text-slate-500">Manage renewals, download invoices, and review payment history.</p>
+                  <p className="text-sm text-neutral-300/80">Manage renewals, download invoices, and review payment history.</p>
                 </div>
                 <div className="flex flex-wrap gap-2 text-xs font-semibold">
                   <Button
@@ -1040,7 +1040,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                           <TableRow key={payment.id}>
                             <TableCell className="text-xs">{new Date(payment.recordedAt).toLocaleDateString()}</TableCell>
                             <TableCell className="text-xs capitalize">{payment.type}</TableCell>
-                            <TableCell className="text-xs font-semibold text-slate-900">
+                            <TableCell className="text-xs font-semibold text-neutral-100">
                               {payment.currency === 'INR' ? `₹${payment.amount}` : `$${payment.amount}`}
                             </TableCell>
                             <TableCell className="text-xs">
@@ -1048,14 +1048,14 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                                 {payment.status}
                               </Badge>
                             </TableCell>
-                            <TableCell className="text-xs text-slate-500">{payment.description}</TableCell>
+                            <TableCell className="text-xs text-neutral-300/80">{payment.description}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
                     </Table>
                   </div>
                 ) : (
-                  <p className="text-sm text-slate-500">No payments recorded yet. Billing begins once your first plan is activated.</p>
+                <p className="text-sm text-neutral-300/80">No payments recorded yet. Billing begins once your first plan is activated.</p>
                 )}
               </CardContent>
             </Card>
@@ -1068,7 +1068,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Notifications</CardTitle>
-              <p className="text-sm text-slate-500">Stay aligned with coach insights.</p>
+              <p className="text-sm text-neutral-300/80">Stay aligned with coach insights.</p>
             </CardHeader>
             <CardContent className="space-y-3">
               {notifications.length ? (
@@ -1078,13 +1078,13 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                       <span>{notificationIcons[item.tone]}</span>
                       <div>
                         <p className="font-semibold">{item.title}</p>
-                        <p className="text-xs text-slate-600">{item.message}</p>
+                        <p className="text-xs text-neutral-300/80">{item.message}</p>
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-slate-500">No alerts right now — keep up the great work!</p>
+                <p className="text-sm text-neutral-300/80">No alerts right now — keep up the great work!</p>
               )}
             </CardContent>
           </Card>
@@ -1092,7 +1092,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Upcoming check-ins</CardTitle>
-              <p className="text-sm text-slate-500">Plan ahead for your next updates.</p>
+              <p className="text-sm text-neutral-300/80">Plan ahead for your next updates.</p>
             </CardHeader>
             <CardContent className="space-y-3">
               {upcomingCheckIns.length ? (
@@ -1100,22 +1100,22 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                   {upcomingCheckIns.map((entry, index) => {
                     const date = new Date(entry)
                     return (
-                      <li key={entry} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-3 py-2">
-                        <span className="font-semibold text-slate-700">
+                      <li key={entry} className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                        <span className="font-semibold text-neutral-100">
                           {date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
                         </span>
-                        <span className="text-xs text-slate-500">{index === 0 ? 'Next' : `+${index} wk`}</span>
+                        <span className="text-xs text-neutral-400">{index === 0 ? 'Next' : `+${index} wk`}</span>
                       </li>
                     )
                   })}
                 </ul>
               ) : (
-                <p className="text-sm text-slate-500">Next check-in will be scheduled after your first update.</p>
+                <p className="text-sm text-neutral-300/80">Next check-in will be scheduled after your first update.</p>
               )}
               {lastCheckIn ? (
-                <p className="text-xs text-slate-500">Last check-in on {new Date(lastCheckIn.submittedAt).toLocaleString()}.</p>
+                <p className="text-xs text-neutral-400">Last check-in on {new Date(lastCheckIn.submittedAt).toLocaleString()}.</p>
               ) : (
-                <p className="text-xs text-slate-500">You have not logged a check-in yet.</p>
+                <p className="text-xs text-neutral-400">You have not logged a check-in yet.</p>
               )}
             </CardContent>
           </Card>
@@ -1123,10 +1123,10 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Coach chat</CardTitle>
-              <p className="text-sm text-slate-500">Share wins, questions, or quick updates.</p>
+                <p className="text-sm text-neutral-300/80">Share wins, questions, or quick updates.</p>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div ref={chatLogRef} className="max-h-64 space-y-3 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-3">
+              <div ref={chatLogRef} className="max-h-64 space-y-3 overflow-y-auto rounded-2xl border border-white/10 bg-white/5 p-3">
                 {chatMessages.length ? (
                   chatMessages.map((message) => {
                     const isClient = message.author === 'client'
@@ -1135,7 +1135,9 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                         <div
                           className={cn(
                             'max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm',
-                            isClient ? 'bg-indigo-600 text-white' : 'border border-slate-200 bg-white text-slate-700',
+                            isClient
+                              ? 'bg-gradient-primary text-white shadow-soft'
+                              : 'border border-white/10 bg-white/5 text-neutral-100',
                           )}
                         >
                           <p>{message.body}</p>
@@ -1147,7 +1149,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                     )
                   })
                 ) : (
-                  <p className="text-xs text-slate-500">Say hello to your coach to kick things off.</p>
+                  <p className="text-xs text-neutral-400">Say hello to your coach to kick things off.</p>
                 )}
               </div>
               <div className="flex gap-2">
@@ -1167,7 +1169,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Profile settings</CardTitle>
-              <p className="text-sm text-slate-500">Keep your coach up to date with key details.</p>
+              <p className="text-sm text-neutral-300/80">Keep your coach up to date with key details.</p>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex flex-col gap-1">

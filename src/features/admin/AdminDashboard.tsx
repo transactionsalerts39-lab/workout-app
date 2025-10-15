@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAuthContext } from '../../context/AuthContext'
 import { useProgressContext } from '../../context/ProgressContext'
 import { useProgramContext } from '../../context/ProgramContext'
@@ -26,6 +26,8 @@ interface SelectedExercise extends ExerciseDefinition {
   week: number
   day: number
   templateSlotId?: string
+  defaultSets?: number
+  defaultReps?: number
 }
 
 interface AthleteProfile {
@@ -106,6 +108,22 @@ const FALLBACK_NOTIFICATIONS: NotificationRecord[] = [
     read: true,
   },
 ]
+
+// Restrict metadata chips to muscle group to satisfy simplified spec (75% reduction vs previous four tags).
+const VISIBLE_LIBRARY_METADATA_FIELDS = ['muscleGroup'] as const
+const VISIBLE_SELECTED_METADATA_FIELDS = ['muscleGroup'] as const
+const SELECTED_EXERCISES_STORAGE_KEY = 'admin:selectedExercises'
+
+type DragPayload =
+  | {
+      source: 'library'
+      exercise: ExerciseDefinition
+    }
+  | {
+      source: 'selected'
+      exerciseId: string
+      originIndex: number
+    }
 
 function formatRelativeTime(timestamp: number) {
   const diff = Date.now() - timestamp
@@ -358,15 +376,15 @@ export function AdminDashboard() {
   const [exerciseLibraryStatus, setExerciseLibraryStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [exerciseFetchError, setExerciseFetchError] = useState<string | null>(null)
   const [exerciseQuery, setExerciseQuery] = useState('')
-  const [focusFilter, setFocusFilter] = useState('')
-  const [equipmentFilter, setEquipmentFilter] = useState('')
+  const [muscleGroupFilter, setMuscleGroupFilter] = useState('')
   const [visibleCount, setVisibleCount] = useState(5)
   const [selectedExercises, setSelectedExercises] = useState<SelectedExercise[]>([])
+  const [dragContext, setDragContext] = useState<DragPayload | null>(null)
+  const [dropIndicatorIndex, setDropIndicatorIndex] = useState<number | null>(null)
   const [activeTemplateId, setActiveTemplateId] = useState('')
   const [selectedAthleteId, setSelectedAthleteId] = useState('')
   const [weekCount, setWeekCount] = useState(4)
   const [startDate, setStartDate] = useState(() => new Date().toISOString().split('T')[0])
-  const [planName, setPlanName] = useState('')
   const [planNotes, setPlanNotes] = useState('')
   const [planHistory, setPlanHistory] = useState<PlanHistoryRecord[]>(FALLBACK_PLAN_HISTORY)
   const [notifications, setNotifications] = useState<NotificationRecord[]>(FALLBACK_NOTIFICATIONS)
@@ -384,6 +402,7 @@ export function AdminDashboard() {
   const [isEditingMonthlyRevenue, setIsEditingMonthlyRevenue] = useState(false)
   const [monthlyRevenueDraft, setMonthlyRevenueDraft] = useState('')
   const [monthlyRevenueError, setMonthlyRevenueError] = useState<string | null>(null)
+  const hasHydratedSelections = useRef(false)
 
   const activeTemplate = useMemo(
     () => workoutTemplates.find((template) => template.id === activeTemplateId),
@@ -410,25 +429,12 @@ export function AdminDashboard() {
     return clientByUserId.get(selectedAthleteId) ?? null
   }, [clientByUserId, selectedAthleteId])
 
-  const focusOptions = useMemo(() => {
+  const muscleGroupOptions = useMemo(() => {
     const options = new Set<string>()
     exerciseLibrary.forEach((exercise) => {
-      if (exercise.primaryFocus) {
-        options.add(exercise.primaryFocus)
+      if (exercise.muscleGroup) {
+        options.add(exercise.muscleGroup)
       }
-    })
-    return Array.from(options).sort((a, b) => a.localeCompare(b))
-  }, [exerciseLibrary])
-
-  const equipmentOptions = useMemo(() => {
-    const options = new Set<string>()
-    exerciseLibrary.forEach((exercise) => {
-      const tokens = exercise.equipment.split(/,\s*/)
-      tokens.forEach((token) => {
-        if (token) {
-          options.add(token)
-        }
-      })
     })
     return Array.from(options).sort((a, b) => a.localeCompare(b))
   }, [exerciseLibrary])
@@ -436,17 +442,17 @@ export function AdminDashboard() {
   const selectedExerciseSummary = useMemo(() => {
     if (!selectedExercises.length) return null
     const weekMap = new Map<number, number>()
-    const focusMap = new Map<string, number>()
+    const muscleGroupMap = new Map<string, number>()
     selectedExercises.forEach((exercise) => {
       weekMap.set(exercise.week, (weekMap.get(exercise.week) ?? 0) + 1)
-      focusMap.set(exercise.primaryFocus, (focusMap.get(exercise.primaryFocus) ?? 0) + 1)
+      muscleGroupMap.set(exercise.muscleGroup, (muscleGroupMap.get(exercise.muscleGroup) ?? 0) + 1)
     })
 
     const weekBadges = Array.from(weekMap.entries())
       .sort((a, b) => a[0] - b[0])
       .map(([week, count]) => `Week ${week}: ${count}`)
 
-    const focusBadges = Array.from(focusMap.entries())
+    const muscleGroupBadges = Array.from(muscleGroupMap.entries())
       .sort((a, b) => {
         if (b[1] === a[1]) {
           return a[0].localeCompare(b[0])
@@ -454,22 +460,30 @@ export function AdminDashboard() {
         return b[1] - a[1]
       })
       .slice(0, 3)
-      .map(([focus, count]) => `${focus} (${count})`)
+      .map(([group, count]) => `${group} (${count})`)
 
     return {
       total: selectedExercises.length,
       weekBadges,
-      focusBadges,
+      muscleGroupBadges,
+      metadataNote: `Visible metadata (${VISIBLE_SELECTED_METADATA_FIELDS.length}): muscle group only`,
     }
   }, [selectedExercises])
+
+  const planPreviewTitle = useMemo(() => {
+    if (!selectedExercises.length) return null
+    const athlete = athletes.find((entry) => entry.id === selectedAthleteId)
+    const primaryLabel = selectedExercises[0]?.name ?? 'Training block'
+    if (!athlete) {
+      return `${weekCount}-week plan · ${primaryLabel}`
+    }
+    return `${athlete.name.split(' ')[0] ?? athlete.name} · ${weekCount}-week plan · ${primaryLabel}`
+  }, [athletes, selectedAthleteId, selectedExercises, weekCount])
 
   const filteredExercises = useMemo(() => {
     const query = exerciseQuery.trim().toLowerCase()
     return exerciseLibrary.filter((exercise) => {
-      const matchesFocus = focusFilter ? exercise.primaryFocus === focusFilter : true
-      const matchesEquipment = equipmentFilter
-        ? exercise.equipment.toLowerCase().split(/,\s*/).includes(equipmentFilter.toLowerCase())
-        : true
+      const matchesMuscleGroup = muscleGroupFilter ? exercise.muscleGroup === muscleGroupFilter : true
       const matchesQuery = query
         ? [
             exercise.name,
@@ -482,9 +496,9 @@ export function AdminDashboard() {
             .toLowerCase()
             .includes(query)
         : true
-      return matchesFocus && matchesEquipment && matchesQuery
+      return matchesMuscleGroup && matchesQuery
     })
-  }, [equipmentFilter, exerciseLibrary, exerciseQuery, focusFilter])
+  }, [exerciseLibrary, exerciseQuery, muscleGroupFilter])
 
   const visibleExercises = useMemo(
     () => filteredExercises.slice(0, visibleCount),
@@ -591,7 +605,7 @@ export function AdminDashboard() {
   )
 
   const hasUnreadNotifications = useMemo(() => notifications.some((entry) => !entry.read), [notifications])
-  const canSubmitPlan = Boolean(selectedAthleteId && planName.trim() && startDate && selectedExercises.length)
+  const canSubmitPlan = Boolean(selectedAthleteId && startDate && selectedExercises.length)
 
   useEffect(() => {
     let isActive = true
@@ -626,7 +640,7 @@ export function AdminDashboard() {
 
   useEffect(() => {
     setVisibleCount(5)
-  }, [equipmentFilter, exerciseLibrary, exerciseQuery, focusFilter])
+  }, [exerciseLibrary, exerciseQuery, muscleGroupFilter])
 
   useEffect(() => {
     if (!toastMessage) return
@@ -640,20 +654,216 @@ export function AdminDashboard() {
     )
   }, [weekCount])
 
-  const handleAddExercise = (exercise: ExerciseDefinition) => {
-    setSelectedExercises((previous) => {
-      if (previous.some((entry) => entry.id === exercise.id)) {
-        return previous
+  useEffect(() => {
+    if (typeof window === 'undefined' || hasHydratedSelections.current) {
+      return
+    }
+    try {
+      const raw = window.localStorage.getItem(SELECTED_EXERCISES_STORAGE_KEY)
+      if (raw) {
+        const parsed = JSON.parse(raw) as SelectedExercise[]
+        if (Array.isArray(parsed) && parsed.length) {
+          setSelectedExercises(
+            parsed.map((exercise) => ({
+              ...exercise,
+              defaultSets: exercise.defaultSets ?? 3,
+              defaultReps: exercise.defaultReps ?? 10,
+            })),
+          )
+        }
       }
-      const nextWeek = Math.min(previous.length + 1, weekCount)
-      const nextDay = ((previous.length % 7) + 1)
-      return [...previous, { ...exercise, week: nextWeek, day: nextDay }]
-    })
-  }
+    } catch (error) {
+      console.warn('Failed to hydrate selected exercises', error)
+    } finally {
+      hasHydratedSelections.current = true
+    }
+  }, [])
 
-  const handleRemoveExercise = (exerciseId: string) => {
+  useEffect(() => {
+    if (typeof window === 'undefined' || !hasHydratedSelections.current) {
+      return
+    }
+    try {
+      if (selectedExercises.length) {
+        window.localStorage.setItem(SELECTED_EXERCISES_STORAGE_KEY, JSON.stringify(selectedExercises))
+      } else {
+        window.localStorage.removeItem(SELECTED_EXERCISES_STORAGE_KEY)
+      }
+    } catch (error) {
+      console.warn('Failed to persist selected exercises', error)
+    }
+  }, [selectedExercises])
+
+  const handleLibraryDragStart = useCallback((event: React.DragEvent<HTMLElement>, exercise: ExerciseDefinition) => {
+    const payload: DragPayload = { source: 'library', exercise }
+    setDragContext(payload)
+    event.dataTransfer.effectAllowed = 'copyMove'
+    event.dataTransfer.setData('application/json', JSON.stringify(payload))
+  }, [])
+
+  const handleSelectedDragStart = useCallback(
+    (event: React.DragEvent<HTMLElement>, exerciseId: string, originIndex: number) => {
+      const payload: DragPayload = { source: 'selected', exerciseId, originIndex }
+      setDragContext(payload)
+      event.dataTransfer.effectAllowed = 'move'
+      event.dataTransfer.setData('application/json', JSON.stringify(payload))
+    },
+    [],
+  )
+
+  const resetDragState = useCallback(() => {
+    setDragContext(null)
+    setDropIndicatorIndex(null)
+  }, [])
+
+  const handleDragEnd = useCallback(() => {
+    resetDragState()
+  }, [resetDragState])
+
+  const handleAddExercise = useCallback(
+    (exercise: ExerciseDefinition, insertIndex?: number | null) => {
+      setSelectedExercises((previous) => {
+        if (previous.some((entry) => entry.id === exercise.id)) {
+          return previous
+        }
+        const nextWeek = Math.min(previous.length + 1, weekCount)
+        const nextDay = (previous.length % 7) + 1
+        const withNew = [
+          ...previous,
+          {
+            ...exercise,
+            week: nextWeek,
+            day: nextDay,
+            defaultSets: exercise.defaultSets ?? 3,
+            defaultReps: exercise.defaultReps ?? 10,
+          },
+        ]
+        if (insertIndex == null) {
+          return withNew
+        }
+        const boundedIndex = Math.max(0, Math.min(insertIndex, withNew.length - 1))
+        const [added] = withNew.splice(withNew.length - 1, 1)
+        withNew.splice(boundedIndex, 0, added)
+        return withNew
+      })
+    },
+    [weekCount],
+  )
+
+  const handleRemoveExercise = useCallback((exerciseId: string) => {
     setSelectedExercises((previous) => previous.filter((exercise) => exercise.id !== exerciseId))
-  }
+  }, [])
+
+  const handleReorderExercise = useCallback((exerciseId: string, targetIndex: number) => {
+    setSelectedExercises((previous) => {
+      const currentIndex = previous.findIndex((exercise) => exercise.id === exerciseId)
+      if (currentIndex === -1) return previous
+      const next = [...previous]
+      const [moved] = next.splice(currentIndex, 1)
+      const boundedIndex = Math.max(0, Math.min(targetIndex, next.length))
+      next.splice(boundedIndex, 0, moved)
+      return next
+    })
+  }, [])
+
+  const parseDragPayload = useCallback(
+    (event: React.DragEvent): DragPayload | null => {
+      const fallback = dragContext
+      try {
+        const raw = event.dataTransfer.getData('application/json')
+        if (!raw) {
+          return fallback
+        }
+        const parsed = JSON.parse(raw) as DragPayload
+        if (parsed && (parsed.source === 'library' || parsed.source === 'selected')) {
+          return parsed
+        }
+      } catch (error) {
+        console.warn('Failed to parse drag payload', error)
+      }
+      return fallback
+    },
+    [dragContext],
+  )
+
+  const handleLibraryDragOver = useCallback(
+    (event: React.DragEvent<HTMLElement>) => {
+      const payload = parseDragPayload(event)
+      if (!payload || payload.source !== 'selected') return
+      event.preventDefault()
+      event.dataTransfer.dropEffect = 'move'
+    },
+    [parseDragPayload],
+  )
+
+  const handleLibraryDrop = useCallback(
+    (event: React.DragEvent<HTMLElement>) => {
+      event.preventDefault()
+      const payload = parseDragPayload(event)
+      if (payload?.source === 'selected') {
+        handleRemoveExercise(payload.exerciseId)
+      }
+      resetDragState()
+    },
+    [handleRemoveExercise, parseDragPayload, resetDragState],
+  )
+
+  const handleSelectedListDragOver = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      const payload = parseDragPayload(event)
+      if (!payload) return
+      event.preventDefault()
+      event.dataTransfer.dropEffect = payload.source === 'library' ? 'copy' : 'move'
+      if (!selectedExercises.length) {
+        setDropIndicatorIndex(0)
+      } else if (dropIndicatorIndex == null) {
+        setDropIndicatorIndex(selectedExercises.length)
+      }
+    },
+    [dropIndicatorIndex, parseDragPayload, selectedExercises.length],
+  )
+
+  const handleSelectedListDrop = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault()
+      const payload = parseDragPayload(event)
+      if (!payload) {
+        resetDragState()
+        return
+      }
+      const fallbackIndex = selectedExercises.length
+      const targetIndex = dropIndicatorIndex ?? fallbackIndex
+      if (payload.source === 'library') {
+        handleAddExercise(payload.exercise, targetIndex)
+      } else {
+        handleReorderExercise(payload.exerciseId, targetIndex)
+      }
+      resetDragState()
+    },
+    [dropIndicatorIndex, handleAddExercise, handleReorderExercise, parseDragPayload, resetDragState, selectedExercises.length],
+  )
+
+  const handleSelectedListDragLeave = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    const nextTarget = event.relatedTarget as Node | null
+    if (!nextTarget || !event.currentTarget.contains(nextTarget)) {
+      setDropIndicatorIndex(null)
+    }
+  }, [])
+
+  const handleSelectedCardDragOver = useCallback(
+    (event: React.DragEvent<HTMLElement>, index: number) => {
+      const payload = parseDragPayload(event)
+      if (!payload) return
+      event.preventDefault()
+      event.dataTransfer.dropEffect = payload.source === 'library' ? 'copy' : 'move'
+      const rect = event.currentTarget.getBoundingClientRect()
+      const offset = event.clientY - rect.top
+      const shouldPlaceBefore = offset < rect.height / 2
+      const nextIndex = shouldPlaceBefore ? index : index + 1
+      setDropIndicatorIndex(nextIndex)
+    },
+    [parseDragPayload],
+  )
 
   const handleWeekChange = (exerciseId: string, week: number) => {
     setSelectedExercises((previous) =>
@@ -664,6 +874,22 @@ export function AdminDashboard() {
   const handleDayChange = (exerciseId: string, day: number) => {
     setSelectedExercises((previous) =>
       previous.map((exercise) => (exercise.id === exerciseId ? { ...exercise, day } : exercise)),
+    )
+  }
+
+  const handleSetsChange = (exerciseId: string, sets: number) => {
+    setSelectedExercises((previous) =>
+      previous.map((exercise) =>
+        exercise.id === exerciseId ? { ...exercise, defaultSets: Math.max(0, Math.min(sets, 20)) } : exercise,
+      ),
+    )
+  }
+
+  const handleRepsChange = (exerciseId: string, reps: number) => {
+    setSelectedExercises((previous) =>
+      previous.map((exercise) =>
+        exercise.id === exerciseId ? { ...exercise, defaultReps: Math.max(0, Math.min(reps, 50)) } : exercise,
+      ),
     )
   }
 
@@ -700,6 +926,8 @@ export function AdminDashboard() {
           week: 1,
           day: Math.min(dayIndex + 1, 7),
           templateSlotId: slot.slotId,
+          defaultSets: slot.prescribedSets ?? 3,
+          defaultReps: slot.prescribedReps ?? 10,
         })
       })
     })
@@ -707,7 +935,6 @@ export function AdminDashboard() {
     setSelectedExercises(nextExercises)
     setActiveTemplateId(templateId)
     setWeekCount(Math.min(Math.max(template.durationWeeks, 1), 24))
-    setPlanName(template.name)
     setPlanNotes(template.notes.join('\n'))
     const allowed = computeAllowedTemplateAdjustments(template)
     setToastMessage(`${template.name} loaded. Adjust up to ${allowed} slots (${template.adjustmentsAllowedPercent}% flex).`)
@@ -738,20 +965,21 @@ export function AdminDashboard() {
 
   const handleSubmitPlan = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const trimmedName = planName.trim()
     const athlete = athletes.find((entry) => entry.id === selectedAthleteId)
-    if (!canSubmitPlan || !athlete || !trimmedName) {
+    if (!canSubmitPlan || !athlete) {
       setToastMessage('Please complete the form and add exercises.')
       return
     }
 
     const focusBreakdown = Array.from(new Set(selectedExercises.map((exercise) => exercise.primaryFocus)))
+    const fallbackTitle = `${athlete.name.split(' ')[0] ?? athlete.name} · ${weekCount}-week plan · ${selectedExercises[0]?.name ?? 'Training block'}`
+    const planTitle = planPreviewTitle ?? fallbackTitle
 
     const newPlan: PlanHistoryRecord = {
       id: generateId('plan'),
       athleteId: athlete.id,
       athleteName: athlete.name,
-      planName: trimmedName,
+      planName: planTitle,
       weeks: weekCount,
       startDate,
       exerciseCount: selectedExercises.length,
@@ -763,7 +991,7 @@ export function AdminDashboard() {
       id: generateId('notif'),
       athleteId: athlete.id,
       athleteName: athlete.name,
-      message: `${trimmedName} (${selectedExercises.length} exercises) assigned to you`,
+      message: `${planTitle} (${selectedExercises.length} exercises) assigned to you`,
       timestamp: Date.now(),
       read: false,
     }
@@ -801,11 +1029,10 @@ export function AdminDashboard() {
 
     setPlanHistory((previous) => [newPlan, ...previous])
     setNotifications((previous) => [newNotification, ...previous])
-    setToastMessage(`${trimmedName} shared with ${athlete.name}`)
+    setToastMessage(`${planTitle} shared with ${athlete.name}`)
 
     setSelectedExercises([])
     setSelectedAthleteId('')
-    setPlanName('')
     setPlanNotes('')
     setWeekCount(4)
     setStartDate(new Date().toISOString().split('T')[0])
@@ -1035,24 +1262,30 @@ export function AdminDashboard() {
   )
 
   const planningContent = (
-    <div className="grid gap-6 xl:grid-cols-[minmax(320px,360px)_minmax(320px,360px)_minmax(0,1fr)]">
-      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card xl:sticky xl:top-24 xl:max-h-[calc(100vh-8rem)] xl:overflow-hidden">
-        <header className="mb-4 flex items-center justify-between gap-3">
-          <div>
+    <div className="grid gap-6 lg:grid-cols-[minmax(320px,1fr)_minmax(320px,1fr)] lg:items-start">
+      <section
+        className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto"
+        onDragOver={handleLibraryDragOver}
+        onDrop={handleLibraryDrop}
+      >
+        <header className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1">
             <h2 className="text-lg font-semibold text-slate-900">Exercise library</h2>
-            <p className="text-xs text-slate-500 leading-relaxed">Search, filter, and add exercises into the weekly schedule.</p>
+            <p className="text-xs text-slate-500">Drag exercises or tap “Add” to queue them for your session.</p>
             {exerciseLibraryStatus === 'loading' ? (
-              <span className="mt-2 inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-[11px] font-semibold text-indigo-600">
+              <span className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-indigo-600">
                 Syncing live exercise data…
               </span>
             ) : null}
             {exerciseLibraryStatus === 'error' ? (
-              <span className="mt-2 inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-[11px] font-semibold text-amber-700">
+              <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-700">
                 Using fallback library{exerciseFetchError ? ` · ${exerciseFetchError}` : ''}
               </span>
             ) : null}
           </div>
-          <span className="text-xs font-semibold text-slate-500">{filteredExercises.length} matches</span>
+          <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            {filteredExercises.length} matches
+          </span>
         </header>
 
         <div className="space-y-4 border-b border-slate-200 pb-4">
@@ -1077,62 +1310,56 @@ export function AdminDashboard() {
               className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
             />
           </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
-              Primary focus
-              <select
-                value={focusFilter}
-                onChange={(event) => setFocusFilter(event.target.value)}
-                className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-              >
-                <option value="">All focuses</option>
-                {focusOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
-              Equipment
-              <select
-                value={equipmentFilter}
-                onChange={(event) => setEquipmentFilter(event.target.value)}
-                className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-              >
-                <option value="">All equipment</option>
-                {equipmentOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
+          <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
+            Muscle group
+            <select
+              value={muscleGroupFilter}
+              onChange={(event) => setMuscleGroupFilter(event.target.value)}
+              className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            >
+              <option value="">All muscle groups</option>
+              {muscleGroupOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
 
-        <div className="mt-4 space-y-3 overflow-y-auto pr-1 xl:max-h-[calc(100vh-18rem)]">
+        <div className="mt-4 space-y-3 pr-1 lg:max-h-[calc(100vh-18rem)] lg:overflow-y-auto lg:pr-2">
           {visibleExercises.length ? (
             visibleExercises.map((exercise) => {
               const isSelected = selectedExercises.some((entry) => entry.id === exercise.id)
               return (
                 <article
                   key={exercise.id}
-                  className="flex items-start justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm"
+                  draggable
+                  onDragStart={(event) => handleLibraryDragStart(event, exercise)}
+                  onDragEnd={handleDragEnd}
+                  className="flex cursor-grab items-start justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm"
                 >
                   <div className="space-y-2">
                     <h3 className="text-base font-semibold text-slate-900 break-words">{exercise.name}</h3>
-                    <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
-                      <span className="rounded-full bg-indigo-100 px-3 py-1 text-indigo-600">{exercise.primaryFocus}</span>
-                      <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-700">{exercise.movementType}</span>
-                      <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-700">{exercise.muscleGroup}</span>
-                      <span className="rounded-full bg-slate-200 px-3 py-1 text-slate-700">{exercise.equipment}</span>
+                    <div
+                      className="flex flex-wrap gap-2 text-[11px] font-semibold"
+                      data-visible-metadata={VISIBLE_LIBRARY_METADATA_FIELDS.join(',')}
+                      data-metadata-count={VISIBLE_LIBRARY_METADATA_FIELDS.length}
+                    >
+                      <span
+                        className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-700"
+                        data-testid="exercise-library-muscle-group"
+                      >
+                        {exercise.muscleGroup}
+                      </span>
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleAddExercise(exercise)}
                     disabled={isSelected}
+                    aria-label={isSelected ? `${exercise.name} already added` : `Add ${exercise.name} to selected exercises`}
+                    data-fallback-action="add"
                     className={`rounded-xl border px-3 py-1 text-xs font-semibold transition ${
                       isSelected
                         ? 'cursor-not-allowed border-slate-200 bg-white text-slate-400'
@@ -1162,21 +1389,19 @@ export function AdminDashboard() {
         ) : null}
       </section>
 
-      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card xl:sticky xl:top-24 xl:max-h-[calc(100vh-8rem)] xl:overflow-hidden">
-        <header className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div>
+      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
+        <header className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1">
             <h2 className="text-lg font-semibold text-slate-900">Selected exercises</h2>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Review selections in real time, tweak weeks and days, and prep the block before assigning it.
-            </p>
+            <p className="text-xs text-slate-500">Drag to reorder or use the Remove button for quick edits.</p>
             {activeTemplate && templateAdjustmentStats ? (
               <p className="mt-1 text-xs font-semibold text-indigo-600">
                 Template adjustments used {templateAdjustmentStats.used}/{templateAdjustmentStats.allowed} · Flex window {activeTemplate.adjustmentsAllowedPercent}%
               </p>
             ) : null}
           </div>
-          <div className="flex items-center gap-2">
-            <span className="rounded-full bg-slate-900/5 px-3 py-1 text-xs font-semibold text-slate-700">
+          <div className="flex items-center gap-2 text-[11px] font-semibold">
+            <span className="rounded-full bg-slate-900/5 px-3 py-1 text-slate-700">
               {(selectedExerciseSummary?.total ?? selectedExercises.length)} selected
             </span>
             {selectedExercises.length ? (
@@ -1194,47 +1419,68 @@ export function AdminDashboard() {
         {selectedExercises.length ? (
           <>
             {selectedExerciseSummary ? (
-              <div className="mb-4 flex flex-wrap gap-2 text-[11px] font-semibold">
+              <div
+                className="mb-4 flex flex-wrap gap-2 text-[11px] font-semibold"
+                title={selectedExerciseSummary.metadataNote}
+              >
                 {selectedExerciseSummary.weekBadges.map((label) => (
                   <span key={`week-${label}`} className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">
                     {label}
                   </span>
                 ))}
-                {selectedExerciseSummary.focusBadges.map((label) => (
-                  <span key={`focus-${label}`} className="rounded-full bg-indigo-50 px-3 py-1 text-indigo-600">
+                {selectedExerciseSummary.muscleGroupBadges.map((label) => (
+                  <span key={`group-${label}`} className="rounded-full bg-indigo-50 px-3 py-1 text-indigo-600">
                     {label}
                   </span>
                 ))}
               </div>
             ) : null}
 
-            <div className="space-y-3 overflow-y-auto pr-1 xl:max-h-[calc(100vh-22rem)]">
-              {sortedSelectedExercises.map((exercise) => {
-                const sourceLabel =
-                  exercise.source === 'template'
-                    ? 'Template slot'
-                    : exercise.source === 'api'
-                      ? 'Library · API'
-                      : 'Library · Fallback'
-                return (
-                  <article key={exercise.id} className="space-y-3 rounded-2xl border border-slate-200 px-4 py-3">
+            <div
+              className="space-y-3 pr-1 lg:max-h-[calc(100vh-22rem)] lg:overflow-y-auto lg:pr-2"
+              onDragOver={handleSelectedListDragOver}
+              onDrop={handleSelectedListDrop}
+              onDragLeave={handleSelectedListDragLeave}
+              data-drag-active={Boolean(dragContext)}
+            >
+              {sortedSelectedExercises.map((exercise, index) => (
+                <div key={exercise.id} className="space-y-3" data-index={index}>
+                  {dropIndicatorIndex === index ? (
+                    <div className="h-2 rounded-full bg-indigo-400" data-testid="selected-drop-indicator" />
+                  ) : null}
+                  <article
+                    draggable
+                    onDragStart={(event) => handleSelectedDragStart(event, exercise.id, index)}
+                    onDragEnd={handleDragEnd}
+                    onDragOver={(event) => handleSelectedCardDragOver(event, index)}
+                    className={`space-y-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 ${
+                      dragContext?.source === 'selected' && dragContext.exerciseId === exercise.id ? 'opacity-60' : ''
+                    }`}
+                  >
                     <header className="flex flex-col gap-2">
                       <div className="flex items-start justify-between gap-3">
                         <h4 className="text-base font-semibold text-slate-900 break-words">{exercise.name}</h4>
                         <button
                           type="button"
                           onClick={() => handleRemoveExercise(exercise.id)}
+                          aria-label={`Remove ${exercise.name} from selected exercises`}
+                          data-fallback-action="remove"
                           className="text-xs font-semibold text-rose-500 transition hover:text-rose-600"
                         >
                           Remove
                         </button>
                       </div>
-                      <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
-                        <span className="rounded-full bg-indigo-100 px-3 py-1 text-indigo-600">{exercise.primaryFocus}</span>
-                        <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-700">{exercise.movementType}</span>
-                        <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-700">{exercise.muscleGroup}</span>
-                        <span className="rounded-full bg-slate-200 px-3 py-1 text-slate-700">{exercise.equipment}</span>
-                        <span className="rounded-full bg-slate-900/10 px-3 py-1 text-slate-700">{sourceLabel}</span>
+                      <div
+                        className="flex flex-wrap gap-2 text-[11px] font-semibold"
+                        data-visible-metadata={VISIBLE_SELECTED_METADATA_FIELDS.join(',')}
+                        data-metadata-count={VISIBLE_SELECTED_METADATA_FIELDS.length}
+                      >
+                        <span
+                          className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-700"
+                          data-testid="selected-exercise-muscle-group"
+                        >
+                          {exercise.muscleGroup}
+                        </span>
                       </div>
                     </header>
 
@@ -1260,7 +1506,29 @@ export function AdminDashboard() {
                       </label>
                     ) : null}
 
-                    <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="grid gap-3 sm:grid-cols-4">
+                      <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
+                        Sets
+                        <input
+                          type="number"
+                          min={0}
+                          max={20}
+                          value={exercise.defaultSets ?? 3}
+                          onChange={(event) => handleSetsChange(exercise.id, Number(event.target.value))}
+                          className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                        />
+                      </label>
+                      <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
+                        Reps
+                        <input
+                          type="number"
+                          min={0}
+                          max={50}
+                          value={exercise.defaultReps ?? 10}
+                          onChange={(event) => handleRepsChange(exercise.id, Number(event.target.value))}
+                          className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                        />
+                      </label>
                       <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600">
                         Week
                         <select
@@ -1268,9 +1536,9 @@ export function AdminDashboard() {
                           onChange={(event) => handleWeekChange(exercise.id, Number(event.target.value))}
                           className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
                         >
-                          {Array.from({ length: weekCount }).map((_, index) => (
-                            <option key={index + 1} value={index + 1}>
-                              Week {index + 1}
+                          {Array.from({ length: weekCount }).map((_, optionIndex) => (
+                            <option key={optionIndex + 1} value={optionIndex + 1}>
+                              Week {optionIndex + 1}
                             </option>
                           ))}
                         </select>
@@ -1282,17 +1550,20 @@ export function AdminDashboard() {
                           onChange={(event) => handleDayChange(exercise.id, Number(event.target.value))}
                           className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
                         >
-                          {Array.from({ length: 7 }).map((_, index) => (
-                            <option key={index + 1} value={index + 1}>
-                              Day {index + 1}
+                          {Array.from({ length: 7 }).map((_, optionIndex) => (
+                            <option key={optionIndex + 1} value={optionIndex + 1}>
+                              Day {optionIndex + 1}
                             </option>
                           ))}
                         </select>
                       </label>
                     </div>
                   </article>
-                )
-              })}
+                </div>
+              ))}
+              {dropIndicatorIndex === sortedSelectedExercises.length ? (
+                <div className="h-2 rounded-full bg-indigo-400" data-testid="selected-drop-indicator" />
+              ) : null}
             </div>
 
             {groupedSchedule.size ? (
@@ -1310,8 +1581,17 @@ export function AdminDashboard() {
                           .map((day) => {
                             const items = dayMap.get(day) ?? []
                             return (
-                              <p key={day}>
-                                <span className="font-semibold text-slate-600">Day {day}:</span> {items.map((item) => item.name).join(', ')}
+                              <p key={day} className="flex flex-wrap gap-1">
+                                <span className="font-semibold text-slate-600">Day {day}:</span>
+                                <span>
+                                  {items
+                                    .map((item) => {
+                                      const sets = item.defaultSets ?? '—'
+                                      const reps = item.defaultReps ?? '—'
+                                      return `${item.name} (${sets}×${reps})`
+                                    })
+                                    .join(', ')}
+                                </span>
                               </p>
                             )
                           })}
@@ -1328,12 +1608,13 @@ export function AdminDashboard() {
         )}
       </section>
 
-      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
-        <header className="mb-6">
+      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card lg:col-span-2 lg:self-start">
+        <header className="mb-4 space-y-1">
           <h2 className="text-lg font-semibold text-slate-900">Plan designer</h2>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            Finalise the block by assigning it to an athlete, setting dates, and adding coaching notes.
-          </p>
+          <p className="text-xs text-slate-500">Assign this set of exercises and lock in schedule details.</p>
+          {planPreviewTitle ? (
+            <p className="text-xs font-semibold text-indigo-600">Preview: {planPreviewTitle}</p>
+          ) : null}
         </header>
 
         <div className="mb-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
@@ -1431,24 +1712,12 @@ export function AdminDashboard() {
           </div>
 
           <label className="flex flex-col gap-2 text-sm font-semibold text-slate-700">
-            Plan name
-            <input
-              type="text"
-              value={planName}
-              onChange={(event) => setPlanName(event.target.value)}
-              placeholder="e.g., In-Season Power Block"
-              className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-              required
-            />
-          </label>
-
-          <label className="flex flex-col gap-2 text-sm font-semibold text-slate-700">
-            Coaching notes
+            Coaching focus (optional)
             <textarea
               value={planNotes}
               onChange={(event) => setPlanNotes(event.target.value)}
-              placeholder="Guidelines, progression cues, recovery focus..."
-              className="min-h-[8rem] rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+              placeholder="Key cues, progression focus, deload reminders..."
+              className="min-h-[5rem] rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
             />
           </label>
 

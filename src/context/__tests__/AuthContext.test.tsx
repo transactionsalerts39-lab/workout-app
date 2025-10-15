@@ -86,6 +86,6 @@ describe('AuthContext credential updates', () => {
       expect(response.success).toBe(true)
     })
 
-    expect(result.current.user?.avatarUrl).toMatch(/^data:image\\/png;base64/)
+    expect(result.current.user?.avatarUrl).toMatch(/^data:image\/png;base64/)
   })
 })

@@ -20,6 +20,8 @@ export interface TemplateExerciseSlot {
   equipment: string
   focusTag: string
   suggestedAlternatives: string[]
+  prescribedSets?: number
+  prescribedReps?: number
 }
 
 export interface TemplateDay {

@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAuthContext } from '../../context/AuthContext'
+import { Button } from '../../components/ui/button'
+import { Badge } from '../../components/ui/badge'
+import { Textarea } from '../../components/ui/textarea'
 import { usePlanContext, type SessionExerciseView } from '../../context/PlanContext'
 import { useProgressContext } from '../../context/ProgressContext'
 
@@ -77,15 +80,11 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
 
   if (!session || !user) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-3 rounded-3xl border border-slate-200 bg-white p-6 text-center">
-        <p className="text-sm text-slate-500">We couldn&apos;t locate that workout session.</p>
-        <button
-          type="button"
-          onClick={onBack}
-          className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white"
-        >
+      <div className="surface-panel flex flex-1 flex-col items-center justify-center gap-4 p-8 text-center">
+        <p className="text-sm text-neutral-300/80">We couldn&apos;t locate that workout session.</p>
+        <Button size="sm" variant="secondary" onClick={onBack}>
           Back to dashboard
-        </button>
+        </Button>
       </div>
     )
   }
@@ -157,13 +156,14 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-2 rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
-        <div className="flex items-center justify-between">
-          <button type="button" className="text-sm font-medium text-indigo-600" onClick={onBack}>
+      <header className="surface-card flex flex-col gap-4 border-white/10 p-6">
+        <div className="flex items-center justify-between gap-3">
+          <Button variant="ghost" size="sm" onClick={onBack}>
             ← Back
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={async () => {
               try {
                 await markExerciseUsingPlan(user.id, weekIndex, session)
@@ -184,16 +184,17 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
                 console.error('Failed to apply coach plan for session', error)
               }
             }}
-            className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600"
           >
             Log from coach plan
-          </button>
+          </Button>
         </div>
-        <h1 className="text-2xl font-semibold text-slate-900">{session.dayTitle}</h1>
-        <p className="text-sm text-slate-500">
-          Week {weekIndex} · Focus {session.focusLabel}
-          {session.plannedDate ? ` · Suggested date ${session.plannedDate}` : ''}
-        </p>
+        <div>
+          <h1 className="font-display text-3xl font-semibold text-neutral-50">{session.dayTitle}</h1>
+          <p className="mt-2 text-sm text-neutral-300/80">
+            Week {weekIndex} · Focus {session.focusLabel}
+            {session.plannedDate ? ` · Suggested date ${session.plannedDate}` : ''}
+          </p>
+        </div>
       </header>
 
       <section className="flex flex-col gap-4">
@@ -206,67 +207,67 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
           return (
             <article
               key={exercise.exerciseId}
-              className="flex flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-6 shadow-card"
+              className="surface-card flex flex-col gap-4 border-white/10 p-6"
             >
               <header className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-slate-900">
+                  <p className="text-base font-semibold text-neutral-50">
                     {exercise.order ? `${exercise.order}. ` : ''}
                     {exercise.name}
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-neutral-300/80">
                     Target {exercise.prescribedSets} sets
                     {exercise.repRange ? ` · ${exercise.repRange.min}-${exercise.repRange.max} reps` : ''}
                     {exercise.rest ? ` · Rest ${exercise.rest}` : ''}
                   </p>
                 </div>
-                {saved ? <span className="text-xs font-semibold text-emerald-600">Saved</span> : null}
+                {saved ? <Badge variant="success" className="text-[10px]">Saved</Badge> : null}
               </header>
 
               <div>
-                <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">Coach prescription</p>
-                <div className="flex flex-wrap gap-2 text-xs text-slate-600">
+                <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Coach prescription</p>
+                <div className="flex flex-wrap gap-2 text-xs text-neutral-300/80">
                   {exercise.plannedSets.length ? (
                     exercise.plannedSets.map((setValue, index) => (
-                      <span key={index} className="rounded-full bg-slate-900/5 px-3 py-1">
+                      <span key={index} className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
                         Set {index + 1}: {setValue}
                       </span>
                     ))
                   ) : (
-                    <span className="rounded-full bg-slate-900/5 px-3 py-1">No data recorded</span>
+                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">No data recorded</span>
                   )}
                 </div>
               </div>
 
               <div className="space-y-2">
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Track sets</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Track sets</p>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {checklist.map((checked, index) => {
                     const optionClass = checked
-                      ? 'border-indigo-300 bg-indigo-50 text-indigo-700 shadow-sm'
-                      : 'border-slate-200 bg-slate-50 text-slate-600'
+                      ? 'border-brand-400/60 bg-brand-500/20 text-neutral-50'
+                      : 'border-white/10 bg-white/5 text-neutral-300/80'
                     return (
                       <label
                         key={`${exercise.exerciseId}_${index}`}
-                        className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-medium transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 ${optionClass}`}
+                        className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-xs font-medium transition ${optionClass} hover:border-brand-300 hover:bg-brand-500/15 hover:text-neutral-100`}
                       >
                         <input
                           type="checkbox"
                           checked={checked}
                           onChange={() => handleToggleSet(exercise, index)}
-                          className="size-3 accent-indigo-600"
+                          className="size-3 accent-brand-500"
                         />
                         <span>Set {index + 1}</span>
                       </label>
                     )
                   })}
                 </div>
-                <p className="text-[11px] text-slate-500">Completed {completedSets} of {totalSets} sets.</p>
+                <p className="text-[11px] text-neutral-400">Completed {completedSets} of {totalSets} sets.</p>
               </div>
 
               <label className="flex flex-col gap-2 text-sm">
-                <span className="font-medium text-slate-700">Notes</span>
-                <textarea
+                <span className="font-medium text-neutral-200">Notes</span>
+                <Textarea
                   value={form.notes}
                   onChange={(event) => {
                     const value = event.target.value
@@ -284,13 +285,13 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
                     })
                   }}
                   rows={2}
-                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
                 />
               </label>
 
               <div className="flex gap-2">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={() => {
                     const completedSets = Math.max(exercise.prescribedSets, exercise.plannedSets.length)
                     setChecklists((previous) => ({
@@ -310,17 +311,12 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
                       return next
                     })
                   }}
-                  className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600"
                 >
                   Use coach plan
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSave(exercise.exerciseId)}
-                  className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500"
-                >
+                </Button>
+                <Button type="button" onClick={() => handleSave(exercise.exerciseId)}>
                   Save progress
-                </button>
+                </Button>
               </div>
             </article>
           )

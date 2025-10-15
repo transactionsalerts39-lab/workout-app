@@ -1,29 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    line-height: 1.5;
+    font-family: theme('fontFamily.sans');
+    line-height: 1.6;
     font-weight: 400;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: theme('colors.slate.100');
-    color: theme('colors.slate.950');
+    color: theme('colors.neutral.100');
+    background-color: theme('colors.neutral.950');
   }
 
   body {
-    @apply m-0 min-h-screen bg-slate-100;
+    @apply relative m-0 min-h-screen overflow-x-hidden bg-neutral-950 text-neutral-100 antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background: radial-gradient(circle at top, rgba(119, 102, 255, 0.22) 0%, rgba(15, 23, 42, 0.92) 55%, rgba(2, 6, 23, 1) 100%);
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(circle at 20% 20%, rgba(34, 211, 238, 0.18) 0%, rgba(2, 6, 23, 0) 55%),
+      radial-gradient(circle at 80% 0%, rgba(95, 75, 255, 0.24) 0%, rgba(2, 6, 23, 0) 60%);
+    filter: blur(0px);
   }
 
   a {
     @apply text-inherit no-underline;
   }
 
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display text-neutral-50;
+  }
+
   button {
     font: inherit;
+  }
+}
+
+@layer components {
+  .surface-panel {
+    @apply rounded-4xl border border-white/10 bg-white/5 backdrop-blur-18 shadow-soft;
+  }
+
+  .surface-card {
+    @apply rounded-3xl border border-white/10 bg-neutral-900/80 backdrop-blur-lg shadow-card;
+  }
+
+  .text-gradient-primary {
+    background: linear-gradient(135deg, #5f4bff 0%, #22d3ee 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }

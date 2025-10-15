@@ -18,14 +18,14 @@ const SheetOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
-    className={cn('fixed inset-0 z-50 bg-slate-950/30 backdrop-blur-sm', className)}
+    className={cn('fixed inset-0 z-50 bg-neutral-950/80 backdrop-blur-md', className)}
     {...props}
   />
 ))
 SheetOverlay.displayName = DialogPrimitive.Overlay.displayName
 
 const sheetContentVariants = cva(
-  'fixed z-50 flex h-full flex-col rounded-t-3xl border border-slate-200 bg-white p-6 shadow-2xl transition ease-in-out sm:rounded-none',
+  'fixed z-50 flex h-full flex-col rounded-t-3xl border border-white/10 bg-neutral-900/90 p-6 shadow-soft backdrop-blur-18 transition ease-in-out sm:rounded-none',
   {
     variants: {
       side: {
@@ -57,7 +57,7 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       <div className="sticky top-0 flex items-center justify-end pb-4">
-        <SheetClose className="text-sm text-slate-500 transition hover:text-slate-900">Close</SheetClose>
+        <SheetClose className="text-sm text-neutral-300 transition hover:text-white">Close</SheetClose>
       </div>
       <div className="flex-1 overflow-y-auto pr-2">
         <div className="space-y-6 pb-6">{children}</div>
@@ -73,14 +73,14 @@ const SheetHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
 
 const SheetTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('text-lg font-semibold text-slate-900', className)} {...props} />
+    <div ref={ref} className={cn('font-display text-lg font-semibold text-neutral-50', className)} {...props} />
   ),
 )
 SheetTitle.displayName = 'SheetTitle'
 
 const SheetDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn('text-sm text-slate-500', className)} {...props} />
+    <p ref={ref} className={cn('text-sm text-neutral-300/80', className)} {...props} />
   ),
 )
 SheetDescription.displayName = 'SheetDescription'
@@ -101,4 +101,3 @@ export {
   SheetTitle,
   SheetTrigger,
 }
-

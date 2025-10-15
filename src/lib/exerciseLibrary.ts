@@ -161,7 +161,7 @@ function normaliseExercise(result: ExerciseApiResult): ExerciseLibraryEntry | nu
 }
 
 export async function fetchExerciseLibrary(signal?: AbortSignal): Promise<ExerciseLibraryEntry[]> {
-  let url = `${EXERCISE_API_BASE}?language=2&status=2&limit=${PAGE_SIZE}`
+  let url: string | null = `${EXERCISE_API_BASE}?language=2&status=2&limit=${PAGE_SIZE}`
   const items: ExerciseLibraryEntry[] = []
 
   while (url && items.length < MAX_RESULTS) {
