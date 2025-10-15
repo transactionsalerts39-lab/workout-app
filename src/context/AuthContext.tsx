@@ -15,6 +15,7 @@ interface AuthContextValue {
   logout: () => void
   updateUsername: (payload: { currentPassword: string; newUsername: string }) => Promise<{ success: true } | { success: false; error: string }>
   updatePassword: (payload: { currentPassword: string; newPassword: string }) => Promise<{ success: true } | { success: false; error: string }>
+  updateAvatar: (payload: { avatarUrl: string | null }) => Promise<{ success: true } | { success: false; error: string }>
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
@@ -500,6 +501,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (error) {
         console.error('Failed to update password', error)
         return { success: false, error: 'Unable to update password right now.' }
+      }
+    },
+    updateAvatar: async ({ avatarUrl }) => {
+      if (!user) {
+        return { success: false, error: 'You need to be signed in to update your profile photo.' }
+      }
+
+      try {
+        if (supabaseClient) {
+          const { data, error } = await supabaseClient
+            .from('app_users')
+            .update({
+              avatar_url: avatarUrl,
+            })
+            .eq('id', user.id)
+            .select(
+              'id, username, display_name, password_hash, salt, is_admin, created_at, avatar_url, plan_name, billing_interval, renewal_date',
+            )
+            .maybeSingle()
+
+          if (error) throw error
+          if (!data) throw new Error('No data returned while updating avatar')
+
+          const updatedUser = mapSupabaseUser(data)
+          setUsers((previous) => previous.map((entry) => (entry.id === updatedUser.id ? updatedUser : entry)))
+          setUser(updatedUser)
+        } else {
+          const updatedUser: StoredUser = {
+            ...user,
+            avatarUrl,
+          }
+          setUsers((previous) => previous.map((entry) => (entry.id === updatedUser.id ? updatedUser : entry)))
+          setUser(updatedUser)
+        }
+
+        return { success: true }
+      } catch (error) {
+        console.error('Failed to update avatar', error)
+        return { success: false, error: 'Unable to update profile photo right now.' }
       }
     },
   }), [isLoading, supabaseClient, user, users])
