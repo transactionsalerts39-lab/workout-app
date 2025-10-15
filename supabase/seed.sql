@@ -3,6 +3,44 @@
 -- Create sample profiles (these would normally be created by Supabase Auth)
 -- Note: In production, these would be managed by Supabase Auth
 
+-- Seed app users with billing and avatar defaults
+INSERT INTO app_users (username, display_name, password_hash, salt, is_admin, created_at, avatar_url, plan_name, billing_interval, renewal_date)
+VALUES
+  (
+    'admin',
+    'Head Coach',
+    '99f45aff744c9251a6e0d3332a007cea0175a1f2688cb906de18fb2800483e18',
+    'a1b2c3d4e5f67890',
+    true,
+    NOW(),
+    NULL,
+    'Pro Coach',
+    'monthly',
+    (CURRENT_DATE + INTERVAL '30 days')::date
+  ),
+  (
+    'athlete',
+    'Jordan Sparks',
+    'be23b9e62079c68337b953bc7f814bd8cfea976450a8676d9939d5f9c280893c',
+    '11aa22bb33cc44dd',
+    false,
+    NOW(),
+    NULL,
+    'Starter',
+    'monthly',
+    (CURRENT_DATE + INTERVAL '28 days')::date
+  )
+ON CONFLICT (username) DO UPDATE
+SET
+  display_name = EXCLUDED.display_name,
+  password_hash = EXCLUDED.password_hash,
+  salt = EXCLUDED.salt,
+  is_admin = EXCLUDED.is_admin,
+  avatar_url = EXCLUDED.avatar_url,
+  plan_name = EXCLUDED.plan_name,
+  billing_interval = EXCLUDED.billing_interval,
+  renewal_date = EXCLUDED.renewal_date;
+
 -- Insert program days
 INSERT INTO program_days (id, week, date_iso, created_at)
 VALUES

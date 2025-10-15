@@ -36,6 +36,10 @@ type SupabaseUserRow = {
   salt: string
   is_admin: boolean
   created_at: string
+  avatar_url: string | null
+  plan_name: string
+  billing_interval: string
+  renewal_date: string
 }
 
 function mapSupabaseUser(row: SupabaseUserRow): StoredUser {
@@ -47,8 +51,41 @@ function mapSupabaseUser(row: SupabaseUserRow): StoredUser {
     salt: row.salt,
     isAdmin: row.is_admin,
     createdAt: row.created_at,
+    avatarUrl: row.avatar_url,
+    planName: row.plan_name,
+    billingInterval: row.billing_interval,
+    renewalDate: row.renewal_date,
   }
 }
+
+type LocalStoredUserSeed = Partial<StoredUser> & { username: string }
+
+const DEFAULT_LOCAL_USERS: LocalStoredUserSeed[] = [
+  {
+    username: 'admin',
+    displayName: 'Head Coach',
+    salt: 'a1b2c3d4e5f67890',
+    passwordHash: '99f45aff744c9251a6e0d3332a007cea0175a1f2688cb906de18fb2800483e18',
+    isAdmin: true,
+    planName: 'Pro Coach',
+    billingInterval: 'monthly',
+    renewalDate: '2025-11-01',
+    avatarUrl: null,
+    createdAt: '2025-10-01T00:00:00.000Z',
+  },
+  {
+    username: 'athlete',
+    displayName: 'Jordan Sparks',
+    salt: '11aa22bb33cc44dd',
+    passwordHash: 'be23b9e62079c68337b953bc7f814bd8cfea976450a8676d9939d5f9c280893c',
+    isAdmin: false,
+    planName: 'Starter',
+    billingInterval: 'monthly',
+    renewalDate: '2025-11-08',
+    avatarUrl: null,
+    createdAt: '2025-10-02T00:00:00.000Z',
+  },
+]
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const supabaseEnv = getSupabaseEnvironment()
@@ -68,14 +105,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (supabaseClient) {
           const { data, error } = await supabaseClient
             .from('app_users')
-            .select('id, username, display_name, password_hash, salt, is_admin, created_at')
+            .select('id, username, display_name, password_hash, salt, is_admin, created_at, avatar_url, plan_name, billing_interval, renewal_date')
             .order('created_at', { ascending: true })
 
           if (error) throw error
           if (cancelled) return
           setUsers((data ?? []).map(mapSupabaseUser))
         } else {
-          const stored = loadStoredUsers<Array<Partial<StoredUser> & { username: string }>>([])
+          const stored = loadStoredUsers<LocalStoredUserSeed[]>(DEFAULT_LOCAL_USERS)
           if (cancelled) return
           const normalised = stored.map((entry) => ({
             id: entry.id ?? generateLocalId(),
@@ -85,6 +122,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             salt: entry.salt ?? '',
             createdAt: entry.createdAt ?? new Date().toISOString(),
             isAdmin: entry.isAdmin ?? false,
+            avatarUrl: entry.avatarUrl ?? null,
+            planName: entry.planName && typeof entry.planName === 'string' ? entry.planName : 'Starter',
+            billingInterval:
+              entry.billingInterval && typeof entry.billingInterval === 'string' ? entry.billingInterval : 'monthly',
+            renewalDate:
+              entry.renewalDate && typeof entry.renewalDate === 'string'
+                ? entry.renewalDate
+                : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
           }))
           setUsers(normalised)
         }
@@ -126,6 +171,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const salt = 'a1b2c3d4e5f67890' // Fixed salt for consistency
         const passwordHash = await hashPassword('admin123', salt)
         const createdAt = new Date().toISOString()
+        const planName = 'Pro Coach'
+        const billingInterval = 'monthly'
+        const renewalDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
 
         console.log('Admin credentials:', { salt, passwordHash })
 
@@ -140,10 +188,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               salt,
               is_admin: true,
               created_at: createdAt,
+              plan_name: planName,
+              billing_interval: billingInterval,
+              renewal_date: renewalDate,
             }, {
               onConflict: 'username'
             })
-            .select('id, username, display_name, password_hash, salt, is_admin, created_at')
+            .select('id, username, display_name, password_hash, salt, is_admin, created_at, avatar_url, plan_name, billing_interval, renewal_date')
             .maybeSingle()
 
           console.log('Supabase admin creation result:', { data, error })
@@ -153,7 +204,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             // Try fetching existing admin
             const { data: existing } = await supabaseClient
               .from('app_users')
-              .select('id, username, display_name, password_hash, salt, is_admin, created_at')
+              .select('id, username, display_name, password_hash, salt, is_admin, created_at, avatar_url, plan_name, billing_interval, renewal_date')
               .eq('username', 'admin')
               .maybeSingle()
 
@@ -175,6 +226,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             passwordHash,
             createdAt,
             isAdmin: true,
+            avatarUrl: null,
+            planName,
+            billingInterval,
+            renewalDate,
           }
           setUsers((previous) => [...previous, adminUser])
         }
@@ -256,6 +311,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const passwordHash = await hashPassword(payload.password, salt)
       const createdAt = new Date().toISOString()
       const displayName = payload.displayName.trim() || username
+      const planName = 'Starter'
+      const billingInterval = 'monthly'
+      const renewalDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+      const avatarUrl: string | null = null
 
       if (supabaseClient) {
         try {
@@ -268,8 +327,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               salt,
               is_admin: false,
               created_at: createdAt,
+              plan_name: planName,
+              billing_interval: billingInterval,
+              renewal_date: renewalDate,
+              avatar_url: avatarUrl,
             })
-            .select('id, username, display_name, password_hash, salt, is_admin, created_at')
+            .select('id, username, display_name, password_hash, salt, is_admin, created_at, avatar_url, plan_name, billing_interval, renewal_date')
             .single()
 
           if (error) throw error
@@ -291,6 +354,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         passwordHash,
         createdAt,
         isAdmin: false,
+        avatarUrl,
+        planName,
+        billingInterval,
+        renewalDate,
       }
       setUsers((previous) => [...previous, nextUser])
       setUser(nextUser)

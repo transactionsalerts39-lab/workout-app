@@ -69,6 +69,10 @@ export interface StoredUser {
   displayName: string
   createdAt: string
   isAdmin: boolean
+  avatarUrl: string | null
+  planName: string
+  billingInterval: string
+  renewalDate: string
 }
 
 export interface AuthState {
