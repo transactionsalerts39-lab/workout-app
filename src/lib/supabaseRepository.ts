@@ -5,6 +5,7 @@ import type {
   ProgressPhoto,
   PaymentRecord,
   ClientProfileSettings,
+  ClientIntakeRecord,
 } from '../types/program'
 
 export interface Database {
@@ -38,6 +39,54 @@ export interface Database {
           email?: string
           is_admin?: boolean
           timezone?: string
+          created_at?: string
+          updated_at?: string
+        },
+        Relationships: []
+      }
+      client_intake_records: {
+        Row: {
+          id: string
+          client_id: string | null
+          prospect_key: string
+          collected_at: string
+          contact: Record<string, unknown>
+          goals: Record<string, unknown>
+          background: Record<string, unknown>
+          availability: Record<string, unknown>
+          schedule_preferences: Record<string, unknown> | null
+          reminder_settings: Record<string, unknown> | null
+          messaging_meta: Record<string, unknown> | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          client_id?: string | null
+          prospect_key: string
+          collected_at?: string
+          contact: Record<string, unknown>
+          goals: Record<string, unknown>
+          background: Record<string, unknown>
+          availability: Record<string, unknown>
+          schedule_preferences?: Record<string, unknown> | null
+          reminder_settings?: Record<string, unknown> | null
+          messaging_meta?: Record<string, unknown> | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          client_id?: string | null
+          prospect_key?: string
+          collected_at?: string
+          contact?: Record<string, unknown>
+          goals?: Record<string, unknown>
+          background?: Record<string, unknown>
+          availability?: Record<string, unknown>
+          schedule_preferences?: Record<string, unknown> | null
+          reminder_settings?: Record<string, unknown> | null
+          messaging_meta?: Record<string, unknown> | null
           created_at?: string
           updated_at?: string
         },
@@ -354,6 +403,7 @@ type ClientProfileRow = Database['public']['Tables']['client_profiles']['Row'] &
   client_check_ins?: Database['public']['Tables']['client_check_ins']['Row'][] | null
   progress_photos?: Database['public']['Tables']['progress_photos']['Row'][] | null
   payment_records?: Database['public']['Tables']['payment_records']['Row'][] | null
+  client_intake_records?: Database['public']['Tables']['client_intake_records']['Row'][] | null
 }
 
 export class SupabaseRepository {

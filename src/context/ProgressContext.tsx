@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js'
 import { useAuthContext } from './AuthContext'
 import { usePlanContext, type SessionExerciseView, type WeekSessionView, type WeekView } from './PlanContext'
+import { useProgramContext } from './ProgramContext'
 import { getSupabaseEnvironment } from '../lib/env'
 import { getSupabaseClient } from '../lib/supabase'
 import { loadStoredProgress, persistProgress } from '../lib/storage'
@@ -23,6 +24,22 @@ interface UpdateExerciseInput {
   notes?: string
 }
 
+interface CheckInComplianceMetrics {
+  clientId: string
+  clientName: string
+  totalExpectedCheckIns: number
+  completedOnTime: number
+  completedLate: number
+  missed: number
+  currentStreak: number
+  longestStreak: number
+  complianceRate: number
+  averageDelayHours: number
+  lastCheckInAt?: string
+  nextCheckInDue?: string
+  status: 'on-track' | 'behind' | 'critical'
+}
+
 interface ProgressContextValue {
   records: Record<string, UserProgressRecord>
   getUserProgress: (userId: string) => UserProgressRecord | undefined
@@ -30,6 +47,8 @@ interface ProgressContextValue {
   updateExerciseProgress: (input: UpdateExerciseInput) => Promise<void>
   markExerciseUsingPlan: (userId: string, weekIndex: number, session: WeekSessionView) => Promise<void>
   summaries: KeyedProgressSummary[]
+  checkInCompliance: CheckInComplianceMetrics[]
+  getClientCompliance: (clientId: string) => CheckInComplianceMetrics | null
   isRemote: boolean
 }
 
@@ -317,6 +336,123 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     }
   }, [supabaseClient, userLookupById])
 
+  const { clients } = useProgramContext()
+
+  const checkInCompliance = useMemo((): CheckInComplianceMetrics[] => {
+    if (!clients.length) return []
+
+    return clients.map((client) => {
+      const now = new Date()
+      const planStartDate = client.planStartDate ? new Date(client.planStartDate) : null
+
+      if (!planStartDate) {
+        return {
+          clientId: client.id,
+          clientName: client.name,
+          totalExpectedCheckIns: 0,
+          completedOnTime: 0,
+          completedLate: 0,
+          missed: 0,
+          currentStreak: 0,
+          longestStreak: 0,
+          complianceRate: 0,
+          averageDelayHours: 0,
+          status: 'on-track',
+        }
+      }
+
+      // Calculate weeks since plan started
+      const weeksSinceStart = Math.floor((now.getTime() - planStartDate.getTime()) / (1000 * 60 * 60 * 24 * 7))
+      const totalExpected = Math.max(0, weeksSinceStart + 1) // +1 to include week 0
+
+      let completedOnTime = 0
+      let completedLate = 0
+      let missed = 0
+      let currentStreak = 0
+      let longestStreak = 0
+      let totalDelay = 0
+      let delayCount = 0
+
+      // Process each check-in
+      for (let weekIndex = 0; weekIndex <= weeksSinceStart; weekIndex++) {
+        const checkIn = client.checkIns.find((ci) => ci.weekIndex === weekIndex)
+        
+        if (checkIn) {
+          const checkInDate = new Date(checkIn.submittedAt)
+          const expectedDate = new Date(planStartDate.getTime() + weekIndex * 7 * 24 * 60 * 60 * 1000)
+          const dayOfWeek = expectedDate.getDay()
+          
+          // Expected on or before Sunday of that week
+          const deadlineDate = new Date(expectedDate.getTime() + (6 - dayOfWeek) * 24 * 60 * 60 * 1000)
+          
+          if (checkInDate <= deadlineDate) {
+            completedOnTime++
+            currentStreak++
+            longestStreak = Math.max(longestStreak, currentStreak)
+          } else {
+            completedLate++
+            currentStreak = 0
+            const delayHours = (checkInDate.getTime() - deadlineDate.getTime()) / (1000 * 60 * 60)
+            totalDelay += delayHours
+            delayCount++
+          }
+        } else {
+          // Check if this week should have been completed
+          const weekDeadline = new Date(planStartDate.getTime() + weekIndex * 7 * 24 * 60 * 60 * 1000 + (6 - planStartDate.getDay()) * 24 * 60 * 60 * 1000)
+          if (now > weekDeadline) {
+            missed++
+            currentStreak = 0
+          }
+        }
+      }
+
+      const totalCompleted = completedOnTime + completedLate
+      const complianceRate = totalExpected > 0 ? (totalCompleted / totalExpected) * 100 : 0
+      const averageDelayHours = delayCount > 0 ? totalDelay / delayCount : 0
+
+      // Determine status
+      let status: 'on-track' | 'behind' | 'critical'
+      if (complianceRate >= 80) {
+        status = 'on-track'
+      } else if (complianceRate >= 50) {
+        status = 'behind'
+      } else {
+        status = 'critical'
+      }
+
+      // Calculate next check-in due date
+      let nextCheckInDue: string | undefined
+      const currentWeekDate = planStartDate.getTime() + (weeksSinceStart + 1) * 7 * 24 * 60 * 60 * 1000
+      const currentWeekDayOfWeek = new Date(currentWeekDate).getDay()
+      const currentWeekDeadline = new Date(currentWeekDate + (6 - currentWeekDayOfWeek) * 24 * 60 * 60 * 1000)
+      if (now < currentWeekDeadline) {
+        nextCheckInDue = currentWeekDeadline.toISOString()
+      } else {
+        const nextWeek = weeksSinceStart + 1
+        const nextWeekDate = planStartDate.getTime() + nextWeek * 7 * 24 * 60 * 60 * 1000
+        const nextWeekDayOfWeek = new Date(nextWeekDate).getDay()
+        const nextWeekDeadline = new Date(nextWeekDate + (6 - nextWeekDayOfWeek) * 24 * 60 * 60 * 1000)
+        nextCheckInDue = nextWeekDeadline.toISOString()
+      }
+
+      return {
+        clientId: client.id,
+        clientName: client.name,
+        totalExpectedCheckIns: totalExpected,
+        completedOnTime,
+        completedLate,
+        missed,
+        currentStreak,
+        longestStreak,
+        complianceRate,
+        averageDelayHours,
+        lastCheckInAt: client.lastCheckInAt,
+        nextCheckInDue,
+        status,
+      }
+    })
+  }, [clients])
+
   const value = useMemo<ProgressContextValue>(() => {
     async function saveToRemote(input: UpdateExerciseInput, progress: SessionProgress) {
       if (!supabaseClient) return
@@ -484,6 +620,10 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         }
       },
       summaries: collectSummaries(records, weeks),
+      checkInCompliance,
+      getClientCompliance: (clientId: string) => {
+        return checkInCompliance.find(compliance => compliance.clientId === clientId) ?? null
+      },
     }
   }, [
     isRemote,
@@ -491,6 +631,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     supabaseClient,
     userLookupById,
     weeks,
+    checkInCompliance,
   ])
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>

@@ -3,6 +3,11 @@ import { useAuthContext } from '../../context/AuthContext'
 import { useProgressContext } from '../../context/ProgressContext'
 import { useProgramContext } from '../../context/ProgramContext'
 import { AdminSettingsPanel } from './AdminSettingsPanel'
+import { IntakeForm, type IntakeFormValues } from './components/IntakeForm'
+import { SchedulingConsole } from './components/SchedulingConsole'
+import { RemindersSystem } from './components/RemindersSystem'
+import { ClientMessaging } from './components/ClientMessaging'
+import { ComplianceDashboard } from './components/ComplianceDashboard'
 import type { Currency, TemplateExerciseSlot, WorkoutTemplate } from '../../types/program'
 import {
   FALLBACK_EXERCISES,
@@ -177,12 +182,17 @@ function formatCurrency(amount: number, currency: Currency) {
   }).format(amount)
 }
 
-type AdminTab = 'overview' | 'planning' | 'clients' | 'operations' | 'activity' | 'settings'
+type AdminTab = 'overview' | 'planning' | 'clients' | 'intake' | 'scheduling' | 'reminders' | 'messaging' | 'compliance' | 'operations' | 'activity' | 'settings'
 
 const ADMIN_TABS: Array<{ id: AdminTab; label: string }> = [
   { id: 'overview', label: 'Overview' },
   { id: 'planning', label: 'Plan Builder' },
   { id: 'clients', label: 'Clients' },
+  { id: 'intake', label: 'Client Intake' },
+  { id: 'scheduling', label: 'Scheduling' },
+  { id: 'reminders', label: 'Reminders' },
+  { id: 'messaging', label: 'Messages' },
+  { id: 'compliance', label: 'Compliance' },
   { id: 'operations', label: 'Revenue & Ops' },
   { id: 'activity', label: 'Activity' },
   { id: 'settings', label: 'Settings' },
@@ -212,6 +222,8 @@ export function AdminDashboard() {
     challenges,
     subscriptionProducts,
     clients,
+    getClientIntake,
+    saveClientIntake,
     revenueSnapshot,
     renewalReminders,
     developmentCostSummary,
@@ -389,6 +401,7 @@ export function AdminDashboard() {
   const [planHistory, setPlanHistory] = useState<PlanHistoryRecord[]>(FALLBACK_PLAN_HISTORY)
   const [notifications, setNotifications] = useState<NotificationRecord[]>(FALLBACK_NOTIFICATIONS)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
+  const [latestIntakePreview, setLatestIntakePreview] = useState<IntakeFormValues | null>(null)
   const [activeTab, setActiveTab] = useState<AdminTab>('overview')
   const [categorySearch, setCategorySearch] = useState('')
   const [challengeSearch, setChallengeSearch] = useState('')
@@ -423,6 +436,11 @@ export function AdminDashboard() {
     const allowed = computeAllowedTemplateAdjustments(activeTemplate)
     return `${allowed} slot${allowed === 1 ? '' : 's'} (${activeTemplate.adjustmentsAllowedPercent}% flex)`
   }, [activeTemplate])
+
+  const handleIntakeSubmit = (intakeValues: IntakeFormValues) => {
+    setLatestIntakePreview(intakeValues)
+    setToastMessage('Client intake captured. Persist details to ProgramContext next.')
+  }
 
   const selectedAthleteClient = useMemo(() => {
     if (!selectedAthleteId) return null
@@ -2248,6 +2266,70 @@ export function AdminDashboard() {
 
   const settingsContent = <AdminSettingsPanel />
 
+  const intakeContent = (
+    <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="space-y-6">
+        <IntakeForm 
+          clientId={selectedAthleteClient?.id}
+          onSuccess={(record) => {
+            setLatestIntakePreview(null as any)
+            setToastMessage('Client intake saved successfully!')
+          }}
+        />
+      </div>
+
+      <aside className="space-y-6">
+        {latestIntakePreview ? (
+          <div className="rounded-3xl border border-emerald-200 bg-emerald-50 p-6 text-sm text-emerald-900">
+            <h3 className="text-sm font-semibold text-emerald-900">Latest intake summary</h3>
+            <dl className="mt-3 space-y-3">
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-emerald-700">Client</dt>
+                <dd>{latestIntakePreview.basic.fullName}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-emerald-700">Primary goal</dt>
+                <dd>{latestIntakePreview.goals.primaryGoal || 'Not specified'}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-emerald-700">Experience</dt>
+                <dd>{latestIntakePreview.background.experienceLevel || 'Not provided'}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-emerald-700">Preferred schedule</dt>
+                <dd>
+                  {latestIntakePreview.availability.preferredDays || 'Days TBD'} ·{' '}
+                  {latestIntakePreview.availability.preferredTimes || 'Times TBD'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-emerald-700">Timezone</dt>
+                <dd>{latestIntakePreview.availability.timezone}</dd>
+              </div>
+            </dl>
+          </div>
+        ) : (
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
+            <h3 className="text-sm font-semibold text-slate-900">What&apos;s next</h3>
+            <ul className="mt-3 space-y-2 text-sm text-slate-600">
+              <li>• Fill out the intake worksheet before assigning a template.</li>
+              <li>• Double-check timezones to keep scheduling aligned.</li>
+              <li>• Use saved details to personalise habit check-ins.</li>
+            </ul>
+          </div>
+        )}
+      </aside>
+    </section>
+  )
+
+  const schedulingContent = <SchedulingConsole />
+
+  const remindersContent = <RemindersSystem />
+
+  const messagingContent = <ClientMessaging />
+
+  const complianceContent = <ComplianceDashboard />
+
   return (
     <div className="space-y-6">
       <header className="relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-950 px-6 py-8 text-white shadow-card">
@@ -2290,6 +2372,11 @@ export function AdminDashboard() {
         {activeTab === 'overview' ? overviewContent : null}
         {activeTab === 'planning' ? planningContent : null}
         {activeTab === 'clients' ? clientsContent : null}
+        {activeTab === 'intake' ? intakeContent : null}
+        {activeTab === 'scheduling' ? schedulingContent : null}
+        {activeTab === 'reminders' ? remindersContent : null}
+        {activeTab === 'messaging' ? messagingContent : null}
+        {activeTab === 'compliance' ? complianceContent : null}
         {activeTab === 'operations' ? operationsContent : null}
         {activeTab === 'activity' ? activityContent : null}
         {activeTab === 'settings' ? settingsContent : null}

@@ -8,9 +8,13 @@ import {
   subscriptionProducts,
   workoutTemplates,
 } from '../data/programData'
+import { getSupabaseEnvironment } from '../lib/env'
+import { loadStoredIntakeRecords, persistIntakeRecords } from '../lib/storage'
 import type {
   ChallengeProgram,
   ClientCheckIn,
+  ClientIntakeRecord,
+  ClientIntakeSubmission,
   ClientProfile,
   ClientProfileSettings,
   Currency,
@@ -56,6 +60,9 @@ interface ProgramContextValue {
   challenges: ChallengeProgram[]
   subscriptionProducts: SubscriptionProduct[]
   clients: ClientProfile[]
+  clientIntakeRecords: ClientIntakeRecord[]
+  getClientIntake: (clientId: string) => ClientIntakeRecord | null
+  saveClientIntake: (clientId: string, submission: ClientIntakeSubmission) => Promise<ClientIntakeRecord>
   revenueSnapshot: RevenueSnapshot
   renewalReminders: PlanRenewalReminder[]
   developmentCostSummary: typeof developmentCostSummary
@@ -210,6 +217,7 @@ function defaultClientForUser(userId: string, displayName: string): ClientProfil
 export function ProgramProvider({ children }: { children: React.ReactNode }) {
   const { users } = useAuthContext()
   const [clients, setClients] = useState<ClientProfile[]>(() => fallbackClients.map(cloneClientProfile))
+  const [clientIntakeRecords, setClientIntakeRecords] = useState<ClientIntakeRecord[]>(() => loadStoredIntakeRecords<ClientIntakeRecord[]>([]))
   const [manualRevenueOverrides, setManualRevenueOverrides] = useState<Record<string, number>>({})
 
   useEffect(() => {
@@ -492,12 +500,70 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
     })
   }, [currentMonthKey])
 
+  const getClientIntake = useCallback(
+    (clientId: string) => clientIntakeRecords.find((record) => record.clientId === clientId) ?? null,
+    [clientIntakeRecords],
+  )
+
+  const saveClientIntake = useCallback(
+    async (clientId: string, submission: ClientIntakeSubmission): Promise<ClientIntakeRecord> => {
+      const timestamp = new Date().toISOString()
+      const existing = clientIntakeRecords.find((record) => record.clientId === clientId)
+      const nextRecord: ClientIntakeRecord = existing
+        ? {
+            ...existing,
+            collectedAt: timestamp,
+            contact: submission.contact,
+            goals: submission.goals,
+            background: submission.background,
+            availability: submission.availability,
+          }
+        : {
+            id: generateId('intake'),
+            clientId,
+            prospectKey: clientId,
+            collectedAt: timestamp,
+            contact: submission.contact,
+            goals: submission.goals,
+            background: submission.background,
+            availability: submission.availability,
+          }
+
+      setClientIntakeRecords((previous) => {
+        const next = existing
+          ? previous.map((record) => (record.clientId === clientId ? nextRecord : record))
+          : [...previous, nextRecord]
+        persistIntakeRecords(next)
+        return next
+      })
+
+      setClients((previous) =>
+        previous.map((client) => {
+          if (client.id !== clientId) return client
+          return {
+            ...client,
+            profileSettings: {
+              ...(client.profileSettings ?? {}),
+              intake: nextRecord,
+            },
+          }
+        }),
+      )
+
+      return nextRecord
+    },
+    [clientIntakeRecords],
+  )
+
   const value = useMemo<ProgramContextValue>(() => ({
     strengthCategories,
     workoutTemplates,
     challenges: challengePrograms,
     subscriptionProducts,
     clients,
+    clientIntakeRecords,
+    getClientIntake,
+    saveClientIntake,
     revenueSnapshot,
     renewalReminders,
     developmentCostSummary,
@@ -513,7 +579,16 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
     unlockChallenge,
     recordPayment,
     findClientByUserId: (userId: string) => clients.find((client) => client.userId === userId),
-  }), [clients, revenueSnapshot, renewalReminders, currentMonthRevenueOverride, setManualRevenueForCurrentMonth])
+  }), [
+    clientIntakeRecords,
+    clients,
+    currentMonthRevenueOverride,
+    getClientIntake,
+    saveClientIntake,
+    revenueSnapshot,
+    renewalReminders,
+    setManualRevenueForCurrentMonth,
+  ])
 
   return <ProgramContext.Provider value={value}>{children}</ProgramContext.Provider>
 }

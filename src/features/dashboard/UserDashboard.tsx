@@ -12,6 +12,8 @@ import { Select } from '../../components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/table'
 import { Textarea } from '../../components/ui/textarea'
 import { cn } from '../../lib/utils'
+import { ScheduleUpdates } from './components/ScheduleUpdates'
+import { AthleteMessaging } from './components/AthleteMessaging'
 import type { UserSessionProgressMap } from '../../types/plan'
 
 interface UserDashboardProps {
@@ -1088,6 +1090,10 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
               )}
             </CardContent>
           </Card>
+
+          <ScheduleUpdates />
+
+          <AthleteMessaging />
 
           <Card>
             <CardHeader className="pb-2">

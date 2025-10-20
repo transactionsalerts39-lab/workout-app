@@ -1,9 +1,10 @@
 const USERS_KEY = 'workout-app/users'
 const PROGRESS_KEY = 'workout-app/progress'
+const INTAKE_KEY = 'workout-app/intake-records'
 
 const memoryStore = new Map<string, string>()
 
-type StorageKey = typeof USERS_KEY | typeof PROGRESS_KEY
+type StorageKey = typeof USERS_KEY | typeof PROGRESS_KEY | typeof INTAKE_KEY
 
 type StorageAdapter = {
   getItem: (key: StorageKey) => string | null
@@ -74,8 +75,17 @@ export function persistProgress<T>(value: T): void {
   writeJson(PROGRESS_KEY, value)
 }
 
+export function loadStoredIntakeRecords<T>(fallback: T): T {
+  return readJson(INTAKE_KEY, fallback)
+}
+
+export function persistIntakeRecords<T>(value: T): void {
+  writeJson(INTAKE_KEY, value)
+}
+
 export function clearAllStorage(): void {
   const adapter = resolveAdapter()
   adapter.removeItem(USERS_KEY)
   adapter.removeItem(PROGRESS_KEY)
+  adapter.removeItem(INTAKE_KEY)
 }

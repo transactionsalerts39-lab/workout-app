@@ -68,12 +68,82 @@ export interface SubscriptionProduct {
   includesChallengeAccess: boolean
 }
 
+export interface IntakeContactDetails {
+  fullName: string
+  email: string
+  phone?: string
+}
+
+export interface IntakeGoalsDetails {
+  primaryGoal?: string
+  secondaryGoal?: string
+  notes?: string
+}
+
+export type IntakeExperienceLevel = 'beginner' | 'intermediate' | 'advanced'
+
+export interface IntakeBackgroundDetails {
+  experienceLevel?: IntakeExperienceLevel
+  equipmentAccess?: string
+  injuries?: string
+}
+
+export interface IntakeAvailabilityDetails {
+  preferredDays?: string
+  preferredTimes?: string
+  timezone: string
+}
+
+export interface ClientIntakeRecord {
+  id: string
+  clientId?: string
+  prospectKey: string
+  collectedAt: string
+  contact: IntakeContactDetails
+  goals: IntakeGoalsDetails
+  background: IntakeBackgroundDetails
+  availability: IntakeAvailabilityDetails
+}
+
+export interface ClientIntakeSubmission {
+  contact: IntakeContactDetails
+  goals: IntakeGoalsDetails
+  background: IntakeBackgroundDetails
+  availability: IntakeAvailabilityDetails
+}
+
+export interface ClientSchedulePreference {
+  clientId: string
+  preferredFrequencyPerWeek?: number
+  preferredSessionLengthMinutes?: number
+  preferredScheduleNotes?: string
+}
+
+export type ReminderChannel = 'in-app' | 'email' | 'sms'
+
+export interface ClientReminderSettings {
+  clientId: string
+  upcomingSessionChannels: ReminderChannel[]
+  missedCheckInChannels: ReminderChannel[]
+  timezone: string
+}
+
+export interface ClientMessagingThreadMeta {
+  clientId: string
+  lastMessageAt?: string
+  unreadCount: number
+}
+
 export interface ClientProfileSettings {
   preferredName?: string
   birthDate?: string
   age?: number
   healthNotes?: string
   emergencyContact?: string
+  intake?: ClientIntakeRecord
+  schedulePreference?: ClientSchedulePreference
+  reminders?: ClientReminderSettings
+  messaging?: ClientMessagingThreadMeta
 }
 
 export interface ClientCheckIn {
