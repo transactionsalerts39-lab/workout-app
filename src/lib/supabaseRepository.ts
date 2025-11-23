@@ -5,7 +5,6 @@ import type {
   ProgressPhoto,
   PaymentRecord,
   ClientProfileSettings,
-  ClientIntakeRecord,
 } from '../types/program'
 
 export interface Database {

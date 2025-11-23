@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Button } from '../../../components/ui/button'
 import { Badge } from '../../../components/ui/badge'
 import { Input } from '../../../components/ui/input'
@@ -21,6 +21,7 @@ interface MessageThread {
   lastMessage: Message
   unreadCount: number
   messages: Message[]
+  status: 'active' | 'archived'
 }
 
 interface ClientMessagingProps {
@@ -60,6 +61,11 @@ export function ClientMessaging({ className }: ClientMessagingProps) {
     return MOCK_THREADS.reduce((sum, thread) => sum + thread.unreadCount, 0)
   }, [])
 
+  const activeThread = useMemo(() => {
+    if (!selectedThread) return null
+    return MOCK_THREADS.find((thread) => thread.clientId === selectedThread) ?? null
+  }, [selectedThread])
+
   const handleSendMessage = () => {
     if (!message.trim()) return
     console.log('Sending message:', message.trim())
@@ -96,40 +102,58 @@ export function ClientMessaging({ className }: ClientMessagingProps) {
     </div>
   )
 
-  if (selectedThread && false) {
+  if (activeThread) {
     return (
-      <div className={`h-[600px] flex flex-col ${className || ''}`}>
+      <div className={`h-[600px] flex flex-col ${className ?? ''}`}>
         <header className="flex items-center gap-4 p-4 border-b border-slate-200 bg-white">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setSelectedThread(null)}
-          >
+          <Button size="sm" variant="outline" onClick={() => setSelectedThread(null)}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </Button>
           <div className="flex-1">
-            <h3 className="font-semibold text-slate-900">Client Name</h3>
-            <p className="text-xs text-slate-600">Active conversation</p>
+            <h3 className="font-semibold text-slate-900">{activeThread.clientName}</h3>
+            <p className="text-xs text-slate-600">
+              {activeThread.status === 'active' ? 'Active conversation' : 'Archived conversation'}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Badge className={`px-2 py-1 text-xs ${STATUS_COLORS[activeThread.status]}`}>
+              {activeThread.status === 'active' ? 'Active' : 'Archived'}
+            </Badge>
+            {activeThread.unreadCount > 0 ? (
+              <Badge className="bg-indigo-600 text-white px-2 py-1 text-xs">{activeThread.unreadCount}</Badge>
+            ) : null}
           </div>
         </header>
 
         <div className="flex-1 overflow-y-auto p-4 bg-slate-50">
-          <div className="text-center py-8">
-            <svg className="w-12 h-12 mx-auto text-slate-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">Start the conversation</h3>
-            <p className="text-sm text-slate-600">Messaging functionality coming soon</p>
-          </div>
+          {activeThread.messages.length ? (
+            activeThread.messages.map((entry) => (
+              <MessageBubble key={entry.id} message={entry} isCoach={entry.authorType === 'coach'} />
+            ))
+          ) : (
+            <div className="text-center py-8">
+              <svg className="w-12 h-12 mx-auto text-slate-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">No messages yet</h3>
+              <p className="text-sm text-slate-600">Start the conversation to keep clients engaged.</p>
+            </div>
+          )}
         </div>
 
         <div className="p-4 border-t border-slate-200 bg-white">
-          <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}>
+          <form
+            className="flex gap-2"
+            onSubmit={(event) => {
+              event.preventDefault()
+              handleSendMessage()
+            }}
+          >
             <Textarea
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(event) => setMessage(event.target.value)}
               placeholder="Type your message..."
               className="flex-1 min-h-[40px] max-h-[120px] resize-none"
               rows={1}
@@ -144,7 +168,7 @@ export function ClientMessaging({ className }: ClientMessagingProps) {
   }
 
   return (
-    <div className={`h-[600px] flex flex-col ${className || ''}`}>
+    <div className={`h-[600px] flex flex-col ${className ?? ''}`}>
       <header className="p-4 border-b border-slate-200 bg-white">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -161,6 +185,11 @@ export function ClientMessaging({ className }: ClientMessagingProps) {
               </svg>
               New Message
             </Button>
+            {totalUnreadCount > 0 ? (
+              <Badge className="bg-indigo-50 text-indigo-600 px-2 py-1 text-xs">
+                {totalUnreadCount} unread
+              </Badge>
+            ) : null}
           </div>
         </div>
 
@@ -237,6 +266,9 @@ export function ClientMessaging({ className }: ClientMessagingProps) {
                           {thread.lastMessage.authorType === 'coach' ? 'Coach' : 'Client'}
                         </span>
                       </div>
+                      <Badge className={`px-2 py-1 text-xs ${STATUS_COLORS[thread.status]}`}>
+                        {thread.status === 'active' ? 'Active' : 'Archived'}
+                      </Badge>
                     </div>
                   </div>
                 </div>

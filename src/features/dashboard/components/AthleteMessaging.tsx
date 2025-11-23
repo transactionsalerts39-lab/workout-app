@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui
 import { Badge } from '../../../components/ui/badge'
 import { Button } from '../../../components/ui/button'
 import { Input } from '../../../components/ui/input'
-import { useAuthContext } from '../../../context/AuthContext'
 
 interface Message {
   id: string
@@ -41,7 +40,6 @@ const MOCK_MESSAGES: Message[] = [
 ]
 
 export function AthleteMessaging({ className }: AthleteMessagingProps) {
-  const { user } = useAuthContext()
   const [message, setMessage] = useState('')
 
   const messages = useMemo(() => {

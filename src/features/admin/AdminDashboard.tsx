@@ -3,12 +3,12 @@ import { useAuthContext } from '../../context/AuthContext'
 import { useProgressContext } from '../../context/ProgressContext'
 import { useProgramContext } from '../../context/ProgramContext'
 import { AdminSettingsPanel } from './AdminSettingsPanel'
-import { IntakeForm, type IntakeFormValues } from './components/IntakeForm'
+import { IntakeForm } from './components/IntakeForm'
 import { SchedulingConsole } from './components/SchedulingConsole'
 import { RemindersSystem } from './components/RemindersSystem'
 import { ClientMessaging } from './components/ClientMessaging'
 import { ComplianceDashboard } from './components/ComplianceDashboard'
-import type { Currency, TemplateExerciseSlot, WorkoutTemplate } from '../../types/program'
+import type { ClientIntakeRecord, Currency, TemplateExerciseSlot, WorkoutTemplate } from '../../types/program'
 import {
   FALLBACK_EXERCISES,
   fetchExerciseLibrary,
@@ -25,6 +25,8 @@ interface ExerciseDefinition {
   movementType: string
   muscleGroup: string
   source: ExerciseSource
+  defaultSets?: number
+  defaultReps?: number
 }
 
 interface SelectedExercise extends ExerciseDefinition {
@@ -222,8 +224,6 @@ export function AdminDashboard() {
     challenges,
     subscriptionProducts,
     clients,
-    getClientIntake,
-    saveClientIntake,
     revenueSnapshot,
     renewalReminders,
     developmentCostSummary,
@@ -401,7 +401,7 @@ export function AdminDashboard() {
   const [planHistory, setPlanHistory] = useState<PlanHistoryRecord[]>(FALLBACK_PLAN_HISTORY)
   const [notifications, setNotifications] = useState<NotificationRecord[]>(FALLBACK_NOTIFICATIONS)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
-  const [latestIntakePreview, setLatestIntakePreview] = useState<IntakeFormValues | null>(null)
+  const [latestIntakePreview, setLatestIntakePreview] = useState<ClientIntakeRecord | null>(null)
   const [activeTab, setActiveTab] = useState<AdminTab>('overview')
   const [categorySearch, setCategorySearch] = useState('')
   const [challengeSearch, setChallengeSearch] = useState('')
@@ -416,6 +416,12 @@ export function AdminDashboard() {
   const [monthlyRevenueDraft, setMonthlyRevenueDraft] = useState('')
   const [monthlyRevenueError, setMonthlyRevenueError] = useState<string | null>(null)
   const hasHydratedSelections = useRef(false)
+
+  useEffect(() => {
+    if (!selectedAthleteId && clientRoster.length) {
+      setSelectedAthleteId(clientRoster[0].client.userId)
+    }
+  }, [clientRoster, selectedAthleteId])
 
   const activeTemplate = useMemo(
     () => workoutTemplates.find((template) => template.id === activeTemplateId),
@@ -436,11 +442,6 @@ export function AdminDashboard() {
     const allowed = computeAllowedTemplateAdjustments(activeTemplate)
     return `${allowed} slot${allowed === 1 ? '' : 's'} (${activeTemplate.adjustmentsAllowedPercent}% flex)`
   }, [activeTemplate])
-
-  const handleIntakeSubmit = (intakeValues: IntakeFormValues) => {
-    setLatestIntakePreview(intakeValues)
-    setToastMessage('Client intake captured. Persist details to ProgramContext next.')
-  }
 
   const selectedAthleteClient = useMemo(() => {
     if (!selectedAthleteId) return null
@@ -2269,10 +2270,35 @@ export function AdminDashboard() {
   const intakeContent = (
     <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
       <div className="space-y-6">
-        <IntakeForm 
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
+          <h3 className="text-sm font-semibold text-slate-900">Select client</h3>
+          <p className="mt-1 text-xs text-slate-500">
+            Choose which client&apos;s intake details you want to capture. You can change this at any time.
+          </p>
+          <select
+            value={selectedAthleteId}
+            onChange={(event) => setSelectedAthleteId(event.target.value)}
+            className="mt-4 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          >
+            <option value="" disabled>
+              Select client
+            </option>
+            {clientRoster.map(({ client }) => (
+              <option key={client.id} value={client.userId}>
+                {client.name} · {client.goal}
+              </option>
+            ))}
+          </select>
+          {!selectedAthleteId ? (
+            <p className="mt-3 rounded-xl bg-slate-100 px-3 py-2 text-xs text-slate-600">
+              Intake form fields will unlock once a client is selected.
+            </p>
+          ) : null}
+        </div>
+        <IntakeForm
           clientId={selectedAthleteClient?.id}
           onSuccess={(record) => {
-            setLatestIntakePreview(null as any)
+            setLatestIntakePreview(record)
             setToastMessage('Client intake saved successfully!')
           }}
         />
@@ -2285,7 +2311,7 @@ export function AdminDashboard() {
             <dl className="mt-3 space-y-3">
               <div>
                 <dt className="text-xs uppercase tracking-wide text-emerald-700">Client</dt>
-                <dd>{latestIntakePreview.basic.fullName}</dd>
+                <dd>{latestIntakePreview.contact.fullName}</dd>
               </div>
               <div>
                 <dt className="text-xs uppercase tracking-wide text-emerald-700">Primary goal</dt>

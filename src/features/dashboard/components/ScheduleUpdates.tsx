@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card'
 import { Badge } from '../../../components/ui/badge'
-import { useProgramContext } from '../../../context/ProgramContext'
 
 interface ScheduleUpdate {
   id: string
@@ -63,7 +62,6 @@ const STATUS_CONFIG = {
 }
 
 export function ScheduleUpdates({ className }: ScheduleUpdatesProps) {
-  const { clients } = useProgramContext()
 
   const upcomingSchedule = useMemo(() => {
     // Filter for future sessions
@@ -159,7 +157,7 @@ export function ScheduleUpdates({ className }: ScheduleUpdatesProps) {
                     <span className="font-medium text-slate-900">
                       {update.sessionType}
                     </span>
-                    <Badge size="sm" className={config.color}>
+                    <Badge className={`px-2 py-0.5 text-xs ${config.color}`}>
                       {config.label}
                     </Badge>
                   </div>

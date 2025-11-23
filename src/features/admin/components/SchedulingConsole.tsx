@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { Button } from '../../../components/ui/button'
 import { Badge } from '../../../components/ui/badge'
 import { Card } from '../../../components/ui/card'
-import { useProgramContext } from '../../../context/ProgramContext'
 
 interface ScheduledSession {
   id: string
@@ -166,6 +165,25 @@ export function SchedulingConsole({ onSessionAction, className }: SchedulingCons
     </Card>
   )
 
+  const viewSwitchControls = (
+    <div className="flex gap-2">
+      <Button
+        variant={viewMode === 'list' ? 'default' : 'outline'}
+        size="sm"
+        onClick={() => setViewMode('list')}
+      >
+        List View
+      </Button>
+      <Button
+        variant={viewMode === 'calendar' ? 'default' : 'outline'}
+        size="sm"
+        onClick={() => setViewMode('calendar')}
+      >
+        Calendar View
+      </Button>
+    </div>
+  )
+
   if (viewMode === 'calendar') {
     return (
       <div className={`space-y-6 ${className || ''}`}>
@@ -174,22 +192,7 @@ export function SchedulingConsole({ onSessionAction, className }: SchedulingCons
             <h2 className="text-lg font-semibold text-slate-900">Scheduling Console</h2>
             <p className="text-sm text-slate-600">Manage client sessions with calendar view</p>
           </div>
-          <div className="flex gap-2">
-            <Button
-              variant={viewMode === 'list' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('list')}
-            >
-              List View
-            </Button>
-            <Button
-              variant={viewMode === 'calendar' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('calendar')}
-            >
-              Calendar View
-            </Button>
-          </div>
+          {viewSwitchControls}
         </header>
 
         <div className="grid gap-4 md:grid-cols-7">
@@ -232,22 +235,7 @@ export function SchedulingConsole({ onSessionAction, className }: SchedulingCons
           <h2 className="text-lg font-semibold text-slate-900">Scheduling Console</h2>
           <p className="text-sm text-slate-600">Manage and track client sessions</p>
         </div>
-        <div className="flex gap-2">
-          <Button
-            variant={viewMode === 'list' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setViewMode('list')}
-          >
-            List View
-          </Button>
-          <Button
-            variant={viewMode === 'calendar' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setViewMode('calendar')}
-          >
-            Calendar View
-          </Button>
-        </div>
+        {viewSwitchControls}
       </header>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

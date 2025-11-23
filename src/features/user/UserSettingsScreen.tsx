@@ -1,4 +1,5 @@
-import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import type { ChangeEvent, FormEvent } from 'react'
 import { Button } from '../../components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import { Input } from '../../components/ui/input'
@@ -43,11 +44,11 @@ export function UserSettingsScreen({ onBack }: UserSettingsScreenProps) {
   useEffect(() => {
     if (!user) return
     setUsernameForm((previous) => ({ ...previous, newUsername: user.username }))
-  }, [user?.username])
+  }, [user])
 
   useEffect(() => {
     setAvatarPreview(user?.avatarUrl ?? null)
-  }, [user?.avatarUrl])
+  }, [user])
 
   const usernameChanged = useMemo(() => {
     if (!user) return false
@@ -143,8 +144,7 @@ export function UserSettingsScreen({ onBack }: UserSettingsScreenProps) {
         })
         if (uploadError) throw uploadError
 
-        const { data: publicData, error: publicUrlError } = supabaseClient.storage.from('avatars').getPublicUrl(filePath)
-        if (publicUrlError) throw publicUrlError
+        const { data: publicData } = supabaseClient.storage.from('avatars').getPublicUrl(filePath)
         const publicUrl = publicData?.publicUrl ? `${publicData.publicUrl}?v=${Date.now()}` : null
         if (!publicUrl) throw new Error('Unable to resolve public URL for uploaded avatar.')
 

@@ -3,7 +3,7 @@ import { Button } from '../../../components/ui/button'
 import { Input } from '../../../components/ui/input'
 import { Textarea } from '../../../components/ui/textarea'
 import { useProgramContext } from '../../../context/ProgramContext'
-import type { ClientIntakeSubmission } from '../../../types/program'
+import type { ClientIntakeRecord, ClientIntakeSubmission } from '../../../types/program'
 
 export interface IntakeFormValues {
   basic: {
@@ -63,7 +63,7 @@ const EMPTY_VALUES: IntakeFormValues = {
 
 interface IntakeFormProps {
   clientId?: string
-  onSuccess?: (record: any) => void
+  onSuccess?: (record: ClientIntakeRecord) => void
   onCancel?: () => void
   className?: string
 }
@@ -112,6 +112,8 @@ export function IntakeForm({ clientId, onSuccess, onCancel, className }: IntakeF
 
     setSubmitting(true)
     try {
+      const experienceLevelValue = values.background.experienceLevel
+
       const submission: ClientIntakeSubmission = {
         contact: {
           fullName: values.basic.fullName,
@@ -124,7 +126,7 @@ export function IntakeForm({ clientId, onSuccess, onCancel, className }: IntakeF
           notes: values.goals.notes,
         },
         background: {
-          experienceLevel: values.background.experienceLevel as any,
+          experienceLevel: experienceLevelValue ? experienceLevelValue : undefined,
           equipmentAccess: values.background.equipmentAccess,
           injuries: values.background.injuries,
         },

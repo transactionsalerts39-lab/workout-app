@@ -8,7 +8,6 @@ import {
   subscriptionProducts,
   workoutTemplates,
 } from '../data/programData'
-import { getSupabaseEnvironment } from '../lib/env'
 import { loadStoredIntakeRecords, persistIntakeRecords } from '../lib/storage'
 import type {
   ChallengeProgram,
@@ -482,7 +481,7 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
     }
 
     return snapshot
-  }, [clients, manualRevenueOverrides, subscriptionProducts])
+  }, [clients, manualRevenueOverrides])
   const renewalReminders = useMemo(() => buildRenewalReminders(clients), [clients])
 
   const currentMonthKey = getMonthKey(new Date())

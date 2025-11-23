@@ -1,4 +1,5 @@
-import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import type { ChangeEvent, FormEvent } from 'react'
 import { useAuthContext } from '../../context/AuthContext'
 import { getSupabaseEnvironment } from '../../lib/env'
 import { getSupabaseClient } from '../../lib/supabase'
@@ -44,11 +45,11 @@ export function AdminSettingsPanel() {
   useEffect(() => {
     if (!user) return
     setUsernameForm((previous) => ({ ...previous, newUsername: user.username }))
-  }, [user?.username])
+  }, [user])
 
   useEffect(() => {
     setAvatarPreview(user?.avatarUrl ?? null)
-  }, [user?.avatarUrl])
+  }, [user])
 
   const usernameChanged = useMemo(() => {
     if (!user) return false
@@ -98,8 +99,7 @@ export function AdminSettingsPanel() {
         })
         if (uploadError) throw uploadError
 
-        const { data: publicData, error: publicUrlError } = supabaseClient.storage.from('avatars').getPublicUrl(filePath)
-        if (publicUrlError) throw publicUrlError
+        const { data: publicData } = supabaseClient.storage.from('avatars').getPublicUrl(filePath)
         const publicUrl = publicData?.publicUrl ? `${publicData.publicUrl}?v=${Date.now()}` : null
         if (!publicUrl) throw new Error('Unable to resolve public URL for uploaded avatar.')
 
