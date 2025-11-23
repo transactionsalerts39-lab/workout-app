@@ -73,8 +73,8 @@ function AppShell() {
       return (
         <div className="relative flex min-h-screen flex-col">
           <header className="sticky top-0 z-40 border-b border-white/10 bg-neutral-950/60 backdrop-blur-18">
-            <div className="container flex items-center justify-between py-5">
-              <div className="flex items-center gap-3">
+            <div className="container flex flex-wrap items-center justify-between gap-4 py-5">
+              <div className="flex min-w-0 items-center gap-3">
                 <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 font-display text-lg text-white">
                   WP
                 </div>
@@ -83,14 +83,14 @@ function AppShell() {
                   <p className="font-display text-base text-white">Live Session</p>
                 </div>
               </div>
-              <Button size="sm" variant="outline" onClick={logout}>
+              <Button size="sm" variant="outline" onClick={logout} className="w-full max-w-xs sm:w-auto">
                 Log out
               </Button>
             </div>
           </header>
 
           <main className="container flex-1 py-12">
-            <div className="mb-8 flex items-center justify-between">
+            <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <Badge variant="secondary" className="mb-3">
                   Guided session
@@ -117,18 +117,18 @@ function AppShell() {
       <div className="relative flex min-h-screen flex-col">
         <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-gradient-primary opacity-30 blur-[120px]" />
         <header className="sticky top-0 z-40 border-b border-white/10 bg-neutral-950/60 backdrop-blur-18">
-          <div className="container flex items-center justify-between py-5">
-            <div className="flex items-center gap-4">
+          <div className="container flex flex-wrap items-center justify-between gap-4 py-5">
+            <div className="flex min-w-0 items-center gap-4">
               <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 font-display text-lg text-white">
                 WP
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.32em] text-neutral-400">Workout App</p>
-                <p className="font-display text-xl text-white">AI Fitness Companion</p>
+                <p className="truncate font-display text-xl text-white">AI Fitness Companion</p>
               </div>
               {hasAdminAccess && <Badge>Admin access</Badge>}
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto">
               {!hasAdminAccess ? (
                 <Button
                   size="sm"
@@ -136,11 +136,12 @@ function AppShell() {
                   onClick={() =>
                     setUserScreen((previous) => (previous === 'settings' ? 'dashboard' : 'settings'))
                   }
+                  className="w-full min-w-[140px] sm:w-auto"
                 >
                   {userScreen === 'settings' ? 'Back to dashboard' : 'Settings'}
                 </Button>
               ) : null}
-              <Button size="sm" variant="secondary" onClick={logout}>
+              <Button size="sm" variant="secondary" onClick={logout} className="w-full min-w-[120px] sm:w-auto">
                 Log out
               </Button>
             </div>
@@ -202,7 +203,7 @@ function AppShell() {
         </main>
       </div>
     )
-  }, [activeSessionId, hasAdminAccess, isLoading, logout, user, view])
+  }, [activeSessionId, hasAdminAccess, isLoading, logout, user, userScreen, view])
 
   return content
 }

@@ -14,6 +14,7 @@ import { Textarea } from '../../components/ui/textarea'
 import { cn } from '../../lib/utils'
 import { ScheduleUpdates } from './components/ScheduleUpdates'
 import { AthleteMessaging } from './components/AthleteMessaging'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 import type { UserSessionProgressMap } from '../../types/plan'
 
 interface UserDashboardProps {
@@ -21,6 +22,16 @@ interface UserDashboardProps {
   onSelectWeek: (weekIndex: number) => void
   onOpenSession: (weekIndex: number, sessionId: string) => void
 }
+
+type DashboardSection =
+  | 'overview'
+  | 'sessions'
+  | 'progress'
+  | 'chat'
+  | 'challenges'
+  | 'billing'
+  | 'notifications'
+  | 'profile'
 
 type SessionState = 'pending' | 'in-progress' | 'completed'
 
@@ -228,6 +239,9 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
   const chatClientIdRef = useRef<string | null>(null)
   const [settingsForm, setSettingsForm] = useState<SettingsFormState>(EMPTY_SETTINGS_FORM)
   const [settingsSaving, setSettingsSaving] = useState(false)
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
+  const [activeSection, setActiveSection] = useState<DashboardSection>('overview')
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const activeWeek = useMemo(() => weeks.find((week) => week.weekIndex === weekIndex) ?? weeks[0], [weekIndex, weeks])
   const userProgress = user ? getUserProgress(user.id) : undefined
@@ -454,6 +468,12 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
     chatLogRef.current.scrollTop = chatLogRef.current.scrollHeight
   }, [chatMessages])
 
+  useEffect(() => {
+    if (isDesktop) {
+      setMenuOpen(false)
+    }
+  }, [isDesktop])
+
   const handlePhotoInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null
     setCheckInPhotoFile(null)
@@ -633,602 +653,804 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
     )
   }
 
-  return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
-      <div className="flex flex-col gap-6">
-        {dashboardFeedback ? (
-          <div className="rounded-3xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm font-semibold text-indigo-700">
-            {dashboardFeedback}
+  const feedbackBanner = dashboardFeedback ? (
+    <div className="rounded-3xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm font-semibold text-indigo-700">
+      {dashboardFeedback}
+    </div>
+  ) : null
+
+  const statsCard = (
+    <Card>
+      <CardHeader className="gap-2">
+        <span className="text-sm font-medium text-indigo-600">{userFriendlyName}</span>
+        <CardTitle>Week {activeWeek.weekIndex} plan</CardTitle>
+        <p className="text-sm text-neutral-300/80">Track your weekly momentum and celebrate each victory.</p>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Sessions</p>
+            <p className="mt-3 font-display text-3xl text-neutral-50">
+              {completionSummary.completedSessions}/{completionSummary.totalSessions}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Completion</p>
+            <p className="mt-3 font-display text-3xl text-neutral-50">{completionSummary.completionPercent}%</p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Total sets</p>
+            <p className="mt-3 font-display text-3xl text-neutral-50">{completionSummary.totalSets}</p>
+          </div>
+        </div>
+
+        {progressTrend.length ? (
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-neutral-200">Progress journey</h3>
+            <ProgressTrendChart data={progressTrend} activeWeekIndex={activeWeek.weekIndex} />
           </div>
         ) : null}
 
-        <Card>
-          <CardHeader className="gap-2">
-            <span className="text-sm font-medium text-indigo-600">{userFriendlyName}</span>
-            <CardTitle>Week {activeWeek.weekIndex} plan</CardTitle>
-            <p className="text-sm text-neutral-300/80">Track your weekly momentum and celebrate each victory.</p>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Sessions</p>
-                <p className="mt-3 font-display text-3xl text-neutral-50">
-                  {completionSummary.completedSessions}/{completionSummary.totalSessions}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Completion</p>
-                <p className="mt-3 font-display text-3xl text-neutral-50">{completionSummary.completionPercent}%</p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Total sets</p>
-                <p className="mt-3 font-display text-3xl text-neutral-50">{completionSummary.totalSets}</p>
-              </div>
-            </div>
+        <div className="flex flex-wrap gap-2">
+          {weeks.map((week) => (
+            <Button
+              key={week.weekIndex}
+              size="sm"
+              variant={week.weekIndex === activeWeek.weekIndex ? 'secondary' : 'outline'}
+              onClick={() => onSelectWeek(week.weekIndex)}
+            >
+              {week.label}
+            </Button>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  )
 
-            {progressTrend.length ? (
-              <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-neutral-200">Progress journey</h3>
-                <ProgressTrendChart data={progressTrend} activeWeekIndex={activeWeek.weekIndex} />
-              </div>
-            ) : null}
-
-            <div className="flex flex-wrap gap-2">
-              {weeks.map((week) => (
-                <Button
-                  key={week.weekIndex}
-                  size="sm"
-                  variant={week.weekIndex === activeWeek.weekIndex ? 'secondary' : 'outline'}
-                  onClick={() => onSelectWeek(week.weekIndex)}
+  const sessionsCard = (
+    <Card>
+      <CardHeader className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <CardTitle className="text-lg">Sessions this week</CardTitle>
+          <p className="text-sm text-neutral-300/85">Mark your workouts and dive into the session log.</p>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {activeWeek.sessions.length ? (
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {activeWeek.sessions.map((session) => {
+              const sessionProgress = weekProgress?.[session.sessionId]
+              const state = evaluateSessionState(session, sessionProgress)
+              const isCelebrating = celebrationState?.sessionId === session.sessionId
+              const totalSets = session.exercises.reduce((sum, exercise) => sum + exercise.prescribedSets, 0)
+              return (
+                <article
+                  key={session.sessionId}
+                  className="surface-card relative flex min-h-[160px] flex-col gap-4 cursor-pointer border-white/15 p-4 transition-transform duration-200 hover:-translate-y-1 hover:shadow-soft"
+                  onClick={() => onOpenSession(activeWeek.weekIndex, session.sessionId)}
                 >
-                  {week.label}
-                </Button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <CardTitle className="text-lg">Sessions this week</CardTitle>
-              <p className="text-sm text-neutral-300/85">Mark your workouts and dive into the session log.</p>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {activeWeek.sessions.length ? (
-              <div className="grid grid-cols-3 gap-3">
-                {activeWeek.sessions.map((session) => {
-                  const sessionProgress = weekProgress?.[session.sessionId]
-                  const state = evaluateSessionState(session, sessionProgress)
-                  const isCelebrating = celebrationState?.sessionId === session.sessionId
-                  const totalSets = session.exercises.reduce((sum, exercise) => sum + exercise.prescribedSets, 0)
-                  return (
-                    <article
-                      key={session.sessionId}
-                      className="surface-card relative flex min-h-[160px] flex-col gap-4 cursor-pointer border-white/15 p-4 transition-transform duration-200 hover:-translate-y-1 hover:shadow-soft"
-                      onClick={() => onOpenSession(activeWeek.weekIndex, session.sessionId)}
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold text-neutral-50">{session.dayTitle}</p>
+                      <p className="truncate text-xs text-neutral-300/80">{session.focusLabel}</p>
+                    </div>
+                    <Badge variant={statusBadgeVariant(state)} className="shrink-0 text-[10px] capitalize">
+                      {state.replace('-', ' ')}
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 text-center text-[11px] text-neutral-300/75">
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <div className="font-display text-xl text-neutral-50">{session.exercises.length}</div>
+                      <div className="mt-1 text-[10px] uppercase tracking-[0.24em] text-neutral-400">Exercises</div>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <div className="font-display text-xl text-neutral-50">{totalSets}</div>
+                      <div className="mt-1 text-[10px] uppercase tracking-[0.24em] text-neutral-400">Sets</div>
+                    </div>
+                  </div>
+                  <div className="mt-auto flex flex-col gap-2 sm:flex-row">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="flex-1 text-[11px]"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onOpenSession(activeWeek.weekIndex, session.sessionId)
+                      }}
                     >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1">
-                          <p className="truncate text-sm font-semibold text-neutral-50">{session.dayTitle}</p>
-                          <p className="truncate text-xs text-neutral-300/80">{session.focusLabel}</p>
-                        </div>
-                        <Badge variant={statusBadgeVariant(state)} className="shrink-0 text-[10px] capitalize">
-                          {state.replace('-', ' ')}
-                        </Badge>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3 text-center text-[11px] text-neutral-300/75">
-                        <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-                          <div className="font-display text-xl text-neutral-50">{session.exercises.length}</div>
-                          <div className="mt-1 text-[10px] uppercase tracking-[0.24em] text-neutral-400">Exercises</div>
-                        </div>
-                        <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-                          <div className="font-display text-xl text-neutral-50">{totalSets}</div>
-                          <div className="mt-1 text-[10px] uppercase tracking-[0.24em] text-neutral-400">Sets</div>
-                        </div>
-                      </div>
-                      <div className="mt-auto flex gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="flex-1 text-[11px]"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            onOpenSession(activeWeek.weekIndex, session.sessionId)
-                          }}
-                        >
-                          Open session
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          className="flex-1 text-[11px]"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            handleCelebrateSession(session, state)
-                          }}
-                          disabled={markingSessionId === session.sessionId}
-                        >
-                          {markingSessionId === session.sessionId ? 'Saving…' : 'Mark complete'}
-                        </Button>
-                      </div>
-                      {isCelebrating && celebrationState ? (
-                        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                          {Array.from({ length: 12 }).map((_, index) => {
-                            const left = Math.random() * 100
-                            const top = Math.random() * 60
-                            const confettiColor = confettiPalette[(index + session.sessionId.length) % confettiPalette.length]
-                            return (
-                              <span
-                                key={`${session.sessionId}_confetti_${index}`}
-                                className="confetti-piece"
-                                style={{
-                                  '--tw-confetti-x': `${left - 50}%`,
-                                  '--tw-confetti-y': `${top + 120}%`,
-                                  backgroundColor: confettiColor,
-                                } as ConfettiStyle}
-                              />
-                            )
-                          })}
-                        </div>
-                      ) : null}
-                    </article>
-                  )
-                })}
-              </div>
-            ) : (
-              <p className="text-sm text-neutral-300/80">No sessions scheduled for this week yet.</p>
-            )}
-          </CardContent>
-        </Card>
-
-        {clientProfile ? (
-          <>
-            <Card>
-              <CardHeader className="mb-4 space-y-0">
-                <div>
-                  <CardTitle className="text-lg">Program overview</CardTitle>
-                  <p className="text-sm text-neutral-300/80">Stay on top of your template, challenges, and renewal plan.</p>
-                </div>
-              </CardHeader>
-              <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                <article className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Assigned template</p>
-                  <p className="mt-3 text-base font-semibold text-neutral-100">{assignedTemplate?.name ?? 'Custom coach build'}</p>
-                  <p className="mt-2 text-xs text-neutral-300/80">Adjustments applied: {clientProfile.templateAdjustments.length}</p>
-                </article>
-                <article className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Active challenge</p>
-                  <p className="mt-3 text-base font-semibold text-neutral-100">{activeChallenge ? activeChallenge.name : 'None yet'}</p>
-                  <p className="mt-2 text-xs text-neutral-300/80">
-                    {activeChallenge
-                      ? `${activeChallenge.durationWeeks} week focus on ${activeChallenge.focus.join(', ')}`
-                      : 'Unlock a preset to fast-track progress.'}
-                  </p>
-                </article>
-                <article className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Subscription</p>
-                  <p className="mt-3 text-base font-semibold text-neutral-100">{subscriptionProduct?.name ?? 'Coach access'}</p>
-                  <p className="mt-2 text-xs text-neutral-300/80">{subscriptionProduct?.description ?? 'Work directly with your coach across shared plans.'}</p>
-                </article>
-                <article className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Renewal</p>
-                  <p className="mt-3 text-base font-semibold text-neutral-100">{clientProfile.subscription.autoRenew ? 'Auto-renew enabled' : 'Manual renewal'}</p>
-                  <p className="mt-2 text-xs text-neutral-300/80">
-                    {renewalDaysRemaining !== null
-                      ? renewalDaysRemaining === 0
-                        ? `Expired on ${new Date(clientProfile.subscription.renewsOn).toLocaleDateString()}`
-                        : `Renews ${new Date(clientProfile.subscription.renewsOn).toLocaleDateString()} (${renewalDaysRemaining} day${renewalDaysRemaining === 1 ? '' : 's'} left)`
-                      : 'Renewal date pending'}
-                  </p>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="mt-3 w-fit text-xs"
-                    onClick={() => {
-                      toggleAutoRenew(clientProfile.id)
-                      setDashboardFeedback(clientProfile.subscription.autoRenew ? 'Auto-renew disabled.' : 'Auto-renew enabled.')
-                    }}
-                  >
-                    Toggle auto-renew
-                  </Button>
-                </article>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="mb-4 space-y-0">
-                <div>
-                  <CardTitle className="text-lg">Check-ins &amp; progress photos</CardTitle>
-                  <p className="text-sm text-neutral-300/80">Log your weekly update and keep photos to track your transformation.</p>
-                </div>
-              </CardHeader>
-              <CardContent className="grid gap-6 lg:grid-cols-[minmax(280px,360px)_1fr]">
-                <div className="space-y-4 rounded-2xl border border-white/12 bg-white/5 p-5">
-                  <div className="flex flex-col gap-1">
-                    <Label htmlFor="check-in-energy">Energy level</Label>
-                    <Select
-                      id="check-in-energy"
-                      value={checkInEnergy}
-                      onChange={(event) => setCheckInEnergy(Number(event.target.value) as 1 | 2 | 3 | 4 | 5)}
+                      Open session
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="flex-1 text-[11px]"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleCelebrateSession(session, state)
+                      }}
+                      disabled={markingSessionId === session.sessionId}
                     >
-                      <option value={5}>🔥 Peaks</option>
-                      <option value={4}>💪 Strong</option>
-                      <option value={3}>🙂 Balanced</option>
-                      <option value={2}>😌 Below average</option>
-                      <option value={1}>😴 Drained</option>
-                    </Select>
+                      {markingSessionId === session.sessionId ? 'Saving…' : 'Mark complete'}
+                    </Button>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <Label htmlFor="check-in-stress">Stress level</Label>
-                    <Select
-                      id="check-in-stress"
-                      value={checkInStress}
-                      onChange={(event) => setCheckInStress(Number(event.target.value) as 1 | 2 | 3 | 4 | 5)}
-                    >
-                      <option value={1}>Very low</option>
-                      <option value={2}>Manageable</option>
-                      <option value={3}>Moderate</option>
-                      <option value={4}>High</option>
-                      <option value={5}>Very high</option>
-                    </Select>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <Label htmlFor="check-in-weight">Body weight (kg)</Label>
-                    <Input
-                      id="check-in-weight"
-                      type="number"
-                      min={0}
-                      step="0.1"
-                      value={checkInWeight}
-                      onChange={(event) => setCheckInWeight(event.target.value)}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <Label htmlFor="check-in-notes">Notes to coach</Label>
-                    <Textarea
-                      id="check-in-notes"
-                      value={checkInNotes}
-                      onChange={(event) => setCheckInNotes(event.target.value)}
-                      rows={3}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <Label htmlFor="check-in-photo">Progress photo</Label>
-                    <Input id="check-in-photo" type="file" accept="image/*" onChange={handlePhotoInputChange} className="file:text-xs" />
-                  </div>
-                  {checkInPhotoPreviewUrl ? (
-                    <div className="overflow-hidden rounded-2xl border border-white/10">
-                      <img src={checkInPhotoPreviewUrl} alt="Progress preview" className="h-40 w-full object-cover" />
+                  {isCelebrating && celebrationState ? (
+                    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                      {Array.from({ length: 12 }).map((_, index) => {
+                        const left = Math.random() * 100
+                        const top = Math.random() * 60
+                        const confettiColor = confettiPalette[(index + session.sessionId.length) % confettiPalette.length]
+                        return (
+                          <span
+                            key={`${session.sessionId}_confetti_${index}`}
+                            className="confetti-piece"
+                            style={{
+                              '--tw-confetti-x': `${left - 50}%`,
+                              '--tw-confetti-y': `${top + 120}%`,
+                              backgroundColor: confettiColor,
+                            } as ConfettiStyle}
+                          />
+                        )
+                      })}
                     </div>
                   ) : null}
-                  <Button type="button" onClick={handleSubmitCheckIn} disabled={checkInSubmitting} className="w-full">
-                    {checkInSubmitting ? 'Submitting…' : 'Submit check-in'}
-                  </Button>
-                </div>
+                </article>
+              )
+            })}
+          </div>
+        ) : (
+          <p className="text-sm text-neutral-300/80">No sessions scheduled for this week yet.</p>
+        )}
+      </CardContent>
+    </Card>
+  )
 
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-sm font-semibold text-neutral-200">Recent check-ins</h3>
-                    {checkIns.length ? (
-                      <ul className="mt-3 space-y-3 text-sm">
-                        {checkIns.map((entry) => {
-                          const submittedAt = new Date(entry.submittedAt)
-                          return (
-                            <li key={entry.id} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                              <div className="flex items-center justify-between text-xs text-neutral-300/80">
-                                <span>
-                                  Checked in on {submittedAt.toLocaleDateString()} · {submittedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                </span>
-                                <span>Week {entry.weekIndex}</span>
-                              </div>
-                              <p className="mt-2 text-xs text-neutral-300/80">Energy {entry.energyLevel}/5 · Stress {entry.stressLevel}/5</p>
-                              {entry.notes ? <p className="mt-2 text-sm text-neutral-100">{entry.notes}</p> : null}
-                            </li>
-                          )
-                        })}
-                      </ul>
-                    ) : (
-                      <p className="mt-3 text-xs text-neutral-400">No check-ins logged yet — share your first update to keep coaching feedback flowing.</p>
-                    )}
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-neutral-200">Progress gallery</h3>
-                    {progressPhotos.length ? (
-                      <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                        {progressPhotos.map((photo) => (
-                          <figure key={photo.id} className="overflow-hidden rounded-2xl border border-white/10">
-                            {photo.imageUrl ? (
-                              <img src={photo.imageUrl} alt={photo.label} className="h-28 w-full object-cover" />
-                            ) : (
-                              <div className="flex h-28 items-center justify-center bg-white/5 text-xs text-neutral-400">Photo pending</div>
-                            )}
-                            <figcaption className="px-2 py-1 text-[11px] text-neutral-300/80">{photo.label}</figcaption>
-                          </figure>
-                        ))}
+  const programOverviewCard = !clientProfile ? null : (
+    <Card>
+      <CardHeader className="mb-4 space-y-0">
+        <div>
+          <CardTitle className="text-lg">Program overview</CardTitle>
+          <p className="text-sm text-neutral-300/80">Stay on top of your template, challenges, and renewal plan.</p>
+        </div>
+      </CardHeader>
+      <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <article className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Assigned template</p>
+          <p className="mt-3 text-base font-semibold text-neutral-100">{assignedTemplate?.name ?? 'Custom coach build'}</p>
+          <p className="mt-2 text-xs text-neutral-300/80">Adjustments applied: {clientProfile.templateAdjustments.length}</p>
+        </article>
+        <article className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Active challenge</p>
+          <p className="mt-3 text-base font-semibold text-neutral-100">{activeChallenge ? activeChallenge.name : 'None yet'}</p>
+          <p className="mt-2 text-xs text-neutral-300/80">
+            {activeChallenge
+              ? `${activeChallenge.durationWeeks} week focus on ${activeChallenge.focus.join(', ')}`
+              : 'Unlock a preset to fast-track progress.'}
+          </p>
+        </article>
+        <article className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Subscription</p>
+          <p className="mt-3 text-base font-semibold text-neutral-100">{subscriptionProduct?.name ?? 'Coach access'}</p>
+          <p className="mt-2 text-xs text-neutral-300/80">{subscriptionProduct?.description ?? 'Work directly with your coach across shared plans.'}</p>
+        </article>
+        <article className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Renewal</p>
+          <p className="mt-3 text-base font-semibold text-neutral-100">{clientProfile.subscription.autoRenew ? 'Auto-renew enabled' : 'Manual renewal'}</p>
+          <p className="mt-2 text-xs text-neutral-300/80">
+            {renewalDaysRemaining !== null
+              ? renewalDaysRemaining === 0
+                ? `Expired on ${new Date(clientProfile.subscription.renewsOn).toLocaleDateString()}`
+                : `Renews ${new Date(clientProfile.subscription.renewsOn).toLocaleDateString()} (${renewalDaysRemaining} day${renewalDaysRemaining === 1 ? '' : 's'} left)`
+              : 'Renewal date pending'}
+          </p>
+          <Button
+            size="sm"
+            variant="outline"
+            className="mt-3 w-fit text-xs"
+            onClick={() => {
+              toggleAutoRenew(clientProfile.id)
+              setDashboardFeedback(clientProfile.subscription.autoRenew ? 'Auto-renew disabled.' : 'Auto-renew enabled.')
+            }}
+          >
+            Toggle auto-renew
+          </Button>
+        </article>
+      </CardContent>
+    </Card>
+  )
+
+  const checkInsCard = !clientProfile ? null : (
+    <Card>
+      <CardHeader className="mb-4 space-y-0">
+        <div>
+          <CardTitle className="text-lg">Check-ins &amp; progress photos</CardTitle>
+          <p className="text-sm text-neutral-300/80">Log your weekly update and keep photos to track your transformation.</p>
+        </div>
+      </CardHeader>
+      <CardContent className="grid gap-6 lg:grid-cols-[minmax(280px,360px)_1fr]">
+        <div className="space-y-4 rounded-2xl border border-white/12 bg-white/5 p-5">
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="check-in-energy">Energy level</Label>
+            <Select
+              id="check-in-energy"
+              value={checkInEnergy}
+              onChange={(event) => setCheckInEnergy(Number(event.target.value) as 1 | 2 | 3 | 4 | 5)}
+            >
+              <option value={5}>🔥 Peaks</option>
+              <option value={4}>💪 Strong</option>
+              <option value={3}>🙂 Balanced</option>
+              <option value={2}>😌 Below average</option>
+              <option value={1}>😴 Drained</option>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="check-in-stress">Stress level</Label>
+            <Select
+              id="check-in-stress"
+              value={checkInStress}
+              onChange={(event) => setCheckInStress(Number(event.target.value) as 1 | 2 | 3 | 4 | 5)}
+            >
+              <option value={1}>Very low</option>
+              <option value={2}>Manageable</option>
+              <option value={3}>Moderate</option>
+              <option value={4}>High</option>
+              <option value={5}>Very high</option>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="check-in-weight">Body weight (kg)</Label>
+            <Input
+              id="check-in-weight"
+              type="number"
+              min={0}
+              step="0.1"
+              value={checkInWeight}
+              onChange={(event) => setCheckInWeight(event.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="check-in-notes">Notes to coach</Label>
+            <Textarea
+              id="check-in-notes"
+              value={checkInNotes}
+              onChange={(event) => setCheckInNotes(event.target.value)}
+              rows={3}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="check-in-photo">Progress photo</Label>
+            <Input id="check-in-photo" type="file" accept="image/*" onChange={handlePhotoInputChange} className="file:text-xs" />
+          </div>
+          {checkInPhotoPreviewUrl ? (
+            <div className="overflow-hidden rounded-2xl border border-white/10">
+              <img src={checkInPhotoPreviewUrl} alt="Progress preview" className="h-40 w-full object-cover" />
+            </div>
+          ) : null}
+          <Button type="button" onClick={handleSubmitCheckIn} disabled={checkInSubmitting} className="w-full">
+            {checkInSubmitting ? 'Submitting…' : 'Submit check-in'}
+          </Button>
+        </div>
+
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-sm font-semibold text-neutral-200">Recent check-ins</h3>
+            {checkIns.length ? (
+              <ul className="mt-3 space-y-3 text-sm">
+                {checkIns.map((entry) => {
+                  const submittedAt = new Date(entry.submittedAt)
+                  return (
+                    <li key={entry.id} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                      <div className="flex items-center justify-between text-xs text-neutral-300/80">
+                        <span>
+                          Checked in on {submittedAt.toLocaleDateString()} · {submittedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        <span>Week {entry.weekIndex}</span>
                       </div>
+                      <p className="mt-2 text-xs text-neutral-300/80">Energy {entry.energyLevel}/5 · Stress {entry.stressLevel}/5</p>
+                      {entry.notes ? <p className="mt-2 text-sm text-neutral-100">{entry.notes}</p> : null}
+                    </li>
+                  )
+                })}
+              </ul>
+            ) : (
+              <p className="mt-3 text-xs text-neutral-400">No check-ins logged yet — share your first update to keep coaching feedback flowing.</p>
+            )}
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-neutral-200">Progress gallery</h3>
+            {progressPhotos.length ? (
+              <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {progressPhotos.map((photo) => (
+                  <figure key={photo.id} className="overflow-hidden rounded-2xl border border-white/10">
+                    {photo.imageUrl ? (
+                      <img src={photo.imageUrl} alt={photo.label} className="h-28 w-full object-cover" />
                     ) : (
-                      <p className="mt-3 text-xs text-neutral-400">Upload your first progress photo to visualise change over time.</p>
+                      <div className="flex h-28 items-center justify-center bg-white/5 text-xs text-neutral-400">Photo pending</div>
                     )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                    <figcaption className="px-2 py-1 text-[11px] text-neutral-300/80">{photo.label}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-3 text-xs text-neutral-400">Upload your first progress photo to visualise change over time.</p>
+            )}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
 
-            <Card>
-              <CardHeader className="mb-4 space-y-0">
-                <div>
-                  <CardTitle className="text-lg">Challenge library</CardTitle>
-                  <p className="text-sm text-neutral-300/80">Unlock preset 8–12 week blocks with in-app payments.</p>
-                </div>
-              </CardHeader>
-              <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {activeChallenge ? (
-                  <article className="rounded-2xl border border-success/30 bg-success/15 px-5 py-4 text-sm text-success">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-success/80">Active</p>
-                    <h3 className="mt-2 text-base font-semibold text-neutral-100">{activeChallenge.name}</h3>
-                    <p className="mt-1 text-sm text-neutral-100/90">Focus: {activeChallenge.focus.join(', ')}</p>
-                    <p className="mt-2 text-xs text-neutral-100/80">
-                      Duration {activeChallenge.durationWeeks} weeks · Unlock {activeChallenge.requiredSubscriptionProductId ? 'via hybrid subscription' : 'with any plan'}
-                    </p>
-                  </article>
-                ) : null}
-                {eligibleChallenges.length ? (
-                  eligibleChallenges.map((challenge) => (
-                    <article key={challenge.id} className="flex flex-col justify-between rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm">
-                      <div className="space-y-2">
-                        <h3 className="text-base font-semibold text-neutral-100">{challenge.name}</h3>
-                        <p className="text-neutral-300/80">{challenge.summary}</p>
-                        <p className="text-xs text-neutral-400">{challenge.durationWeeks} weeks · Unlock cost ₹{challenge.unlockCost}</p>
-                      </div>
-                      <Button variant="secondary" size="sm" className="mt-4" onClick={() => handleUnlockChallenge(challenge.id)}>
-                        Unlock challenge
-                      </Button>
-                    </article>
-                  ))
-                ) : (
-                  <div className="rounded-2xl border border-dashed border-white/20 bg-white/5 px-4 py-6 text-sm text-neutral-300/75">
-                    Upgrade to a hybrid or semi-annual subscription to unlock premium preset challenges.
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+  const challengesCard = !clientProfile ? null : (
+    <Card>
+      <CardHeader className="mb-4 space-y-0">
+        <div>
+          <CardTitle className="text-lg">Challenge library</CardTitle>
+          <p className="text-sm text-neutral-300/80">Unlock preset 8–12 week blocks with in-app payments.</p>
+        </div>
+      </CardHeader>
+      <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {activeChallenge ? (
+          <article className="rounded-2xl border border-success/30 bg-success/15 px-5 py-4 text-sm text-success">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-success/80">Active</p>
+            <h3 className="mt-2 text-base font-semibold text-neutral-100">{activeChallenge.name}</h3>
+            <p className="mt-1 text-sm text-neutral-100/90">Focus: {activeChallenge.focus.join(', ')}</p>
+            <p className="mt-2 text-xs text-neutral-100/80">
+              Duration {activeChallenge.durationWeeks} weeks · Unlock {activeChallenge.requiredSubscriptionProductId ? 'via hybrid subscription' : 'with any plan'}
+            </p>
+          </article>
+        ) : null}
+        {eligibleChallenges.length ? (
+          eligibleChallenges.map((challenge) => (
+            <article key={challenge.id} className="flex flex-col justify-between rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm">
+              <div className="space-y-2">
+                <h3 className="text-base font-semibold text-neutral-100">{challenge.name}</h3>
+                <p className="text-neutral-300/80">{challenge.summary}</p>
+                <p className="text-xs text-neutral-400">{challenge.durationWeeks} weeks · Unlock cost ₹{challenge.unlockCost}</p>
+              </div>
+              <Button variant="secondary" size="sm" className="mt-4" onClick={() => handleUnlockChallenge(challenge.id)}>
+                Unlock challenge
+              </Button>
+            </article>
+          ))
+        ) : (
+          <div className="rounded-2xl border border-dashed border-white/20 bg-white/5 px-4 py-6 text-sm text-neutral-300/75">
+            Upgrade to a hybrid or semi-annual subscription to unlock premium preset challenges.
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
 
-            <Card>
-              <CardHeader className="mb-4 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+  const billingCard = !clientProfile ? null : (
+    <Card>
+      <CardHeader className="mb-4 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <CardTitle className="text-lg">Billing &amp; invoices</CardTitle>
+          <p className="text-sm text-neutral-300/80">Manage renewals, download invoices, and review payment history.</p>
+        </div>
+        <div className="flex flex-wrap gap-2 text-xs font-semibold">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              extendSubscription(clientProfile.id, 3)
+              setDashboardFeedback('Plan extended by 3 months. Payment recorded.')
+            }}
+          >
+            Extend 3 months
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              extendSubscription(clientProfile.id, 6)
+              setDashboardFeedback('Plan extended by 6 months. Payment recorded.')
+            }}
+          >
+            Extend 6 months
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {paymentHistory.length ? (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Description</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {paymentHistory.map((payment) => (
+                  <TableRow key={payment.id}>
+                    <TableCell className="text-xs">{new Date(payment.recordedAt).toLocaleDateString()}</TableCell>
+                    <TableCell className="text-xs capitalize">{payment.type}</TableCell>
+                    <TableCell className="text-xs font-semibold text-neutral-100">
+                      {payment.currency === 'INR' ? `₹${payment.amount}` : `$${payment.amount}`}
+                    </TableCell>
+                    <TableCell className="text-xs">
+                      <Badge variant={paymentStatusVariant(payment.status)} className="capitalize">
+                        {payment.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-xs text-neutral-300/80">{payment.description}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        ) : (
+        <p className="text-sm text-neutral-300/80">No payments recorded yet. Billing begins once your first plan is activated.</p>
+        )}
+      </CardContent>
+    </Card>
+  )
+
+  const notificationsCard = !clientProfile ? null : (
+    <Card>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-base">Notifications</CardTitle>
+        <p className="text-sm text-neutral-300/80">Stay aligned with coach insights.</p>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {notifications.length ? (
+          notifications.map((item) => (
+            <div key={item.id} className={cn('rounded-2xl border px-4 py-3 text-sm shadow-sm', notificationToneClasses[item.tone])}>
+              <div className="flex items-start gap-2">
+                <span>{notificationIcons[item.tone]}</span>
                 <div>
-                  <CardTitle className="text-lg">Billing &amp; invoices</CardTitle>
-                  <p className="text-sm text-neutral-300/80">Manage renewals, download invoices, and review payment history.</p>
+                  <p className="font-semibold">{item.title}</p>
+                  <p className="text-xs text-neutral-300/80">{item.message}</p>
                 </div>
-                <div className="flex flex-wrap gap-2 text-xs font-semibold">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      extendSubscription(clientProfile.id, 3)
-                      setDashboardFeedback('Plan extended by 3 months. Payment recorded.')
-                    }}
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-sm text-neutral-300/80">No alerts right now — keep up the great work!</p>
+        )}
+      </CardContent>
+    </Card>
+  )
+
+  const upcomingCard = !clientProfile ? null : (
+    <Card>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-base">Upcoming check-ins</CardTitle>
+        <p className="text-sm text-neutral-300/80">Plan ahead for your next updates.</p>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {upcomingCheckIns.length ? (
+          <ul className="space-y-2 text-sm">
+            {upcomingCheckIns.map((entry, index) => {
+              const date = new Date(entry)
+              return (
+                <li key={entry} className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                  <span className="font-semibold text-neutral-100">
+                    {date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
+                  </span>
+                  <span className="text-xs text-neutral-400">{index === 0 ? 'Next' : `+${index} wk`}</span>
+                </li>
+              )
+            })}
+          </ul>
+        ) : (
+          <p className="text-sm text-neutral-300/80">Next check-in will be scheduled after your first update.</p>
+        )}
+        {lastCheckIn ? (
+          <p className="text-xs text-neutral-400">Last check-in on {new Date(lastCheckIn.submittedAt).toLocaleString()}.</p>
+        ) : (
+          <p className="text-xs text-neutral-400">You have not logged a check-in yet.</p>
+        )}
+      </CardContent>
+    </Card>
+  )
+
+  const coachChatCard = !clientProfile ? null : (
+    <Card>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-base">Coach chat</CardTitle>
+          <p className="text-sm text-neutral-300/80">Share wins, questions, or quick updates.</p>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div ref={chatLogRef} className="max-h-64 space-y-3 overflow-y-auto rounded-2xl border border-white/10 bg-white/5 p-3">
+          {chatMessages.length ? (
+            chatMessages.map((message) => {
+              const isClient = message.author === 'client'
+              return (
+                <div key={message.id} className={cn('flex', isClient ? 'justify-end' : 'justify-start')}>
+                  <div
+                    className={cn(
+                      'max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm',
+                      isClient
+                        ? 'bg-gradient-primary text-white shadow-soft'
+                        : 'border border-white/10 bg-white/5 text-neutral-100',
+                    )}
                   >
-                    Extend 3 months
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      extendSubscription(clientProfile.id, 6)
-                      setDashboardFeedback('Plan extended by 6 months. Payment recorded.')
-                    }}
-                  >
-                    Extend 6 months
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {paymentHistory.length ? (
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Date</TableHead>
-                          <TableHead>Type</TableHead>
-                          <TableHead>Amount</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>Description</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {paymentHistory.map((payment) => (
-                          <TableRow key={payment.id}>
-                            <TableCell className="text-xs">{new Date(payment.recordedAt).toLocaleDateString()}</TableCell>
-                            <TableCell className="text-xs capitalize">{payment.type}</TableCell>
-                            <TableCell className="text-xs font-semibold text-neutral-100">
-                              {payment.currency === 'INR' ? `₹${payment.amount}` : `$${payment.amount}`}
-                            </TableCell>
-                            <TableCell className="text-xs">
-                              <Badge variant={paymentStatusVariant(payment.status)} className="capitalize">
-                                {payment.status}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="text-xs text-neutral-300/80">{payment.description}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                    <p>{message.body}</p>
+                    <time className="mt-1 block text-[10px] uppercase tracking-wide opacity-70">
+                      {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </time>
                   </div>
-                ) : (
-                <p className="text-sm text-neutral-300/80">No payments recorded yet. Billing begins once your first plan is activated.</p>
-                )}
-              </CardContent>
-            </Card>
-          </>
+                </div>
+              )
+            })
+          ) : (
+            <p className="text-xs text-neutral-400">Say hello to your coach to kick things off.</p>
+          )}
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Input
+            value={chatInput}
+            onChange={(event) => setChatInput(event.target.value)}
+            onKeyDown={handleChatKeyDown}
+            placeholder="Type a message to your coach"
+          />
+          <Button type="button" onClick={handleSendChat} disabled={!chatInput.trim()}>
+            Send
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+
+  const profileCard = !clientProfile ? null : (
+    <Card>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-base">Profile settings</CardTitle>
+        <p className="text-sm text-neutral-300/80">Keep your coach up to date with key details.</p>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="setting-name">Preferred name</Label>
+          <Input
+            id="setting-name"
+            value={settingsForm.preferredName}
+            onChange={(event) => setSettingsForm((previous) => ({ ...previous, preferredName: event.target.value }))}
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="setting-birth">Birth date</Label>
+          <Input
+            id="setting-birth"
+            type="date"
+            value={settingsForm.birthDate}
+            onChange={(event) => setSettingsForm((previous) => ({ ...previous, birthDate: event.target.value }))}
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="setting-age">Age</Label>
+          <Input
+            id="setting-age"
+            type="number"
+            min={0}
+            value={settingsForm.age}
+            onChange={(event) => setSettingsForm((previous) => ({ ...previous, age: event.target.value }))}
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="setting-health">Health notes</Label>
+          <Textarea
+            id="setting-health"
+            value={settingsForm.healthNotes}
+            onChange={(event) => setSettingsForm((previous) => ({ ...previous, healthNotes: event.target.value }))}
+            rows={3}
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="setting-emergency">Emergency contact</Label>
+          <Input
+            id="setting-emergency"
+            value={settingsForm.emergencyContact}
+            onChange={(event) => setSettingsForm((previous) => ({ ...previous, emergencyContact: event.target.value }))}
+          />
+        </div>
+        <Button type="button" onClick={handleSaveSettings} disabled={settingsSaving} className="w-full">
+          {settingsSaving ? 'Saving…' : 'Save profile'}
+        </Button>
+      </CardContent>
+    </Card>
+  )
+
+  const scheduleUpdatesCard = clientProfile ? <ScheduleUpdates /> : null
+  const athleteMessagingCard = clientProfile ? <AthleteMessaging /> : null
+
+  const renderMobileSection = () => {
+    switch (activeSection) {
+      case 'overview':
+        return (
+          <div className="space-y-6">
+            {feedbackBanner}
+            {statsCard}
+            {programOverviewCard}
+            {scheduleUpdatesCard}
+            {upcomingCard}
+          </div>
+        )
+      case 'sessions':
+        return (
+          <div className="space-y-6">
+            {feedbackBanner}
+            {sessionsCard}
+          </div>
+        )
+      case 'progress':
+        return (
+          <div className="space-y-6">
+            {feedbackBanner}
+            {checkInsCard}
+          </div>
+        )
+      case 'chat':
+        return (
+          <div className="space-y-6">
+            {feedbackBanner}
+            {athleteMessagingCard}
+            {coachChatCard}
+          </div>
+        )
+      case 'challenges':
+        return (
+          <div className="space-y-6">
+            {challengesCard}
+          </div>
+        )
+      case 'billing':
+        return (
+          <div className="space-y-6">
+            {billingCard}
+          </div>
+        )
+      case 'notifications':
+        return (
+          <div className="space-y-6">
+            {notificationsCard}
+            {upcomingCard}
+          </div>
+        )
+      case 'profile':
+        return (
+          <div className="space-y-6">
+            {profileCard}
+          </div>
+        )
+      default:
+        return null
+    }
+  }
+
+  if (isDesktop) {
+    return (
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
+        <div className="flex flex-col gap-6">
+          {feedbackBanner}
+          {statsCard}
+          {sessionsCard}
+          {programOverviewCard}
+          {checkInsCard}
+          {challengesCard}
+          {billingCard}
+        </div>
+
+        {clientProfile ? (
+          <aside className="flex flex-col gap-6">
+            {notificationsCard}
+            {scheduleUpdatesCard}
+            {athleteMessagingCard}
+            {upcomingCard}
+            {coachChatCard}
+            {profileCard}
+          </aside>
         ) : null}
       </div>
+    )
+  }
 
-      {clientProfile ? (
-        <aside className="flex flex-col gap-6">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base">Notifications</CardTitle>
-              <p className="text-sm text-neutral-300/80">Stay aligned with coach insights.</p>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {notifications.length ? (
-                notifications.map((item) => (
-                  <div key={item.id} className={cn('rounded-2xl border px-4 py-3 text-sm shadow-sm', notificationToneClasses[item.tone])}>
-                    <div className="flex items-start gap-2">
-                      <span>{notificationIcons[item.tone]}</span>
-                      <div>
-                        <p className="font-semibold">{item.title}</p>
-                        <p className="text-xs text-neutral-300/80">{item.message}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-neutral-300/80">No alerts right now — keep up the great work!</p>
-              )}
-            </CardContent>
-          </Card>
-
-          <ScheduleUpdates />
-
-          <AthleteMessaging />
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base">Upcoming check-ins</CardTitle>
-              <p className="text-sm text-neutral-300/80">Plan ahead for your next updates.</p>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {upcomingCheckIns.length ? (
-                <ul className="space-y-2 text-sm">
-                  {upcomingCheckIns.map((entry, index) => {
-                    const date = new Date(entry)
-                    return (
-                      <li key={entry} className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                        <span className="font-semibold text-neutral-100">
-                          {date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
-                        </span>
-                        <span className="text-xs text-neutral-400">{index === 0 ? 'Next' : `+${index} wk`}</span>
-                      </li>
-                    )
-                  })}
-                </ul>
-              ) : (
-                <p className="text-sm text-neutral-300/80">Next check-in will be scheduled after your first update.</p>
-              )}
-              {lastCheckIn ? (
-                <p className="text-xs text-neutral-400">Last check-in on {new Date(lastCheckIn.submittedAt).toLocaleString()}.</p>
-              ) : (
-                <p className="text-xs text-neutral-400">You have not logged a check-in yet.</p>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base">Coach chat</CardTitle>
-                <p className="text-sm text-neutral-300/80">Share wins, questions, or quick updates.</p>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div ref={chatLogRef} className="max-h-64 space-y-3 overflow-y-auto rounded-2xl border border-white/10 bg-white/5 p-3">
-                {chatMessages.length ? (
-                  chatMessages.map((message) => {
-                    const isClient = message.author === 'client'
-                    return (
-                      <div key={message.id} className={cn('flex', isClient ? 'justify-end' : 'justify-start')}>
-                        <div
-                          className={cn(
-                            'max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm',
-                            isClient
-                              ? 'bg-gradient-primary text-white shadow-soft'
-                              : 'border border-white/10 bg-white/5 text-neutral-100',
-                          )}
-                        >
-                          <p>{message.body}</p>
-                          <time className="mt-1 block text-[10px] uppercase tracking-wide opacity-70">
-                            {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                          </time>
-                        </div>
-                      </div>
-                    )
-                  })
-                ) : (
-                  <p className="text-xs text-neutral-400">Say hello to your coach to kick things off.</p>
-                )}
-              </div>
-              <div className="flex gap-2">
-                <Input
-                  value={chatInput}
-                  onChange={(event) => setChatInput(event.target.value)}
-                  onKeyDown={handleChatKeyDown}
-                  placeholder="Type a message to your coach"
-                />
-                <Button type="button" onClick={handleSendChat} disabled={!chatInput.trim()}>
-                  Send
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base">Profile settings</CardTitle>
-              <p className="text-sm text-neutral-300/80">Keep your coach up to date with key details.</p>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex flex-col gap-1">
-                <Label htmlFor="setting-name">Preferred name</Label>
-                <Input
-                  id="setting-name"
-                  value={settingsForm.preferredName}
-                  onChange={(event) => setSettingsForm((previous) => ({ ...previous, preferredName: event.target.value }))}
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <Label htmlFor="setting-birth">Birth date</Label>
-                <Input
-                  id="setting-birth"
-                  type="date"
-                  value={settingsForm.birthDate}
-                  onChange={(event) => setSettingsForm((previous) => ({ ...previous, birthDate: event.target.value }))}
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <Label htmlFor="setting-age">Age</Label>
-                <Input
-                  id="setting-age"
-                  type="number"
-                  min={0}
-                  value={settingsForm.age}
-                  onChange={(event) => setSettingsForm((previous) => ({ ...previous, age: event.target.value }))}
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <Label htmlFor="setting-health">Health notes</Label>
-                <Textarea
-                  id="setting-health"
-                  value={settingsForm.healthNotes}
-                  onChange={(event) => setSettingsForm((previous) => ({ ...previous, healthNotes: event.target.value }))}
-                  rows={3}
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <Label htmlFor="setting-emergency">Emergency contact</Label>
-                <Input
-                  id="setting-emergency"
-                  value={settingsForm.emergencyContact}
-                  onChange={(event) => setSettingsForm((previous) => ({ ...previous, emergencyContact: event.target.value }))}
-                />
-              </div>
-              <Button type="button" onClick={handleSaveSettings} disabled={settingsSaving} className="w-full">
-                {settingsSaving ? 'Saving…' : 'Save profile'}
-              </Button>
-            </CardContent>
-          </Card>
-        </aside>
-      ) : null}
+  return (
+    <div className="relative pb-28">
+      <div className="space-y-6">{renderMobileSection()}</div>
+      <MobileNavTabs activeSection={activeSection} onSelectSection={(section) => setActiveSection(section)} />
+      <FloatingMenu
+        open={menuOpen}
+        onOpen={() => setMenuOpen(true)}
+        onClose={() => setMenuOpen(false)}
+        onSelectSection={(section) => {
+          setActiveSection(section)
+          setMenuOpen(false)
+        }}
+      />
     </div>
+  )
+}
+
+interface MobileNavTabsProps {
+  activeSection: DashboardSection
+  onSelectSection: (section: DashboardSection) => void
+}
+
+function MobileNavTabs({ activeSection, onSelectSection }: MobileNavTabsProps) {
+  const tabs: Array<{ id: DashboardSection; label: string; icon: string }> = [
+    { id: 'overview', label: 'Overview', icon: '🏠' },
+    { id: 'sessions', label: 'Sessions', icon: '📅' },
+    { id: 'progress', label: 'Progress', icon: '📈' },
+    { id: 'chat', label: 'Chat', icon: '💬' },
+  ]
+
+  return (
+    <nav className="fixed bottom-4 left-1/2 z-30 w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 rounded-full border border-white/10 bg-neutral-900/80 px-2 py-2 shadow-soft backdrop-blur-18 md:hidden">
+      <div className="grid grid-cols-4 gap-1">
+        {tabs.map((tab) => {
+          const isActive = tab.id === activeSection
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => onSelectSection(tab.id)}
+              className={cn(
+                'flex items-center justify-center gap-2 rounded-full px-3 py-2 text-xs font-semibold transition',
+                isActive ? 'bg-white/10 text-neutral-50 shadow-inner' : 'text-neutral-300 hover:text-white',
+              )}
+            >
+              <span aria-hidden="true">{tab.icon}</span>
+              <span>{tab.label}</span>
+            </button>
+          )
+        })}
+      </div>
+    </nav>
+  )
+}
+
+interface FloatingMenuProps {
+  open: boolean
+  onOpen: () => void
+  onClose: () => void
+  onSelectSection: (section: DashboardSection) => void
+}
+
+function FloatingMenu({ open, onOpen, onClose, onSelectSection }: FloatingMenuProps) {
+  const items: Array<{ id: DashboardSection; label: string; helper?: string }> = [
+    { id: 'challenges', label: 'Challenges', helper: 'Unlock presets' },
+    { id: 'billing', label: 'Billing', helper: 'Renewals & invoices' },
+    { id: 'notifications', label: 'Notifications', helper: 'Alerts & check-ins' },
+    { id: 'profile', label: 'Profile', helper: 'Account & details' },
+  ]
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={onOpen}
+        className="fixed bottom-20 right-4 z-30 inline-flex h-12 items-center justify-center rounded-full border border-white/10 bg-gradient-primary px-5 text-sm font-semibold text-white shadow-soft md:hidden"
+      >
+        Menu
+      </button>
+      {open ? (
+        <div className="fixed inset-0 z-40 md:hidden">
+          <button type="button" onClick={onClose} className="absolute inset-0 bg-black/40 backdrop-blur-sm" aria-label="Close menu" />
+          <div className="absolute inset-x-4 bottom-24 space-y-3 rounded-3xl border border-white/15 bg-neutral-900/95 p-4 shadow-soft">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold text-neutral-100">More</p>
+              <button type="button" onClick={onClose} className="text-xs text-neutral-300 hover:text-white">
+                Close
+              </button>
+            </div>
+            {items.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => onSelectSection(item.id)}
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm text-neutral-100 transition hover:border-white/20 hover:bg-white/10"
+              >
+                <span className="font-semibold">{item.label}</span>
+                {item.helper ? <p className="text-xs text-neutral-300">{item.helper}</p> : null}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </>
   )
 }

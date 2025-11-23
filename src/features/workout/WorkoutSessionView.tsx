@@ -157,8 +157,8 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
   return (
     <div className="flex flex-col gap-6">
       <header className="surface-card flex flex-col gap-4 border-white/10 p-6">
-        <div className="flex items-center justify-between gap-3">
-          <Button variant="ghost" size="sm" onClick={onBack}>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Button variant="ghost" size="sm" onClick={onBack} className="w-full sm:w-auto">
             ← Back
           </Button>
           <Button
@@ -184,6 +184,7 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
                 console.error('Failed to apply coach plan for session', error)
               }
             }}
+            className="w-full sm:w-auto"
           >
             Log from coach plan
           </Button>
@@ -209,7 +210,7 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
               key={exercise.exerciseId}
               className="surface-card flex flex-col gap-4 border-white/10 p-6"
             >
-              <header className="flex items-center justify-between">
+              <header className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <p className="text-base font-semibold text-neutral-50">
                     {exercise.order ? `${exercise.order}. ` : ''}
@@ -241,7 +242,7 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
 
               <div className="space-y-2">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Track sets</p>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 max-[420px]:grid-cols-1">
                   {checklist.map((checked, index) => {
                     const optionClass = checked
                       ? 'border-brand-400/60 bg-brand-500/20 text-neutral-50'
@@ -288,7 +289,7 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
                 />
               </label>
 
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <Button
                   type="button"
                   variant="outline"
