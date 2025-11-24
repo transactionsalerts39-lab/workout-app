@@ -17,10 +17,10 @@
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset --seed",
     "db:push": "supabase db push",
-    "mobile:start": "npx expo start --clear --config apps/mobile/app.json --project-root apps/mobile",
-    "mobile:ios": "npx expo start --ios --config apps/mobile/app.json --project-root apps/mobile",
-    "mobile:android": "npx expo start --android --config apps/mobile/app.json --project-root apps/mobile",
-    "mobile:web": "npx expo start --web --config apps/mobile/app.json --project-root apps/mobile"
+    "mobile:start": "cd apps/mobile && npx expo start --clear",
+    "mobile:ios": "cd apps/mobile && npx expo start --ios",
+    "mobile:android": "cd apps/mobile && npx expo start --android",
+    "mobile:web": "cd apps/mobile && npx expo start --web"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
