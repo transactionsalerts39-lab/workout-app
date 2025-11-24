@@ -1,15 +1,15 @@
-const { getDefaultConfig } = require('@expo/metro-config')
 const path = require('path')
+const { getDefaultConfig } = require('@expo/metro-config')
 
 const projectRoot = __dirname
-const workspaceRoot = path.resolve(projectRoot, '..', '..')
 
 const config = getDefaultConfig(projectRoot)
 
-// Ensure Metro resolves modules from the app and the workspace root when needed.
-config.resolver.nodeModulesPaths = [
-  path.resolve(projectRoot, 'node_modules'),
-  path.resolve(workspaceRoot, 'node_modules'),
-]
+// Force React/React Native to resolve from the app to avoid workspace version clashes.
+config.resolver.disableHierarchicalLookup = true
+config.resolver.extraNodeModules = {
+  react: path.resolve(projectRoot, 'node_modules/react'),
+  'react-native': path.resolve(projectRoot, 'node_modules/react-native'),
+}
 
 module.exports = config
