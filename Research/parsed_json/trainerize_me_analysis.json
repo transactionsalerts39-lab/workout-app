@@ -1,0 +1,109 @@
+{
+  "vendor": "trainerize_me",
+  "base_url": "https://www.trainerize.me",
+  "slug": "trainerize_me",
+  "fetched_at": "2025-10-16T20:13:17.364011",
+  "pages_scraped": [
+    {
+      "url": "https://www.trainerize.me/for-trainers",
+      "page_type": "pricing",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/trainerize_me_pricing_20251016_201320.html",
+      "is_sufficient": true
+    },
+    {
+      "url": "https://www.trainerize.me/about",
+      "page_type": "pricing",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/trainerize_me_pricing_20251016_201327.html",
+      "is_sufficient": true
+    },
+    {
+      "url": "https://www.trainerize.me/for-trainers",
+      "page_type": "features",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/trainerize_me_features_20251016_201332.html",
+      "is_sufficient": true
+    }
+  ],
+  "pricing": [
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Nutrition and Meal Plans",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Nutrition and Meal Plans",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    }
+  ],
+  "features_raw": [
+    "Popular Trainers",
+    "Private Personal Training",
+    "Online Personal Training",
+    "Group Bootcamp",
+    "Online Group Bootcamps",
+    "Partner Training",
+    "Bodybuilding and Competing",
+    "Cardiac Rehabiliation",
+    "Endurance Training",
+    "Functional and Core Training",
+    "Group Training",
+    "Improving Flexibility",
+    "Improving General Fitness",
+    "Muscle and Strength Gain",
+    "Nutrition and Meal Plans",
+    "Physiotherapy",
+    "Pre and Post Natal Training",
+    "Rehabilitation",
+    "Weight Loss",
+    "Women's Fitness",
+    "Los Angeles",
+    "Manchester",
+    "San Francisco",
+    "Washington DC"
+  ],
+  "parsing_errors": [],
+  "feature_flags": {
+    "check_ins": true,
+    "groups_teams": true,
+    "workout_builder": true
+  },
+  "feature_samples": {
+    "check_ins_examples": [
+      "Popular Trainers",
+      "Private Personal Training",
+      "Online Personal Training"
+    ],
+    "groups_teams_examples": [
+      "Group Bootcamp",
+      "Online Group Bootcamps",
+      "Group Training"
+    ],
+    "workout_builder_examples": [
+      "Nutrition and Meal Plans"
+    ]
+  },
+  "unmatched_features": [
+    "Cardiac Rehabiliation",
+    "Physiotherapy",
+    "Rehabilitation",
+    "Weight Loss",
+    "Women's Fitness",
+    "Los Angeles",
+    "Manchester",
+    "San Francisco"
+  ]
+}

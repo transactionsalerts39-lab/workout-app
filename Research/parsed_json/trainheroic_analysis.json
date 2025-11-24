@@ -1,0 +1,95 @@
+{
+  "vendor": "trainheroic",
+  "base_url": "https://www.trainheroic.com",
+  "slug": "trainheroic",
+  "fetched_at": "2025-10-16T20:12:53.027491",
+  "pages_scraped": [
+    {
+      "url": "https://www.trainheroic.com/pricing",
+      "page_type": "pricing",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/trainheroic_pricing_20251016_201255.html",
+      "is_sufficient": true
+    },
+    {
+      "url": "https://www.trainheroic.com/platform",
+      "page_type": "features",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/trainheroic_features_20251016_201303.html",
+      "is_sufficient": true
+    },
+    {
+      "url": "https://www.trainheroic.com/coaches",
+      "page_type": "features",
+      "status_code": 200,
+      "extraction_method": "curl",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/trainheroic_features_20251016_201312.html",
+      "is_sufficient": true
+    }
+  ],
+  "pricing": [],
+  "features_raw": [
+    "For Coaches Coaching Platform Coach Testimonials Start a Free Trial",
+    "Coaching Platform",
+    "Coach Testimonials",
+    "Start a Free Trial",
+    "For Athletes Athlete Features Shop Training Plans Get the App",
+    "Athlete Features",
+    "Shop Training Plans",
+    "Get the App",
+    "Resources Training Blog Exercise Guides Coach Business Guide",
+    "Training Blog",
+    "Exercise Guides",
+    "Coach Business Guide",
+    "For Coaches",
+    "For Athletes",
+    "Contact Us",
+    "Adding Exercises",
+    "Edit Sets & Reps",
+    "Explore the TrainHeroic Library"
+  ],
+  "parsing_errors": [],
+  "feature_flags": {
+    "habit_coaching": true,
+    "workout_builder": true,
+    "coach_athlete_chat": true,
+    "mobile_app": true,
+    "check_ins": true,
+    "client_management": true,
+    "exercise_library": true
+  },
+  "feature_samples": {
+    "habit_coaching_examples": [
+      "For Coaches Coaching Platform Coach Testimonials Start a Free Trial",
+      "Coaching Platform",
+      "Coach Testimonials"
+    ],
+    "workout_builder_examples": [
+      "For Athletes Athlete Features Shop Training Plans Get the App",
+      "Shop Training Plans",
+      "Resources Training Blog Exercise Guides Coach Business Guide"
+    ],
+    "coach_athlete_chat_examples": [
+      "Athlete Features",
+      "For Athletes"
+    ],
+    "mobile_app_examples": [
+      "Get the App"
+    ],
+    "check_ins_examples": [
+      "Training Blog"
+    ],
+    "client_management_examples": [
+      "Contact Us"
+    ],
+    "exercise_library_examples": [
+      "Explore the TrainHeroic Library"
+    ]
+  },
+  "unmatched_features": [
+    "Start a Free Trial",
+    "Edit Sets & Reps"
+  ]
+}

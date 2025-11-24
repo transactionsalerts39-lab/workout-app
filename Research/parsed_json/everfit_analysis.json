@@ -1,0 +1,1719 @@
+{
+  "vendor": "everfit",
+  "base_url": "https://everfit.io",
+  "slug": "everfit",
+  "fetched_at": "2025-10-16T20:12:41.591238",
+  "pages_scraped": [
+    {
+      "url": "https://everfit.io/pricing",
+      "page_type": "pricing",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/everfit_pricing_20251016_201243.html",
+      "is_sufficient": true
+    },
+    {
+      "url": "https://everfit.io/features",
+      "page_type": "features",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/everfit_features_20251016_201248.html",
+      "is_sufficient": true
+    }
+  ],
+  "pricing": [
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per month Per year $ 92 920 $ 49 490",
+      "price_amount": 920.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per month Per year $ 92 920 $ 49 490",
+      "price_amount": 920.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Starter",
+      "raw_text": "Starter Individual personal trainers and coaches starting their remote training business. Forever Free Free Train up to 5 clients Start training now Show Details Custom Exercise Library Choose from our library of 1000+ exercises or create your own branded exercises with custom videos. Workout Builder Build custom workouts for your clients. Program training any way you like using our extensive workout builder features. Metrics & Progress Photos Track and communicate client progress with progress ",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Starter",
+      "raw_text": "Starter Individual personal trainers and coaches starting their remote training business. Forever Free Free Train up to 5 clients Start training now Show Details Custom Exercise Library Choose from our library of 1000+ exercises or create your own branded exercises with custom videos. Workout Builder Build custom workouts for your clients. Program training any way you like using our extensive workout builder features. Metrics & Progress Photos Track and communicate client progress with progress ",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Starter",
+      "raw_text": "Starter Individual personal trainers and coaches starting their remote training business. Forever Free Free Train up to 5 clients Start training now Show Details Custom Exercise Library Choose from our library of 1000+ exercises or create your own branded exercises with custom videos. Workout Builder Build custom workouts for your clients. Program training any way you like using our extensive workout builder features. Metrics & Progress Photos Track and communicate client progress with progress ",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Starter",
+      "raw_text": "Starter Individual personal trainers and coaches starting their remote training business. Forever Free Free Train up to 5 clients Start training now",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Individual personal trainers and coaches starting their remote training business.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Forever Free Free",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Train up to 5 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start training now",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Show Details",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Custom Exercise Library Choose from our library of 1000+ exercises or create your own branded exercises with custom videos. Workout Builder Build custom workouts for your clients. Program training any way you like using our extensive workout builder features. Metrics & Progress Photos Track and communicate client progress with progress photos or a wide list of metrics, such as weight, body fat, BMI, steps, waist measurements, or even your own custom metrics. Tasks Set up tasks with automated rem",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro",
+      "raw_text": "Most Popular Pro Individual or small teams of fitness professionals looking to build their brand and deliver high-touch training From $19 $16 /mo Billed Monthly Billed Annually 5 clients - $3.8 / client $19 5 clients - $3.8 / client $29 10 clients - $2.9 / client $49 20 clients - $2.45 / client $75 35 clients - $2.14 / client $95 50 clients - $1.9 / client $120 75 clients - $1.6 / client $140 100 clients - $1.4 / client $160 125 clients - $1.28 / client $180 150 clients - $1.2 / client $220 200 ",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro",
+      "raw_text": "Most Popular Pro Individual or small teams of fitness professionals looking to build their brand and deliver high-touch training From $19 $16 /mo Billed Monthly Billed Annually 5 clients - $3.8 / client $19 5 clients - $3.8 / client $29 10 clients - $2.9 / client $49 20 clients - $2.45 / client $75 35 clients - $2.14 / client $95 50 clients - $1.9 / client $120 75 clients - $1.6 / client $140 100 clients - $1.4 / client $160 125 clients - $1.28 / client $180 150 clients - $1.2 / client $220 200 ",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Most Popular",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro",
+      "raw_text": "Pro Individual or small teams of fitness professionals looking to build their brand and deliver high-touch training From $19 $16 /mo Billed Monthly Billed Annually 5 clients - $3.8 / client $19 5 clients - $3.8 / client $29 10 clients - $2.9 / client $49 20 clients - $2.45 / client $75 35 clients - $2.14 / client $95 50 clients - $1.9 / client $120 75 clients - $1.6 / client $140 100 clients - $1.4 / client $160 125 clients - $1.28 / client $180 150 clients - $1.2 / client $220 200 clients - $1.",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Individual or small teams of fitness professionals looking to build their brand and deliver high-touch training",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "From $19 $16 /mo Billed Monthly Billed Annually",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "5 clients - $3.8 / client $19 5 clients - $3.8 / client $29 10 clients - $2.9 / client $49 20 clients - $2.45 / client $75 35 clients - $2.14 / client $95 50 clients - $1.9 / client $120 75 clients - $1.6 / client $140 100 clients - $1.4 / client $160 125 clients - $1.28 / client $180 150 clients - $1.2 / client $220 200 clients - $1.1 / client $255 250 clients - $1.02 / client $290 300 clients - $0.97 / client 5 clients - $3.17 / client $16 5 clients - $3.17 / client $24 10 clients - $2.42 / cl",
+      "price_amount": 3.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start free trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "No credit card required",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Show Details",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Custom Exercise Library Choose from our library of 1000+ exercises or create your own branded exercises with custom videos. Workout Builder Build custom workouts for your clients. Program training any way you like using our extensive workout builder features. Metrics & Progress Photos Track and communicate client progress with progress photos or a wide list of metrics, such as weight, body fat, BMI, steps, waist measurements, or even your own custom metrics. Tasks Set up tasks with automated rem",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio",
+      "raw_text": "Studio Athletic clubs or multi-location gyms ready to scale up online coaching and elevate member engagement. From $105 $88 /mo Billed Monthly Billed Annually 50 clients - $2.1 / client $105 50 clients - $2.1 / client $135 75 clients - $1.8 / client $165 100 clients - $1.65 / client $205 150 clients - $1.37 / client $249 200 clients - $1.25 / client $290 250 clients - $1.16 / client $325 300 clients - $1.08 / client $355 350 clients - $1.01 / client $385 400 clients - $0.96 / client $410 450 cli",
+      "price_amount": 105.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio",
+      "raw_text": "Studio Athletic clubs or multi-location gyms ready to scale up online coaching and elevate member engagement. From $105 $88 /mo Billed Monthly Billed Annually 50 clients - $2.1 / client $105 50 clients - $2.1 / client $135 75 clients - $1.8 / client $165 100 clients - $1.65 / client $205 150 clients - $1.37 / client $249 200 clients - $1.25 / client $290 250 clients - $1.16 / client $325 300 clients - $1.08 / client $355 350 clients - $1.01 / client $385 400 clients - $0.96 / client $410 450 cli",
+      "price_amount": 105.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio",
+      "raw_text": "Studio Athletic clubs or multi-location gyms ready to scale up online coaching and elevate member engagement. From $105 $88 /mo Billed Monthly Billed Annually 50 clients - $2.1 / client $105 50 clients - $2.1 / client $135 75 clients - $1.8 / client $165 100 clients - $1.65 / client $205 150 clients - $1.37 / client $249 200 clients - $1.25 / client $290 250 clients - $1.16 / client $325 300 clients - $1.08 / client $355 350 clients - $1.01 / client $385 400 clients - $0.96 / client $410 450 cli",
+      "price_amount": 105.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Athletic clubs or multi-location gyms ready to scale up online coaching and elevate member engagement.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "From $105 $88 /mo Billed Monthly Billed Annually",
+      "price_amount": 105.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "50 clients - $2.1 / client $105 50 clients - $2.1 / client $135 75 clients - $1.8 / client $165 100 clients - $1.65 / client $205 150 clients - $1.37 / client $249 200 clients - $1.25 / client $290 250 clients - $1.16 / client $325 300 clients - $1.08 / client $355 350 clients - $1.01 / client $385 400 clients - $0.96 / client $410 450 clients - $0.91 / client $430 500 clients - $0.86 / client 50 clients - $1.75 / client $88 50 clients - $1.75 / client $113 75 clients - $1.5 / client $138 100 cl",
+      "price_amount": 2.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start free trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "No credit card required",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Show Details",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Custom Exercise Library Choose from our library of 1000+ exercises or create your own branded exercises with custom videos. Workout Builder Build custom workouts for your clients. Program training any way you like using our extensive workout builder features. Metrics & Progress Photos Track and communicate client progress with progress photos or a wide list of metrics, such as weight, body fat, BMI, steps, waist measurements, or even your own custom metrics. Tasks Set up tasks with automated rem",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Enterprise",
+      "raw_text": "Enterprise For multi-location businesses and corporate wellness programs managing over 500 clients. Deliver personal training and wellness coaching to your members. White Label Solution Access to API integration Sync up your own membership and payment system with Everfit's APIs to allow for automated client management. Contact Us",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Enterprise",
+      "raw_text": "Enterprise For multi-location businesses and corporate wellness programs managing over 500 clients. Deliver personal training and wellness coaching to your members. White Label Solution Access to API integration Sync up your own membership and payment system with Everfit's APIs to allow for automated client management. Contact Us",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Enterprise",
+      "raw_text": "Enterprise For multi-location businesses and corporate wellness programs managing over 500 clients. Deliver personal training and wellness coaching to your members. White Label Solution Access to API integration Sync up your own membership and payment system with Everfit's APIs to allow for automated client management. Contact Us",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Enterprise",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "For multi-location businesses and corporate wellness programs managing over 500 clients. Deliver personal training and wellness coaching to your members.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "White Label Solution Access to API integration Sync up your own membership and payment system with Everfit's APIs to allow for automated client management.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Contact Us",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "White Label Solution Access to API integration Sync up your own membership and payment system with Everfit's APIs to allow for automated client management.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Autoflow (Automation)",
+      "raw_text": "Add-on Autoflow (Automation) Spend less time managing, and more time training clients. From $29 $24 /mo Assign Group Training and Tasks Assigning workouts and tasks for a group of clients is as easy as programming for 1 client. Automate Client Onboarding Simplify how you onboard new clients. Use our Announcements feature to send welcome articles and videos for your new clients. Schedule Auto Messages & Announcements Schedule in-app messages to check-in with or encourage clients each week, so you",
+      "price_amount": 29.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Autoflow (Automation)",
+      "raw_text": "Add-on Autoflow (Automation) Spend less time managing, and more time training clients. From $29 $24 /mo Assign Group Training and Tasks Assigning workouts and tasks for a group of clients is as easy as programming for 1 client. Automate Client Onboarding Simplify how you onboard new clients. Use our Announcements feature to send welcome articles and videos for your new clients. Schedule Auto Messages & Announcements Schedule in-app messages to check-in with or encourage clients each week, so you",
+      "price_amount": 29.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Autoflow (Automation)",
+      "raw_text": "Add-on Autoflow (Automation) Spend less time managing, and more time training clients. From $29 $24 /mo",
+      "price_amount": 29.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Autoflow (Automation)",
+      "raw_text": "Add-on Autoflow (Automation) Spend less time managing, and more time training clients.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Add-on Autoflow (Automation)",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Spend less time managing, and more time training clients.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "From $29 $24 /mo",
+      "price_amount": 29.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Assign Group Training and Tasks Assigning workouts and tasks for a group of clients is as easy as programming for 1 client. Automate Client Onboarding Simplify how you onboard new clients. Use our Announcements feature to send welcome articles and videos for your new clients. Schedule Auto Messages & Announcements Schedule in-app messages to check-in with or encourage clients each week, so you can spend more time coaching. Run Leaderboards (for Forums) Motivate clients with a competitive leaderb",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "How we calculate price?",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on On-Demand Collections",
+      "raw_text": "Add-on On-Demand Collections Launch an on-demand Content hub for your training clients Included in the Studio Plan From $25 $21 /mo Resources Collections Amplify your coaching and share documents, videos, and links effortlessly with any group of clients. Workout Collections Offer on-demand workouts that your clients can browse and start anytime.",
+      "price_amount": 25.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on On-Demand Collections",
+      "raw_text": "Add-on On-Demand Collections Launch an on-demand Content hub for your training clients Included in the Studio Plan From $25 $21 /mo",
+      "price_amount": 25.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on On-Demand Collections",
+      "raw_text": "Add-on On-Demand Collections Launch an on-demand Content hub for your training clients Included in the Studio Plan",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Add-on On-Demand Collections",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Launch an on-demand Content hub for your training clients Included in the Studio Plan",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "From $25 $21 /mo",
+      "price_amount": 25.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Resources Collections Amplify your coaching and share documents, videos, and links effortlessly with any group of clients. Workout Collections Offer on-demand workouts that your clients can browse and start anytime.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Payments & Packages",
+      "raw_text": "Add-on Payments & Packages Optimize your business monetization and automate program delivery. From $9 $8 /mo Offer recurring subscriptions Sell one-time coaching packages Automate program assignment with a client’s purchase View your sales analytics",
+      "price_amount": 9.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Payments & Packages",
+      "raw_text": "Add-on Payments & Packages Optimize your business monetization and automate program delivery. From $9 $8 /mo",
+      "price_amount": 9.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Payments & Packages",
+      "raw_text": "Add-on Payments & Packages Optimize your business monetization and automate program delivery.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Add-on Payments & Packages",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Optimize your business monetization and automate program delivery.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "From $9 $8 /mo",
+      "price_amount": 9.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Offer recurring subscriptions Sell one-time coaching packages Automate program assignment with a client’s purchase View your sales analytics",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Meal Plans & Recipe Books",
+      "raw_text": "Add-on Meal Plans & Recipe Books Personalized nutrition guidance and tracking for clients $39 $33 /mo Create and store unlimited recipes for different food categories Develop customized meal plans for different group of clients Access to current and future weeks of nutrition planning on the client's dashboard Provide flexibility for clients to swap meal options on their own",
+      "price_amount": 39.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Meal Plans & Recipe Books",
+      "raw_text": "Add-on Meal Plans & Recipe Books Personalized nutrition guidance and tracking for clients $39 $33 /mo",
+      "price_amount": 39.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Meal Plans & Recipe Books",
+      "raw_text": "Add-on Meal Plans & Recipe Books Personalized nutrition guidance and tracking for clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Add-on Meal Plans & Recipe Books",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Personalized nutrition guidance and tracking for clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$39 $33 /mo",
+      "price_amount": 39.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Create and store unlimited recipes for different food categories Develop customized meal plans for different group of clients Access to current and future weeks of nutrition planning on the client's dashboard Provide flexibility for clients to swap meal options on their own",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "The right plan for your needs",
+      "raw_text": "The right plan for your needs From independent trainers to big box gyms, we're here to help scale your business with powerful time-saving features and seamless automation. Bill Monthly Bill Annually save 16% Standard Plan Bundle BEST VALUE Accelerator Bundle Kickstart your training business and scale to the next stage. Get free trial Pro Plan (10 Clients) Automation Payments & Packages On-Demand Collections Per month Per year $ 92 920 $ 49 490 Starter Individual personal trainers and coaches sta",
+      "price_amount": 920.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "The right plan for your needs",
+      "raw_text": "The right plan for your needs From independent trainers to big box gyms, we're here to help scale your business with powerful time-saving features and seamless automation. Bill Monthly Bill Annually save 16% Standard Plan Bundle BEST VALUE",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Standard Plan Bundle BEST VALUE",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Standard Plan",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Standard Plan",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Bundle BEST VALUE",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Accelerator Bundle",
+      "raw_text": "Accelerator Bundle Kickstart your training business and scale to the next stage. Get free trial Pro Plan (10 Clients) Automation Payments & Packages On-Demand Collections Per month Per year $ 92 920 $ 49 490",
+      "price_amount": 920.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Pro Plan (10 Clients) Automation Payments & Packages On-Demand Collections",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Pro Plan (10 Clients)",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Starter",
+      "raw_text": "Starter Individual personal trainers and coaches starting their remote training business. Forever Free Free Train up to 5 clients Start training now Show Details Custom Exercise Library Choose from our library of 1000+ exercises or create your own branded exercises with custom videos. Workout Builder Build custom workouts for your clients. Program training any way you like using our extensive workout builder features. Metrics & Progress Photos Track and communicate client progress with progress ",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Starter",
+      "raw_text": "Starter Individual personal trainers and coaches starting their remote training business. Forever Free Free Train up to 5 clients Start training now Show Details Custom Exercise Library Choose from our library of 1000+ exercises or create your own branded exercises with custom videos. Workout Builder Build custom workouts for your clients. Program training any way you like using our extensive workout builder features. Metrics & Progress Photos Track and communicate client progress with progress ",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Starter",
+      "raw_text": "Starter Individual personal trainers and coaches starting their remote training business. Forever Free Free Train up to 5 clients Start training now Show Details Custom Exercise Library Choose from our library of 1000+ exercises or create your own branded exercises with custom videos. Workout Builder Build custom workouts for your clients. Program training any way you like using our extensive workout builder features. Metrics & Progress Photos Track and communicate client progress with progress ",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Starter",
+      "raw_text": "Starter Individual personal trainers and coaches starting their remote training business. Forever Free Free Train up to 5 clients Start training now Show Details Custom Exercise Library Choose from our library of 1000+ exercises or create your own branded exercises with custom videos. Workout Builder Build custom workouts for your clients. Program training any way you like using our extensive workout builder features. Metrics & Progress Photos Track and communicate client progress with progress ",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Starter",
+      "raw_text": "Starter Individual personal trainers and coaches starting their remote training business. Forever Free Free Train up to 5 clients Start training now",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Individual personal trainers and coaches starting their remote training business.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Forever Free Free",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Train up to 5 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start training now",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Show Details",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Custom Exercise Library Choose from our library of 1000+ exercises or create your own branded exercises with custom videos. Workout Builder Build custom workouts for your clients. Program training any way you like using our extensive workout builder features. Metrics & Progress Photos Track and communicate client progress with progress photos or a wide list of metrics, such as weight, body fat, BMI, steps, waist measurements, or even your own custom metrics. Tasks Set up tasks with automated rem",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro",
+      "raw_text": "Most Popular Pro Individual or small teams of fitness professionals looking to build their brand and deliver high-touch training From $19 $16 /mo Billed Monthly Billed Annually 5 clients - $3.8 / client $19 5 clients - $3.8 / client $29 10 clients - $2.9 / client $49 20 clients - $2.45 / client $75 35 clients - $2.14 / client $95 50 clients - $1.9 / client $120 75 clients - $1.6 / client $140 100 clients - $1.4 / client $160 125 clients - $1.28 / client $180 150 clients - $1.2 / client $220 200 ",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro",
+      "raw_text": "Most Popular Pro Individual or small teams of fitness professionals looking to build their brand and deliver high-touch training From $19 $16 /mo Billed Monthly Billed Annually 5 clients - $3.8 / client $19 5 clients - $3.8 / client $29 10 clients - $2.9 / client $49 20 clients - $2.45 / client $75 35 clients - $2.14 / client $95 50 clients - $1.9 / client $120 75 clients - $1.6 / client $140 100 clients - $1.4 / client $160 125 clients - $1.28 / client $180 150 clients - $1.2 / client $220 200 ",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Most Popular",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro",
+      "raw_text": "Pro Individual or small teams of fitness professionals looking to build their brand and deliver high-touch training From $19 $16 /mo Billed Monthly Billed Annually 5 clients - $3.8 / client $19 5 clients - $3.8 / client $29 10 clients - $2.9 / client $49 20 clients - $2.45 / client $75 35 clients - $2.14 / client $95 50 clients - $1.9 / client $120 75 clients - $1.6 / client $140 100 clients - $1.4 / client $160 125 clients - $1.28 / client $180 150 clients - $1.2 / client $220 200 clients - $1.",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Individual or small teams of fitness professionals looking to build their brand and deliver high-touch training",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "From $19 $16 /mo Billed Monthly Billed Annually",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "5 clients - $3.8 / client $19 5 clients - $3.8 / client $29 10 clients - $2.9 / client $49 20 clients - $2.45 / client $75 35 clients - $2.14 / client $95 50 clients - $1.9 / client $120 75 clients - $1.6 / client $140 100 clients - $1.4 / client $160 125 clients - $1.28 / client $180 150 clients - $1.2 / client $220 200 clients - $1.1 / client $255 250 clients - $1.02 / client $290 300 clients - $0.97 / client 5 clients - $3.17 / client $16 5 clients - $3.17 / client $24 10 clients - $2.42 / cl",
+      "price_amount": 3.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start free trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "No credit card required",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Show Details",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Custom Exercise Library Choose from our library of 1000+ exercises or create your own branded exercises with custom videos. Workout Builder Build custom workouts for your clients. Program training any way you like using our extensive workout builder features. Metrics & Progress Photos Track and communicate client progress with progress photos or a wide list of metrics, such as weight, body fat, BMI, steps, waist measurements, or even your own custom metrics. Tasks Set up tasks with automated rem",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio",
+      "raw_text": "Studio Athletic clubs or multi-location gyms ready to scale up online coaching and elevate member engagement. From $105 $88 /mo Billed Monthly Billed Annually 50 clients - $2.1 / client $105 50 clients - $2.1 / client $135 75 clients - $1.8 / client $165 100 clients - $1.65 / client $205 150 clients - $1.37 / client $249 200 clients - $1.25 / client $290 250 clients - $1.16 / client $325 300 clients - $1.08 / client $355 350 clients - $1.01 / client $385 400 clients - $0.96 / client $410 450 cli",
+      "price_amount": 105.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio",
+      "raw_text": "Studio Athletic clubs or multi-location gyms ready to scale up online coaching and elevate member engagement. From $105 $88 /mo Billed Monthly Billed Annually 50 clients - $2.1 / client $105 50 clients - $2.1 / client $135 75 clients - $1.8 / client $165 100 clients - $1.65 / client $205 150 clients - $1.37 / client $249 200 clients - $1.25 / client $290 250 clients - $1.16 / client $325 300 clients - $1.08 / client $355 350 clients - $1.01 / client $385 400 clients - $0.96 / client $410 450 cli",
+      "price_amount": 105.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio",
+      "raw_text": "Studio Athletic clubs or multi-location gyms ready to scale up online coaching and elevate member engagement. From $105 $88 /mo Billed Monthly Billed Annually 50 clients - $2.1 / client $105 50 clients - $2.1 / client $135 75 clients - $1.8 / client $165 100 clients - $1.65 / client $205 150 clients - $1.37 / client $249 200 clients - $1.25 / client $290 250 clients - $1.16 / client $325 300 clients - $1.08 / client $355 350 clients - $1.01 / client $385 400 clients - $0.96 / client $410 450 cli",
+      "price_amount": 105.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Athletic clubs or multi-location gyms ready to scale up online coaching and elevate member engagement.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "From $105 $88 /mo Billed Monthly Billed Annually",
+      "price_amount": 105.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "50 clients - $2.1 / client $105 50 clients - $2.1 / client $135 75 clients - $1.8 / client $165 100 clients - $1.65 / client $205 150 clients - $1.37 / client $249 200 clients - $1.25 / client $290 250 clients - $1.16 / client $325 300 clients - $1.08 / client $355 350 clients - $1.01 / client $385 400 clients - $0.96 / client $410 450 clients - $0.91 / client $430 500 clients - $0.86 / client 50 clients - $1.75 / client $88 50 clients - $1.75 / client $113 75 clients - $1.5 / client $138 100 cl",
+      "price_amount": 2.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start free trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "No credit card required",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Show Details",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Custom Exercise Library Choose from our library of 1000+ exercises or create your own branded exercises with custom videos. Workout Builder Build custom workouts for your clients. Program training any way you like using our extensive workout builder features. Metrics & Progress Photos Track and communicate client progress with progress photos or a wide list of metrics, such as weight, body fat, BMI, steps, waist measurements, or even your own custom metrics. Tasks Set up tasks with automated rem",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Enterprise",
+      "raw_text": "Enterprise For multi-location businesses and corporate wellness programs managing over 500 clients. Deliver personal training and wellness coaching to your members. White Label Solution Access to API integration Sync up your own membership and payment system with Everfit's APIs to allow for automated client management. Contact Us",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Enterprise",
+      "raw_text": "Enterprise For multi-location businesses and corporate wellness programs managing over 500 clients. Deliver personal training and wellness coaching to your members. White Label Solution Access to API integration Sync up your own membership and payment system with Everfit's APIs to allow for automated client management. Contact Us",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Enterprise",
+      "raw_text": "Enterprise For multi-location businesses and corporate wellness programs managing over 500 clients. Deliver personal training and wellness coaching to your members. White Label Solution Access to API integration Sync up your own membership and payment system with Everfit's APIs to allow for automated client management. Contact Us",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Enterprise",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "For multi-location businesses and corporate wellness programs managing over 500 clients. Deliver personal training and wellness coaching to your members.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "White Label Solution Access to API integration Sync up your own membership and payment system with Everfit's APIs to allow for automated client management.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Contact Us",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "White Label Solution Access to API integration Sync up your own membership and payment system with Everfit's APIs to allow for automated client management.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Autoflow (Automation)",
+      "raw_text": "Add-on Autoflow (Automation) Spend less time managing, and more time training clients. From $29 $24 /mo Assign Group Training and Tasks Assigning workouts and tasks for a group of clients is as easy as programming for 1 client. Automate Client Onboarding Simplify how you onboard new clients. Use our Announcements feature to send welcome articles and videos for your new clients. Schedule Auto Messages & Announcements Schedule in-app messages to check-in with or encourage clients each week, so you",
+      "price_amount": 29.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Autoflow (Automation)",
+      "raw_text": "Add-on Autoflow (Automation) Spend less time managing, and more time training clients. From $29 $24 /mo Assign Group Training and Tasks Assigning workouts and tasks for a group of clients is as easy as programming for 1 client. Automate Client Onboarding Simplify how you onboard new clients. Use our Announcements feature to send welcome articles and videos for your new clients. Schedule Auto Messages & Announcements Schedule in-app messages to check-in with or encourage clients each week, so you",
+      "price_amount": 29.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Autoflow (Automation)",
+      "raw_text": "Add-on Autoflow (Automation) Spend less time managing, and more time training clients. From $29 $24 /mo",
+      "price_amount": 29.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Autoflow (Automation)",
+      "raw_text": "Add-on Autoflow (Automation) Spend less time managing, and more time training clients.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Add-on Autoflow (Automation)",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Spend less time managing, and more time training clients.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "From $29 $24 /mo",
+      "price_amount": 29.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Assign Group Training and Tasks Assigning workouts and tasks for a group of clients is as easy as programming for 1 client. Automate Client Onboarding Simplify how you onboard new clients. Use our Announcements feature to send welcome articles and videos for your new clients. Schedule Auto Messages & Announcements Schedule in-app messages to check-in with or encourage clients each week, so you can spend more time coaching. Run Leaderboards (for Forums) Motivate clients with a competitive leaderb",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "How we calculate price?",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on On-Demand Collections",
+      "raw_text": "Add-on On-Demand Collections Launch an on-demand Content hub for your training clients Included in the Studio Plan From $25 $21 /mo Resources Collections Amplify your coaching and share documents, videos, and links effortlessly with any group of clients. Workout Collections Offer on-demand workouts that your clients can browse and start anytime.",
+      "price_amount": 25.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on On-Demand Collections",
+      "raw_text": "Add-on On-Demand Collections Launch an on-demand Content hub for your training clients Included in the Studio Plan From $25 $21 /mo",
+      "price_amount": 25.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on On-Demand Collections",
+      "raw_text": "Add-on On-Demand Collections Launch an on-demand Content hub for your training clients Included in the Studio Plan",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Add-on On-Demand Collections",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Launch an on-demand Content hub for your training clients Included in the Studio Plan",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "From $25 $21 /mo",
+      "price_amount": 25.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Resources Collections Amplify your coaching and share documents, videos, and links effortlessly with any group of clients. Workout Collections Offer on-demand workouts that your clients can browse and start anytime.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Payments & Packages",
+      "raw_text": "Add-on Payments & Packages Optimize your business monetization and automate program delivery. From $9 $8 /mo Offer recurring subscriptions Sell one-time coaching packages Automate program assignment with a client’s purchase View your sales analytics",
+      "price_amount": 9.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Payments & Packages",
+      "raw_text": "Add-on Payments & Packages Optimize your business monetization and automate program delivery. From $9 $8 /mo",
+      "price_amount": 9.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Payments & Packages",
+      "raw_text": "Add-on Payments & Packages Optimize your business monetization and automate program delivery.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Add-on Payments & Packages",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Optimize your business monetization and automate program delivery.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "From $9 $8 /mo",
+      "price_amount": 9.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Offer recurring subscriptions Sell one-time coaching packages Automate program assignment with a client’s purchase View your sales analytics",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Meal Plans & Recipe Books",
+      "raw_text": "Add-on Meal Plans & Recipe Books Personalized nutrition guidance and tracking for clients $39 $33 /mo Create and store unlimited recipes for different food categories Develop customized meal plans for different group of clients Access to current and future weeks of nutrition planning on the client's dashboard Provide flexibility for clients to swap meal options on their own",
+      "price_amount": 39.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Meal Plans & Recipe Books",
+      "raw_text": "Add-on Meal Plans & Recipe Books Personalized nutrition guidance and tracking for clients $39 $33 /mo",
+      "price_amount": 39.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Add-on Meal Plans & Recipe Books",
+      "raw_text": "Add-on Meal Plans & Recipe Books Personalized nutrition guidance and tracking for clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Add-on Meal Plans & Recipe Books",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Personalized nutrition guidance and tracking for clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$39 $33 /mo",
+      "price_amount": 39.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Create and store unlimited recipes for different food categories Develop customized meal plans for different group of clients Access to current and future weeks of nutrition planning on the client's dashboard Provide flexibility for clients to swap meal options on their own",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Pricing | Online Personal Training Software for Remote Training Business",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"WebSite\",\"@id\":\"https://everfit.io/#website\",\"url\":\"https://everfit.io/\",\"name\":\"Everfit | #1 Fitness and Wellness Coaching Platform\",\"description\":\"Everfit | #1 Fitness and Wellness Coaching Platform\",\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://everfit.io/?s={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}],\"inLanguage\":\"en-US\"},{\"@type\":\"ImageObject\",\"@id\":\"https://",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": 30
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "const utm_page = 'Pricing';",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "START FREE TRIAL",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "The right plan for your needs",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "The right plan for your needs",
+      "raw_text": "The right plan for your needs From independent trainers to big box gyms, we're here to help scale your business with powerful time-saving features and seamless automation. Bill Monthly Bill Annually save 16% Standard Plan Bundle BEST VALUE",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Bill Monthly",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Bill Monthly Bill Annually save 16%",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Get free trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "The most powerful coaching app. Receive messages and important notifications on the go, or plan workouts and review client stats from your phone or tablet.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Billed Monthly",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Basic Meal Plans",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Design meal plans for each client that align with their macro goals and dietary preferences.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Create multi-week training plans to easily replicate your coaching regimen to more clients.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Basic Meal Plans",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Plan ahead and schedule posts in your Community Forums.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Included in the Studio Plan",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Meal Plans & Recipe Books",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Develop customized meal plans for different group of clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "What happens if I want to upgrade/downgrade my plan?",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Once subscribed, you can change your month-to-month plan anytime and as many times as you'd like. We'll prorate the difference between your current and new plans in your current bill cycle.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Yes, we’re here to help you build your brand! On the Pro or Studio plans, you can add your logo, change the workout background, and even choose a desired color scheme.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Pricing for Automation Money Saver Policy",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "You will be charged monthly only for your actual usage, counting the number of clients that have participated in at least one active Autoflow in the past month.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Price/month",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    }
+  ],
+  "features_raw": [
+    "Coach Programming & Periodization Meal Plans & Recipe Books Habit Tracking On-Demand Training",
+    "Programming & Periodization",
+    "Meal Plans & Recipe Books",
+    "Habit Tracking",
+    "On-Demand Training",
+    "Engage 1-1 Messaging Community Forum Broadcast Messaging Announcements",
+    "1-1 Messaging",
+    "Community Forum",
+    "Broadcast Messaging",
+    "Announcements",
+    "Manage Data Analytics Goal Setting Check-ins Integrations",
+    "Data Analytics",
+    "Goal Setting",
+    "Integrations",
+    "Scale Automation Integrated Payments HSA/FSA Marketplace",
+    "Automation",
+    "Integrated Payments",
+    "Marketplace",
+    "Resources Everfit Academy Case Study Webinar Blog Help Articles",
+    "Everfit Academy",
+    "Case Study",
+    "Help Articles",
+    "Customized training plans",
+    "Personal check-ins",
+    "Direct communication",
+    "On-demand training content",
+    "Group check-ins",
+    "Community forums & Online fitness challenges",
+    "Habit & Task",
+    "Custom Branding",
+    "Form And Questionnaires",
+    "Sports Coaching",
+    "Everfit AI",
+    "Blog Articles",
+    "Contact Support",
+    "How we compare",
+    "Affiliate Program",
+    "Fitness Intelligence",
+    "Free Trial",
+    "Contact Sales"
+  ],
+  "parsing_errors": [],
+  "feature_flags": {
+    "workout_builder": true,
+    "progress_tracking": true,
+    "check_ins": true,
+    "groups_teams": true,
+    "integrations": true,
+    "payments_billing": true,
+    "marketplace_access": true,
+    "form_check_video": true,
+    "messaging": true,
+    "habit_coaching": true,
+    "white_label_branding": true,
+    "client_management": true
+  },
+  "feature_samples": {
+    "workout_builder_examples": [
+      "Coach Programming & Periodization Meal Plans & Recipe Books Habit Tracking On-Demand Training",
+      "Programming & Periodization",
+      "Meal Plans & Recipe Books"
+    ],
+    "progress_tracking_examples": [
+      "Habit Tracking",
+      "Manage Data Analytics Goal Setting Check-ins Integrations",
+      "Data Analytics"
+    ],
+    "check_ins_examples": [
+      "On-Demand Training",
+      "1-1 Messaging",
+      "Broadcast Messaging"
+    ],
+    "groups_teams_examples": [
+      "Engage 1-1 Messaging Community Forum Broadcast Messaging Announcements",
+      "Community Forum",
+      "Group check-ins"
+    ],
+    "integrations_examples": [
+      "Integrations"
+    ],
+    "payments_billing_examples": [
+      "Scale Automation Integrated Payments HSA/FSA Marketplace",
+      "Integrated Payments"
+    ],
+    "marketplace_access_examples": [
+      "Marketplace"
+    ],
+    "form_check_video_examples": [
+      "Personal check-ins",
+      "Form And Questionnaires"
+    ],
+    "messaging_examples": [
+      "Direct communication"
+    ],
+    "habit_coaching_examples": [
+      "Habit & Task",
+      "Sports Coaching"
+    ],
+    "white_label_branding_examples": [
+      "Custom Branding"
+    ],
+    "client_management_examples": [
+      "Contact Support",
+      "Contact Sales"
+    ]
+  },
+  "unmatched_features": [
+    "Announcements",
+    "Automation",
+    "Everfit Academy",
+    "Case Study",
+    "Help Articles",
+    "Everfit AI",
+    "Blog Articles",
+    "How we compare",
+    "Free Trial"
+  ]
+}

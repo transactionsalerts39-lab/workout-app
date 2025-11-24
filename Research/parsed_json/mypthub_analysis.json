@@ -1,0 +1,27 @@
+{
+  "vendor": "mypthub",
+  "base_url": "https://www.mypthub.net",
+  "slug": "mypthub",
+  "fetched_at": "2025-10-16T20:12:17.960728",
+  "pages_scraped": [
+    {
+      "url": "https://www.mypthub.net/pricing",
+      "page_type": "pricing",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/mypthub_pricing_20251016_201220.html",
+      "is_sufficient": true
+    },
+    {
+      "url": "https://www.mypthub.net/features",
+      "page_type": "features",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/mypthub_features_20251016_201225.html",
+      "is_sufficient": true
+    }
+  ],
+  "pricing": [],
+  "features_raw": [],
+  "parsing_errors": []
+}

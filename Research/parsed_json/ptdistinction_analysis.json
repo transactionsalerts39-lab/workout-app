@@ -1,0 +1,676 @@
+{
+  "vendor": "ptdistinction",
+  "base_url": "https://www.ptdistinction.com",
+  "slug": "ptdistinction",
+  "fetched_at": "2025-10-16T20:12:28.978762",
+  "pages_scraped": [
+    {
+      "url": "https://www.ptdistinction.com/pricing",
+      "page_type": "pricing",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/ptdistinction_pricing_20251016_201231.html",
+      "is_sufficient": true
+    },
+    {
+      "url": "https://www.ptdistinction.com/features",
+      "page_type": "features",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/ptdistinction_features_20251016_201236.html",
+      "is_sufficient": true
+    }
+  ],
+  "pricing": [
+    {
+      "plan_name": "Pro",
+      "raw_text": "MostpopularPro$59. 90USDPer monthIncludes 25 clientsStart Free Trial",
+      "price_amount": 59.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "$59",
+      "raw_text": "$59. 90USD",
+      "price_amount": 59.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per monthIncludes 25 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Extra clients are free for 1 month and $2.40 per month after thatSame day supportYour own custom branded Android and iOS appsYour own website integration",
+      "price_amount": 2.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Master",
+      "raw_text": "Master$89. 90USDPer monthIncludes 50 clientsStart Free Trial",
+      "price_amount": 89.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "$89",
+      "raw_text": "$89. 90USD",
+      "price_amount": 89.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per monthIncludes 50 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Extra clients are free for 1 month and $1.60 per month after thatSame day supportYour own custom branded Android and iOS appsYour own website integration",
+      "price_amount": 1.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic$19. 90USDPer monthIncludes 3 clientsStart Free Trial",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "$19",
+      "raw_text": "$19. 90USD",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per monthIncludes 3 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Extra clients are free for 1 month and $6.00 per month after thatSame day supportAndroid and iOS apps â¨(no custom branding)",
+      "price_amount": 6.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic$19. 90USDPer monthIncludes 3 clientsStart Free Trial",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "$19",
+      "raw_text": "$19. 90USD",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per monthIncludes 3 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Extra clients are free for 1 month and $6.00 per month after thatSame day supportAndroid and iOS apps â¨(no custom branding)",
+      "price_amount": 6.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro",
+      "raw_text": "MostpopularPro$59. 90USDPer monthIncludes 25 clients",
+      "price_amount": 59.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "$59",
+      "raw_text": "$59. 90USD",
+      "price_amount": 59.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per monthIncludes 25 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Extra clients are free for 1 month and $2.40 per month after thatSame day supportYour own custom branded Android and iOS appsYour own website integration",
+      "price_amount": 2.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Master",
+      "raw_text": "Master$89. 90USDPer monthIncludes 50 clients",
+      "price_amount": 89.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "$89",
+      "raw_text": "$89. 90USD",
+      "price_amount": 89.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per monthIncludes 50 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Extra clients are free for 1 month and $1.60 per month after thatSame day supportYour own custom branded Android and iOS appsYour own website integration",
+      "price_amount": 1.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic$19. 90USDPer monthIncludes 3 clients",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "$19",
+      "raw_text": "$19. 90USD",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per monthIncludes 3 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Extra clients are free for 1 month and $6.00 per month after thatSame day supportAndroid and iOS apps â¨(no custom branding)",
+      "price_amount": 6.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro",
+      "raw_text": "MostpopularPro$59. 90USDPer monthIncludes 25 clientsStart Free Trial",
+      "price_amount": 59.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "$59",
+      "raw_text": "$59. 90USD",
+      "price_amount": 59.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per monthIncludes 25 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Extra clients are free for 1 month and $2.40 per month after thatSame day supportYour own custom branded Android and iOS appsYour own website integration",
+      "price_amount": 2.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Master",
+      "raw_text": "Master$89. 90USDPer monthIncludes 50 clients",
+      "price_amount": 89.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "$89",
+      "raw_text": "$89. 90USD",
+      "price_amount": 89.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per monthIncludes 50 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Extra clients are free for 1 month and $1.60 per month after thatSame day supportYour own custom branded Android and iOS appsYour own website integration",
+      "price_amount": 1.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic$19. 90USDPer monthIncludes 3 clients",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "$19",
+      "raw_text": "$19. 90USD",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per monthIncludes 3 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Extra clients are free for 1 month and $6.00 per month after thatSame day supportAndroid and iOS apps â¨(no custom branding)",
+      "price_amount": 6.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro",
+      "raw_text": "MostpopularPro$59. 90USDPer monthIncludes 25 clients",
+      "price_amount": 59.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "$59",
+      "raw_text": "$59. 90USD",
+      "price_amount": 59.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per monthIncludes 25 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Extra clients are free for 1 month and $2.40 per month after thatSame day supportYour own custom branded Android and iOS appsYour own website integration",
+      "price_amount": 2.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Master",
+      "raw_text": "Master$89. 90USDPer monthIncludes 50 clientsStart Free Trial",
+      "price_amount": 89.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "$89",
+      "raw_text": "$89. 90USD",
+      "price_amount": 89.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Per monthIncludes 50 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Extra clients are free for 1 month and $1.60 per month after thatSame day supportYour own custom branded Android and iOS appsYour own website integration",
+      "price_amount": 1.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "SelectStart Free TrialSelectStart Free TrialSelectStart Free TrialBasic$19. 90USDPer monthIncludes 3 clientsStart Free TrialExtra clients are free for 1 month and $6.00 per month after thatSame day supportAndroid and iOS apps â¨(no custom branding)MostpopularPro$59. 90USDPer monthIncludes 25 clientsExtra clients are free for 1 month and $2.40 per month after thatSame day supportYour own custom branded Android and iOS appsYour own website integrationMaster$89. 90USDPer monthIncludes 50 clientsEx",
+      "price_amount": 19.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "PT Distinction Pricing | Affordable Plans for Personal Trainers",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Free trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start free trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "1-Month Free Trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Plans to suit you",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "No commitments or minimum terms - just simple monthly pricing. Cancel at any time in your first month and pay nothing.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start Free Trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$2.40 per month",
+      "price_amount": 2.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$1.60 per month",
+      "price_amount": 1.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$6.00 per month",
+      "price_amount": 6.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "All plans include these core features",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start Free Trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start Free Trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start Free Trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start Free Trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start Free Trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Start Free Trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "What happens at the end of my 1-Month free trial?",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "At the end of your free trial your membership continues and subscription begins (unless you cancel of course), a little like Netflix, Audible etc... You can cancel anytime in your free trial and never pay a penny.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "How do I switch a plan?",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "You can switch plan anytime by clicking Account > Account Settings > Subscription and chose your plan.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "You can add as many clients as you like. When using PT Distinction, managing this number of clients is easy and quick, even when giving them all personalized plans. Each client over 50 adds a small amount of $1.60 per month to your bill. This covers our costs in allowing unlimited programs, coaching and data for your clients. While some software offer unlimited client packages they limit the data per client and don't have the tools for you to coach large numbers. We're here to help you grow and ",
+      "price_amount": 1.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": "per_client",
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "I highly recommend PT Distinction to any fitness professional looking for a reliable and easy-to-use platform. It has truly transformed the way I design programs and nutrition plans for my clients.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    }
+  ],
+  "features_raw": [],
+  "parsing_errors": []
+}

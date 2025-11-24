@@ -1,0 +1,472 @@
+{
+  "vendor": "truecoach",
+  "base_url": "https://truecoach.co",
+  "slug": "truecoach",
+  "fetched_at": "2025-10-16T20:12:02.534735",
+  "pages_scraped": [
+    {
+      "url": "https://truecoach.co/pricing",
+      "page_type": "pricing",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/truecoach_pricing_20251016_201205.html",
+      "is_sufficient": true
+    },
+    {
+      "url": "https://truecoach.co/features",
+      "page_type": "features",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/truecoach_features_20251016_201212.html",
+      "is_sufficient": true
+    }
+  ],
+  "pricing": [
+    {
+      "plan_name": "The Starter Plan",
+      "raw_text": "The Starter Plan $26.34/mo 1 MONTH FREE Try Starter Free For individual trainers who are just getting started in digital coaching Up to 5 active clients Program & Workout Builder Client Management Tracker MyFitnessPal Nutrition and Habit Tracker Client Dashboard 3,000+ Video Exercise Library In-App Messaging Free Automated Payments Try Starter Free",
+      "price_amount": 26.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "1 MONTH FREE",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "The Standard Plan",
+      "raw_text": "Most popular The Standard Plan $57.99/mo 2 MONTHS FREE Try Standard Free For growing fitness professionals looking to scale their business Up to 20 active clients Program & Workout Builder Client Management Tracker MyFitnessPal Nutrition and Habit Tracker Client Dashboard 3,000+ Video Exercise Library In-App Messaging Free Automated Payments Plus: New! Public Coach Profiles Data Integration with Apple, Garmin, WHOOP, and other Wearables Custom-Branded Fitness App Advanced Habit and Nutrition Tra",
+      "price_amount": 57.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "2 MONTHS FREE",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "The Pro Plan",
+      "raw_text": "The Pro Plan $136.99/mo 2 MONTHS FREE Try Pro Free For established fitness businesses aiming to maximize the coaching experience Up to 50 active clients Program & Workout Builder Client Management Tracker MyFitnessPal Nutrition and Habit Tracker Client Dashboard 3,000+ Video Exercise Library In-App Messaging Free Automated Payments Plus: New! Public Coach Profiles Data Integration with Apple, Garmin, WHOOP, and other Wearables Custom-Branded Fitness App Advanced Habit and Nutrition Tracking Busi",
+      "price_amount": 136.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$136.99/mo",
+      "price_amount": 136.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "2 MONTHS FREE",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Pricing - TrueCoach",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"WebPage\",\"@id\":\"https://truecoach.co/pricing/\",\"url\":\"https://truecoach.co/pricing/\",\"name\":\"Pricing - TrueCoach\",\"isPartOf\":{\"@id\":\"https://truecoach.co/#website\"},\"primaryImageOfPage\":{\"@id\":\"https://truecoach.co/pricing/#primaryimage\"},\"image\":{\"@id\":\"https://truecoach.co/pricing/#primaryimage\"},\"thumbnailUrl\":\"https://truecoach.co/wp-content/uploads/sites/2/2024/06/05_solidsymbolgradient.png\",\"datePublished\":\"2024-04-04T14:31:09+00:00\",\"da",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": 14
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "/ <![CDATA[ / window.nabSettings={\"alternativeUrls\":[\"https:\\/\\/truecoach.co\\/pricing\\/\"],\"api\":{\"mode\":\"native\",\"url\":\"https:\\/\\/api.nelioabtesting.com\\/v1\"},\"cookieTesting\":false,\"excludeBots\":true,\"experiments\":[{\"active\":false,\"id\":10778,\"type\":\"nab\\/page\",\"alternatives\":[8833,0],\"goals\":[{\"id\":0,\"name\":\"Increase form submission\",\"conversionActions\":[{\"type\":\"nab\\/click\",\"attributes\":{\"mode\":\"class\",\"value\":\"search-submit\"},\"active\":false}]}],\"segments\":[],\"segmentEvaluation\":\"tested-page\"}]",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Manage custom plans and progress photos while giving clients a high-touch experience.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Upload meal plans, track habits, and integrate with MyFitnessPal to support clients’ goals beyond the gym floor.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Upload meal plans, set calorie goals, and sync with MyFitnessPal.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "AI Meal Plan Generator for Personal Trainers",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Find The Right Plan For Your Personal Training Business",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "The Starter Plan",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "The Standard Plan",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "The Pro Plan",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Not ready to choose your plan? Try out everything TrueCoach has to offer with a 14-Day Free Trial! No credit card required. Try For Free",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": 14
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Equivalent month(s) free when comparing the total cost of annual billing with the total cost of monthly billing.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Each Plan Includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "TrueCoach's integration with MyFitnessPal lets coaches set custom calorie, macro, and nutrition plans in one place. Pair this with Custom Habit Tracking to create personalized habits, like hydration and meditation, directly in clients' TrueCoach calendars for better engagement and accountability.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "All prices are in USD. All annual plans are backed by our TrueCoach Guarantee. More than 50 clients? We’ve got special pricing for you. Email support@truecoach.co to learn more.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "yearly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Habit TrackingCreate custom habits for your clients to complete on a daily, weekly, or monthly basis to allow them to excel in and outside the gym!",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Macro TrackingTrack all aspects of your clients’ nutrition plans through our integration with MyFitnessPal. Set and monitor calorie and macro goals to keep your clients accountable in and outside of the gym.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Automated PaymentsTrueCoach Payments, powered by Stripe, allows you to set up recurring payments to guarantee monthly income, and remove the need for that awkward Venmo request.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "That's awesome! Contact us to discuss custom pricing options.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Any plan can be upgraded/downgraded at any time and this will be reflected on your next billing cycle.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Our default agreement is month to month and you can cancel at any time. For additional savings, we have annual plans backed by our TrueCoach Guarantee!",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "yearly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Easy! Select which plan works for your business above and try it free during our 14-day trial. We'll see you on the other side!",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": 14
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "We are confident that TrueCoach will save you time and deliver a better experience to your clients while growing your training businesses. So confident, we have introduced the TrueCoach Guarantee. This unconditional 90-day money-back guarantee is for first-time subscribers signed up for an annual plan. If you are not satisfied with TrueCoach for any reason within the first 90 days, we will issue a refund.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "yearly",
+      "per_unit": null,
+      "trial_days": null
+    }
+  ],
+  "features_raw": [
+    "Workout templates - Build workout templates in under a minute that can copied and pasted for several clients.",
+    "Drag and Drop Workout Builder - create any workout you can dream up, from AMRAPs to Strength Sets with our drag and drop workout builder.",
+    "Video Library - Our extensive video library comes pre-loaded with 3,500+ professionally recorded exercise demonstrations and allows you to add your own!",
+    "Interval and HIIT Training - TrueCoach's mobile app has a built-in timer to help with rest periods, intervals, and more.",
+    "Printable Sheets - Any client workout can be saved and printed in PDF format for times when signal may be spotty!",
+    "Custom Instructions - Add unique instructions and notes to individual exercises and circuits to increase client efficacy and tracking.",
+    "Client Milestones - Clients receive personal badges and are notified when they hit certain workout milestones.",
+    "Client Updates - Capture progress pictures, body metrics, macros, diet, and custom data points to keep your clients engaged from every angle.",
+    "Progression Tracking - Client are able to view progress in reps, weights, heart rate, and more with TrueCoach’s dedicated mobile app.",
+    "Habit Tracking - Create custom habits for your clients to complete on a daily, weekly, or monthly basis to allow them to excel in and outside the gym!",
+    "Meal Plans - Deliver custom meal plans through our integrated “Documents” Feature.",
+    "Nutrition Education - Get certified with Precision Nutrition for less with our exclusive Partner Perk.",
+    "Video Exercise Library",
+    "Program & Workout Builder",
+    "Personal Trainer Client Tracker",
+    "Team Accounts",
+    "In-App Messaging - Keep in touch with all of your clients with our dedicated coaching app.",
+    "Multi-Media Messaging Support - Keep your clients engaged and provide form cues with the ability to send pictures, videos, and even GIFs!",
+    "Coach Notifications - Set custom permissions for e-mail and push notifications to get alerted when you need to be!",
+    "Client Notifications - Alert your clients when they’ve been assigned a new workout or you send them a message!",
+    "Group Messaging - Keep your groups organized and engaged with dedicated group messaging!",
+    "Real-Time Messaging - Touch base with your clients no matter where in the world they might be, whether to answer a workout-specific question or just to check in.",
+    "Notifications - With both push and e-mail notifications, you’ll never miss an update when a client completes a workout, leaves feedback, or sends you a message!",
+    "Public Profiles - Allow clients to find you with a custom storefront webpage, and let them contact you directly to apply to work with you.",
+    "Client Management With Integrated Communication Tools",
+    "Client Onboarding - Keep in touch with all of your clients with our dedicated coaching app.",
+    "Pausing Clients - Sometimes clients just need a break. Easily archive your clients for easy re-activation when they’re ready to start up again.",
+    "Client Dashboard - Keep all the important and relevant information on all your clients in one, easy-to-use dashboard.",
+    "Automated Risk Assessment - Get alerted when clients start to lose compliance and proactively reach out to avoid client churn.",
+    "Client Organization - Filter your clients by name, program due date, and more to give attention where it’s needed.",
+    "Client Progress - See your clients’ progress with custom metrics, progress photos, and more.",
+    "Coach Profiles - A powerful tool that boosts your visibility, highlights your expertise, and lets potential clients find your services directly, all in one place. (Available on Standard+ plans)",
+    "Custom Branding - Customize the TrueCoach app with your logo and any color you can imagine to make the experience truly yours.",
+    "Compliance Tracking",
+    "Custom Branded Fitness App",
+    "Coach Dashboard",
+    "Personal Trainer Billing Software",
+    "Real-time Metrics - Access key data points from your clients' wearables, allowing you to monitor performance metrics instantly and make informed coaching decisions on the fly.",
+    "Personalized Insights - Gain deeper insights into your clients' activity levels, sleep patterns, and recovery metrics, enabling you to tailor training programs precisely to their individual needs.",
+    "Partner Perks - Gain exclusive access to discounts on education, certifications, clothing, and more with TrueCoach’s expansive library of Partner Perks.",
+    "NASM CEU Library - Save up to 33% on continuing education with NASM with TrueCoach’s embedded CEU Library for 24/7 access to the latest courses and learning resources.",
+    "No credit card required.",
+    "Cancel any time.",
+    "Strength and Conditioning Coach",
+    "Bodybuilding Coach",
+    "Weightlifting Coach",
+    "Nutrition Coach",
+    "Physical Therapists",
+    "Functional Fitness Specialist",
+    "Occupational Therapist",
+    "Chiropractor",
+    "CrossFit Coach",
+    "University Educator",
+    "Recreation Center",
+    "Program Workout Builder",
+    "Nutrition Tracking",
+    "Habit Tracking",
+    "NEW! Wearables",
+    "Client Tracking",
+    "NEW! Public Profiles",
+    "Automated Payments",
+    "Custom Theming",
+    "Business Planner",
+    "Partner Perks",
+    "Learning Center",
+    "Case Studies",
+    "Help Center",
+    "Affiliate Referrals",
+    "Capterra Reviews",
+    "G2Crowd Reviews",
+    "Client Management",
+    "The Learning Center",
+    "iOS App for Coaches and Clients",
+    "Android App for Clients",
+    "Android App for Coaches",
+    "Website Terms",
+    "Terms of Service",
+    "Cookie List"
+  ],
+  "parsing_errors": [],
+  "feature_flags": {
+    "workout_builder": true,
+    "habit_coaching": true,
+    "client_management": true,
+    "nutrition_tracking": true,
+    "groups_teams": true,
+    "messaging": true,
+    "progress_tracking": true,
+    "mobile_app": true,
+    "payments_billing": true,
+    "exercise_library": true,
+    "integrations": true,
+    "white_label_branding": true,
+    "check_ins": true,
+    "form_check_video": true
+  },
+  "feature_samples": {
+    "workout_builder_examples": [
+      "Workout templates - Build workout templates in under a minute that can copied and pasted for several clients.",
+      "Drag and Drop Workout Builder - create any workout you can dream up, from AMRAPs to Strength Sets with our drag and drop workout builder.",
+      "Video Library - Our extensive video library comes pre-loaded with 3,500+ professionally recorded exercise demonstrations and allows you to add your own!"
+    ],
+    "habit_coaching_examples": [
+      "Interval and HIIT Training - TrueCoach's mobile app has a built-in timer to help with rest periods, intervals, and more.",
+      "Custom Branding - Customize the TrueCoach app with your logo and any color you can imagine to make the experience truly yours.",
+      "Coach Dashboard"
+    ],
+    "client_management_examples": [
+      "Client Updates - Capture progress pictures, body metrics, macros, diet, and custom data points to keep your clients engaged from every angle.",
+      "Progression Tracking - Client are able to view progress in reps, weights, heart rate, and more with TrueCoach’s dedicated mobile app.",
+      "Habit Tracking - Create custom habits for your clients to complete on a daily, weekly, or monthly basis to allow them to excel in and outside the gym!"
+    ],
+    "nutrition_tracking_examples": [
+      "Nutrition Education - Get certified with Precision Nutrition for less with our exclusive Partner Perk."
+    ],
+    "groups_teams_examples": [
+      "Team Accounts",
+      "Group Messaging - Keep your groups organized and engaged with dedicated group messaging!"
+    ],
+    "messaging_examples": [
+      "Coach Notifications - Set custom permissions for e-mail and push notifications to get alerted when you need to be!"
+    ],
+    "progress_tracking_examples": [
+      "Compliance Tracking",
+      "Nutrition Tracking",
+      "Habit Tracking"
+    ],
+    "mobile_app_examples": [
+      "Custom Branded Fitness App"
+    ],
+    "payments_billing_examples": [
+      "Personal Trainer Billing Software",
+      "Automated Payments"
+    ],
+    "exercise_library_examples": [
+      "Partner Perks - Gain exclusive access to discounts on education, certifications, clothing, and more with TrueCoach’s expansive library of Partner Perks.",
+      "NASM CEU Library - Save up to 33% on continuing education with NASM with TrueCoach’s embedded CEU Library for 24/7 access to the latest courses and learning resources."
+    ],
+    "integrations_examples": [
+      "Physical Therapists",
+      "Occupational Therapist"
+    ],
+    "white_label_branding_examples": [
+      "Custom Theming"
+    ],
+    "check_ins_examples": [
+      "Learning Center",
+      "The Learning Center"
+    ],
+    "form_check_video_examples": [
+      "Capterra Reviews",
+      "G2Crowd Reviews"
+    ]
+  },
+  "unmatched_features": [
+    "No credit card required.",
+    "Cancel any time.",
+    "Functional Fitness Specialist",
+    "Chiropractor",
+    "University Educator",
+    "Recreation Center",
+    "NEW! Wearables",
+    "Partner Perks",
+    "Case Studies",
+    "Help Center"
+  ]
+}

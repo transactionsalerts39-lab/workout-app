@@ -1,0 +1,2312 @@
+{
+  "vendor": "trainerize",
+  "base_url": "https://www.trainerize.com",
+  "slug": "trainerize",
+  "fetched_at": "2025-10-16T20:11:49.260103",
+  "pages_scraped": [
+    {
+      "url": "https://www.trainerize.com/pricing",
+      "page_type": "pricing",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/trainerize_pricing_20251016_201150.html",
+      "is_sufficient": true
+    },
+    {
+      "url": "https://www.trainerize.com/features",
+      "page_type": "features",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/trainerize_features_20251016_201157.html",
+      "is_sufficient": true
+    }
+  ],
+  "pricing": [
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$10 USD/month",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$ 22 USD/month",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$250 USD/month for each location added",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$ 22 USD/month",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$10 USD/month",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$250 USD/month for each location added",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$ 10 USD/month",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$ 70 USD/month",
+      "price_amount": 70.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$ 250 USD/month",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Monthly Billing",
+      "raw_text": "Plans that fit your business, with plenty of room to grow Monthly Billing Yearly Billing (save 10%) All prices subject to applicable taxes Basic Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required. Free Get started ALL FEATURES Free plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with ",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Plans that fit your business, with plenty of room to grow",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Yearly Billing",
+      "raw_text": "Yearly Billing (save 10%)",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "yearly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "All prices subject to applicable taxes",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required. Free Get started ALL FEATURES Free plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Grow Best for starting digital coaching. Coach up to",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required. Free Get started ALL FEATURES Free plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Grow Best for starting digital coaching. Coach up to",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required. Free Get started ALL FEATURES Free plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required. Free Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required. Free Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required. Free Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES Free plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Free plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Free plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Free plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Grow",
+      "raw_text": "Grow Best for starting digital coaching. Coach up to 2 clients and grow with us. Enable add-ons to level up and change plans anytime. $10 USD/month Get started ALL FEATURES Grow plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Grow",
+      "raw_text": "Grow Best for starting digital coaching. Coach up to 2 clients and grow with us. Enable add-ons to level up and change plans anytime. $10 USD/month Get started",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Grow",
+      "raw_text": "Grow Best for starting digital coaching. Coach up to 2 clients and grow with us. Enable add-ons to level up and change plans anytime. $10 USD/month Get started",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Grow",
+      "raw_text": "Grow Best for starting digital coaching. Coach up to 2 clients and grow with us. Enable add-ons to level up and change plans anytime. $10 USD/month Get started",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Best for starting digital coaching. Coach up to 2 clients and grow with us. Enable add-ons to level up and change plans anytime.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$10 USD/month",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES Grow plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery ",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Grow plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integr",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Grow plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Grow plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integrations Standardize p",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integrations Standardize programming with master workouts and programs Ability to purchase additional add-ons to get: Business add-on Advanced Nutrition Coaching Stripe Integrated Payments Video Coaching",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro 5",
+      "raw_text": "Pro 5 Best for coaches who already have a clientele. Coach up to 200 clients. Enable add-ons to level up and change plans anytime. Up to 5 clients Up to 15 clients Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients Up to 200 clients $ 22 USD/month Get started ALL FEATURES Pro 5 plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with prog",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro 5",
+      "raw_text": "Pro 5 Best for coaches who already have a clientele. Coach up to 200 clients. Enable add-ons to level up and change plans anytime. Up to 5 clients Up to 15 clients Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients Up to 200 clients $ 22 USD/month Get started",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro 5",
+      "raw_text": "Pro 5 Best for coaches who already have a clientele. Coach up to 200 clients. Enable add-ons to level up and change plans anytime. Up to 5 clients Up to 15 clients Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients Up to 200 clients $ 22 USD/month Get started",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro 5",
+      "raw_text": "Pro 5 Best for coaches who already have a clientele. Coach up to 200 clients. Enable add-ons to level up and change plans anytime. Up to 5 clients Up to 15 clients Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients Up to 200 clients $ 22 USD/month Get started",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Best for coaches who already have a clientele. Coach up to 200 clients. Enable add-ons to level up and change plans anytime.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 5 clients Up to 15 clients Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients Up to 200 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 5 clients Up to 15 clients Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients Up to 200 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$ 22 USD/month",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES Pro 5 plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Pro 5 plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integ",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Pro 5 plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Pro 5 plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integrations Standardize p",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integrations Standardize programming with master workouts and programs Ability to purchase additional add-ons to get: Pro Level Custom Branded App Business add-on Advanced Nutrition Coaching Stripe Integrated Payments Video Coaching Live customer support",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio Plus",
+      "raw_text": "Studio Plus For single and multi-location fitness studios and entrepreneurs who have up to 500 members. Complement your in person training and take your business online. Up to 500 clients Up to 1000 clients $250 USD/month for each location added Get started ALL FEATURES Studio Plus plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, co",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio Plus",
+      "raw_text": "Studio Plus For single and multi-location fitness studios and entrepreneurs who have up to 500 members. Complement your in person training and take your business online. Up to 500 clients Up to 1000 clients $250 USD/month for each location added Get started",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio Plus",
+      "raw_text": "Studio Plus For single and multi-location fitness studios and entrepreneurs who have up to 500 members. Complement your in person training and take your business online. Up to 500 clients Up to 1000 clients $250 USD/month for each location added Get started",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio Plus",
+      "raw_text": "Studio Plus For single and multi-location fitness studios and entrepreneurs who have up to 500 members. Complement your in person training and take your business online. Up to 500 clients Up to 1000 clients $250 USD/month for each location added Get started",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio Plus",
+      "raw_text": "Studio Plus",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "For single and multi-location fitness studios and entrepreneurs who have up to 500 members. Complement your in person training and take your business online.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 500 clients Up to 1000 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 500 clients Up to 1000 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$250 USD/month for each location added",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "for each location added",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES Studio Plus plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integration",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Studio Plus plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integrations Standardize",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Studio Plus plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Studio Plus plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integrations Standardize programming with master wo",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Zapier integrations Standardize programming with master workouts and programs Everything in Pro plus: Studio level branded iOS, Android app and Apple Watch app Branded Apple Watch app powered by ABC Trainerize Access to all business partner add-ons (ABC Glofox and Mindbody) Free access to all add-ons: Studio Level Custom Branded App Business add-on Advanced Nutrition Coaching Stripe Integrated Payments Video Coaching Personalized onboarding support API Access Multi-location programming content c",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required. Free Get started ALL FEATURES Free plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Pro 5 Best for coaches who already have a clientele.",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required. Free Get started ALL FEATURES Free plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Pro 5 Best for coaches who already have a clientele.",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required. Free Get started ALL FEATURES Free plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required. Free Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required. Free Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required. Free Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Baby steps? Get started with ABC Trainerize or try it out with 1 coaching client. Free forever. No credit card required.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES Free plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Free plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Free plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Free plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro 5",
+      "raw_text": "Pro 5 Best for coaches who already have a clientele. Coach up to 200 clients. Enable add-ons to level up and change plans anytime. Up to 5 clients Up to 15 clients Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients Up to 200 clients $ 22 USD/month Get started ALL FEATURES Pro 5 plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with prog",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro 5",
+      "raw_text": "Pro 5 Best for coaches who already have a clientele. Coach up to 200 clients. Enable add-ons to level up and change plans anytime. Up to 5 clients Up to 15 clients Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients Up to 200 clients $ 22 USD/month Get started",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro 5",
+      "raw_text": "Pro 5 Best for coaches who already have a clientele. Coach up to 200 clients. Enable add-ons to level up and change plans anytime. Up to 5 clients Up to 15 clients Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients Up to 200 clients $ 22 USD/month Get started",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Pro 5",
+      "raw_text": "Pro 5 Best for coaches who already have a clientele. Coach up to 200 clients. Enable add-ons to level up and change plans anytime. Up to 5 clients Up to 15 clients Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients Up to 200 clients $ 22 USD/month Get started",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Best for coaches who already have a clientele. Coach up to 200 clients. Enable add-ons to level up and change plans anytime.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 5 clients Up to 15 clients Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients Up to 200 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 5 clients Up to 15 clients Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients Up to 200 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$ 22 USD/month",
+      "price_amount": 22.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES Pro 5 plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Pro 5 plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integ",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Pro 5 plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Pro 5 plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integrations Standardize p",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integrations Standardize programming with master workouts and programs Ability to purchase additional add-ons to get: Pro Level Custom Branded App Business add-on Advanced Nutrition Coaching Stripe Integrated Payments Video Coaching Live customer support",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Grow",
+      "raw_text": "Grow Best for starting digital coaching. Coach up to 2 clients and grow with us. Enable add-ons to level up and change plans anytime. $10 USD/month Get started ALL FEATURES Grow plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Grow",
+      "raw_text": "Grow Best for starting digital coaching. Coach up to 2 clients and grow with us. Enable add-ons to level up and change plans anytime. $10 USD/month Get started",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Grow",
+      "raw_text": "Grow Best for starting digital coaching. Coach up to 2 clients and grow with us. Enable add-ons to level up and change plans anytime. $10 USD/month Get started",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Grow",
+      "raw_text": "Grow Best for starting digital coaching. Coach up to 2 clients and grow with us. Enable add-ons to level up and change plans anytime. $10 USD/month Get started",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Best for starting digital coaching. Coach up to 2 clients and grow with us. Enable add-ons to level up and change plans anytime.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$10 USD/month",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES Grow plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery ",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Grow plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integr",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Grow plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Grow plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integrations Standardize p",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Help and education resources Everything in Free plus: Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integrations Standardize programming with master workouts and programs Ability to purchase additional add-ons to get: Business add-on Advanced Nutrition Coaching Stripe Integrated Payments Video Coaching",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio Plus",
+      "raw_text": "Studio Plus For single and multi-location fitness studios and entrepreneurs who have up to 500 members. Complement your in person training and take your business online. Up to 500 clients Up to 1000 clients $250 USD/month for each location added Get started ALL FEATURES Studio Plus plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, co",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio Plus",
+      "raw_text": "Studio Plus For single and multi-location fitness studios and entrepreneurs who have up to 500 members. Complement your in person training and take your business online. Up to 500 clients Up to 1000 clients $250 USD/month for each location added Get started",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio Plus",
+      "raw_text": "Studio Plus For single and multi-location fitness studios and entrepreneurs who have up to 500 members. Complement your in person training and take your business online. Up to 500 clients Up to 1000 clients $250 USD/month for each location added Get started",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio Plus",
+      "raw_text": "Studio Plus For single and multi-location fitness studios and entrepreneurs who have up to 500 members. Complement your in person training and take your business online. Up to 500 clients Up to 1000 clients $250 USD/month for each location added Get started",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Studio Plus",
+      "raw_text": "Studio Plus",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "For single and multi-location fitness studios and entrepreneurs who have up to 500 members. Complement your in person training and take your business online.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 500 clients Up to 1000 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 500 clients Up to 1000 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$250 USD/month for each location added",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "for each location added",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Get started",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES Studio Plus plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integration",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "ALL FEATURES",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Studio Plus plan includes: Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integrations Standardize",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Studio Plus plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Studio Plus plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery Zapier integrations Standardize programming with master wo",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Mobile app for iOS and Android Workout programs and workout tracking Basic in-app nutrition tracking and PDF meal plans In-app client messaging and groups Digital member profiles with progress tools, compliance metrics, and body measurements Help and education resources Trainerize.me profile and product storefront Ability for clients to connect to Apple Health/Apple Watch, Garmin, MyFitnessPal, Fitbit, Withings Automated program delivery",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Zapier integrations Standardize programming with master workouts and programs Everything in Pro plus: Studio level branded iOS, Android app and Apple Watch app Branded Apple Watch app powered by ABC Trainerize Access to all business partner add-ons (ABC Glofox and Mindbody) Free access to all add-ons: Studio Level Custom Branded App Business add-on Advanced Nutrition Coaching Stripe Integrated Payments Video Coaching Personalized onboarding support API Access Multi-location programming content c",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Explore Add-ons Compare all plans and features",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Expand your business with powerful add-ons.",
+      "raw_text": "Expand your business with powerful add-ons. Explore Add-ons Discover enterprise solutions for large businesses. Contact Sales Learn More",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Expand your business with powerful add-ons.",
+      "raw_text": "Expand your business with powerful add-ons. Explore Add-ons",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Expand your business with powerful add-ons.",
+      "raw_text": "Expand your business with powerful add-ons. Explore Add-ons",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Discover enterprise solutions for large businesses. Contact Sales Learn More",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Compare all plans and features",
+      "raw_text": "Compare all plans and features Basic Up to 1 client Free Individual Trainer Up to 2 clients Up to 5 clients Up to 15 clients $ 10 USD/month Small business Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients $ 70 USD/month Medium to enterprise Up to 200 clients Up to 500 clients Up to 1000 clients 1000+ clients $ 250 USD/month Fundamentals Coaching client seats Coaching clients have full access to programs, workouts, meal tracking, habits, and groups. Choose between 1- and 2-way ",
+      "price_amount": 45.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Up to 1 client Free Individual Trainer Up to 2 clients Up to 5 clients Up to 15 clients $ 10 USD/month Small business Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients $ 70 USD/month Medium to enterprise Up to 200 clients Up to 500 clients Up to 1000 clients 1000+ clients $ 250 USD/month",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Basic",
+      "raw_text": "Basic Up to 1 client Free",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 1 client",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 1 client",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Individual Trainer",
+      "raw_text": "Individual Trainer Up to 2 clients Up to 5 clients Up to 15 clients $ 10 USD/month",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 2 clients Up to 5 clients Up to 15 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 2 clients Up to 5 clients Up to 15 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$ 10 USD/month",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Small business",
+      "raw_text": "Small business Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients $ 70 USD/month",
+      "price_amount": 70.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 30 clients Up to 50 clients Up to 75 clients Up to 100 clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$ 70 USD/month",
+      "price_amount": 70.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Medium to enterprise",
+      "raw_text": "Medium to enterprise Up to 200 clients Up to 500 clients Up to 1000 clients 1000+ clients $ 250 USD/month",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 200 clients Up to 500 clients Up to 1000 clients 1000+ clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Up to 200 clients Up to 500 clients Up to 1000 clients 1000+ clients",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$ 250 USD/month",
+      "price_amount": 250.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Fundamentals",
+      "raw_text": "Fundamentals Coaching client seats Coaching clients have full access to programs, workouts, meal tracking, habits, and groups. Choose between 1- and 2-way messaging. Basic client seats Basic clients can book appointments and make purchases. They cannot use training programs, track workouts or meals, or use in-app messaging. 1 Not Available 2 15 30 Unlimited 500 Unlimited ADD-ONS Custom Branded App Make ABC Trainerize your own. Deliver a training experience personalized to your brand with your ow",
+      "price_amount": 45.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "1 Not Available",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "30 Unlimited",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "500 Unlimited",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Not Available Not Available Not Available Not Available Not Available",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Not Available $45 $5/month $25/month $10/month $10/month",
+      "price_amount": 45.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$169 one-time fee $45/month $25/month $10/month $10/month",
+      "price_amount": 169.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Included Included Included Included Included",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "- - - - - - - - -",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "- - - - - - - - - -",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "- - - - - - -",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "- - - - - -",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Expand your business with powerful add-ons",
+      "raw_text": "Expand your business with powerful add-ons Take nutrition coaching to the next level, streamline payments and product delivery, offer live and on-demand video coaching, and customize your app to make it truly your own. Business Everything you need to manage and scale your business all in one place. Features included in this add-on will help streamline and simplify your day-to-day so you can build a business that thrives. Not Available on the Free plan Add to your plan for $25 USD/mo (Grow, Pro) ",
+      "price_amount": 25.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Expand your business with powerful add-ons",
+      "raw_text": "Expand your business with powerful add-ons Take nutrition coaching to the next level, streamline payments and product delivery, offer live and on-demand video coaching, and customize your app to make it truly your own.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Business",
+      "raw_text": "Business Everything you need to manage and scale your business all in one place. Features included in this add-on will help streamline and simplify your day-to-day so you can build a business that thrives. Not Available on the Free plan Add to your plan for $25 USD/mo (Grow, Pro) Included in the Studio plan Access to Stripe Integrated Payments add-on Access to Video Coaching add-on Built-in automation and product selling features Enlist premium scheduling features like video calls, shareable boo",
+      "price_amount": 25.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Back to Base Plans",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Create your own Custom Branded App",
+      "raw_text": "Create your own Custom Branded App Drive engagement and build stronger connections with clients and members. With three tiers of customization, our Pro, Studio, and Enterprise branded apps are the ultimate way to digitize your business and deliver a training experience that is uniquely yours. Discover Custom Branded Apps",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Create your own Custom Branded App",
+      "raw_text": "Create your own Custom Branded App Drive engagement and build stronger connections with clients and members. With three tiers of customization, our Pro, Studio, and Enterprise branded apps are the ultimate way to digitize your business and deliver a training experience that is uniquely yours. Discover Custom Branded Apps",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "1 844 625 1155",
+      "raw_text": "Talk to our team Not sure which plan is right for your business? Let us help you find the right one. 1 844 625 1155",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Not sure which plan is right for your business? Let us help you find the right one.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "1 844 625 1155",
+      "raw_text": "1 844 625 1155",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "FAQs",
+      "raw_text": "FAQs How does the free 30-day trial work? After signing up for a trial, you'll be able to enjoy all of ABC Trainerize's core features for 30 days, completely free of charge. There is no credit card required to activate your trial. At the end of the 30 days, you can upgrade to the paid plan of your choice. If you do not upgrade, you will be automatically downgraded to our Free plan with limited clients and features. How do I get started? Once you've activated your trial or purchased your plan, th",
+      "price_amount": 5.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": 30
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Pricing | ABC Trainerize Personal Training Software",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Plans that fit your business, with plenty of room to grow",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Monthly Billing",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Yearly Billing",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "yearly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Free plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Basic in-app nutrition tracking and PDF meal plans",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Best for starting digital coaching. Coach up to 2 clients and grow with us. Enable add-ons to level up and change plans anytime.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Grow plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Best for coaches who already have a clientele. Coach up to 200 clients. Enable add-ons to level up and change plans anytime.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Pro 5 plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Studio Plus plan includes:",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Compare all plans and features",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Compare all plans and features",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Access the Smart Meal Planner to automatically generate meal plans, browse or add recipes, and build grocery shopping lists in an instant.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "$45 $5/month",
+      "price_amount": 45.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "var matrixController = (function() { var MATRIX = { fundamentals: { free: { coachingClientSeats: \"1\", basicClientSeats: \"Not Available\", }, grow: { coachingClientSeats: \"2\", basicClientSeats: \"15\", }, pro: { pro5: { coachingClientSeats: \"5\", basicClientSeats: \"15\", }, pro15: { coachingClientSeats: \"15\", basicClientSeats: \"15\", }, pro30: { coachingClientSeats: \"30\", basicClientSeats: \"Unlimited\", }, pro50: { coachingClientSeats: \"50\", basicClientSeats: \"Unlimited\", }, pro75: { coachingClientSeats",
+      "price_amount": 45.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Not Available on the Free plan",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Add to your plan for $25 USD/mo (Grow, Pro)",
+      "price_amount": 25.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Included in the Studio plan",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Take your nutrition coaching to the next level with the Smart Meal Planner. Quickly generate and deliver meal plans for your clients based on their caloric goals, macro split, schedule, and dietary preferences.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Add to your plan for $5 USD/mo (Grow, Pro 5, 15)",
+      "price_amount": 5.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Add to your plan for $45 USD /mo (Pro 30 to Pro 200)",
+      "price_amount": 45.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Generate smart meal plans for up to 7 days",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Add to your plan for $10 USD/mo (Grow, Pro)",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "50 hours/month, Grow and Pro",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "500 hours/month, Studio",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "100 hours/month, Grow and Pro",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "1000 hours/month, Studio",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Not Available on the Free and Grow plans",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Add to your plan for a one-time setup fee of $169 USD (Pro)",
+      "price_amount": 169.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Included in the Studio plan",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Back to Base Plans",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Drive engagement and build stronger connections with clients and members. With three tiers of customization, our Pro, Studio, and Enterprise branded apps are the ultimate way to digitize your business and deliver a training experience that is uniquely yours.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "After signing up for a trial, you'll be able to enjoy all of ABC Trainerize's core features for 30 days, completely free of charge. There is no credit card required to activate your trial. At the end of the 30 days, you can upgrade to the paid plan of your choice. If you do not upgrade, you will be automatically downgraded to our Free plan with limited clients and features.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Once you've activated your trial or purchased your plan, there a lot of resources to get you started. In the web app, you'll find a setup guide with instructional videos and guided walk-throughs on how to quickly create training programs and how to use key features in ABC Trainerize.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Yes, you can upgrade or downgrade your plan at any time, and can make those changes yourself right from your ABC Trainerize account.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Note that not all features are available or included with all plans, so be sure to review what is or isn't included in your new plan before completing the change. You will lose access to any features or add-ons not included in or available with your new plan as of your next billing cycle. For example, if you choose to downgrade from a Studio plan to a Pro or Grow plan, you may lose access to your included add-ons (Custom Branded App, Video Coaching, Advanced Nutrition Coaching, Stripe Integrated",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "What happens when I change plans?",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "When changing to a larger plan or a longer billing cycle, the change is applied immediately and the pro-rated difference is charged to your account.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "When changing to a smaller or Free plan, or when switching to a shorter billing cycle, the change is applied at the end of the current billing cycle. You can continue to use your current paid plan until that date. We are unable to issue refunds for unused portions of your subscription.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "All of ABC Trainerize's powerful core features are included in the subscription price for all of our paid plans. However, if you choose to level up your subscription through our add-ons, there are a few additional costs you may encounter.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Select add-ons are available to Grow and Pro plan users at an addtional cost to their base plan subscription and can be purchased at any time. Our Studio plans include access to most of our add-ons at no additional cost, though usage limits, transaction fees, and overage charges still apply. For add-on pricing for Enterprise plans, please contact us directly.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "The Advanced Nutrition Coaching Add-on allows you to generate and deliver custom meal plans, contribute meals and recipes to your business's meal library, and give clients access to the best meals to cook and track in-app. The add-on costs $5/mo for Grow, Pro 5, and Pro 15 plans, $45/mo for Pro 30 to Pro 200 plans, and it is included as part of the Studio plan cost.",
+      "price_amount": 5.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "The Pro Custom Branded App add-on has a one-time setup fee of $169 for Pro plan. The Studio Custom Branded App is included as part of the Studio and Enterprise plans.",
+      "price_amount": 169.0,
+      "currency": "USD",
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "The Video Coaching add-on includes a monthly bundle of video calling and video streaming hours to let you run virtual coaching calls or PT sessions, and host on-demand workouts. The Pro plan add-on is a $10 USD monthly subscription and includes 50h video calling + 100h video streaming. The Studio plan add-on is included in the Studio plan cost and inclues includes 500h video calling + 5000h video streaming. Extra time can be purchased in packs (Video call time is sold in packs of 20 hours for $1",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "The Stripe Integrated Payments add-on allows you to create, market and sell products online. Automate your sales funnel and program delivery and pay out your earnings through Stripe. This add-on is a $10 USD monthly subscription for Grow and Pro plans and it is included in the Studio plan cost.",
+      "price_amount": 10.0,
+      "currency": "USD",
+      "billing_cycle": "monthly",
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "You will be moved onto our Free plan with limited access to ABC Trainerize features and add-ons, and limited to being able to train 1 active client limit. All clients above the Free plan limit will be automatically deactivated. If you are using Payments in ABC Trainerize, all active recurring products will be canceled and will not renew. If you have a Custom Branded App, it will be deactivated and you will need to use the main ABC Trainerize app.",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "var plansPage = (function() { function toggleExpandHandler(event, el) { var EXPANDED_CLASSNAME = 'expanded'; var APROX_ADDITION_TO_CONTAINER = 100; if (!el) return; if (el.classList.contains(EXPANDED_CLASSNAME)) { el.style.maxHeight = '0'; el.classList.remove(EXPANDED_CLASSNAME); this.classList.remove(EXPANDED_CLASSNAME); } else { el.style.maxHeight = (el.scrollHeight + APROX_ADDITION_TO_CONTAINER) + 'px'; el.classList.add(EXPANDED_CLASSNAME); this.classList.add(EXPANDED_CLASSNAME); } } function",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    }
+  ],
+  "features_raw": [
+    "Independent Coach Personal Trainer Nutrition Coach Lifestyle Coach Health & Wellness Coach Content Creator/Influencer",
+    "Independent Coach",
+    "Personal Trainer",
+    "Nutrition Coach",
+    "Lifestyle Coach",
+    "Health & Wellness Coach",
+    "Content Creator/Influencer",
+    "Small to Medium Business Personal Training Studio Gym Boutique Studio Health & Wellness Center Education",
+    "Small to Medium Business",
+    "Personal Training Studio Gym Boutique Studio Health & Wellness Center Education",
+    "Personal Training Studio",
+    "Boutique Studio",
+    "Health & Wellness Center",
+    "Large Business Health/Fitness Club Community Recreation Center Corporate Wellness",
+    "Large Business",
+    "Health/Fitness Club",
+    "Community Recreation Center",
+    "Corporate Wellness",
+    "ways to train Online training In-person training Hybrid training Group training Nutrition coaching",
+    "Online training",
+    "In-person training",
+    "Hybrid training",
+    "Group training",
+    "Nutrition coaching",
+    "COACH Fitness Nutrition Habits",
+    "ENGAGE Communication Community Motivation",
+    "Communication",
+    "Motivation",
+    "MANAGE Scheduling Payments Marketing Clients Teams",
+    "Scheduling",
+    "ADD-ONS Custom Branded Apps Advanced Nutrition Coaching Stripe Integrated Payments Video Coaching Integrations",
+    "Custom Branded Apps",
+    "Advanced Nutrition Coaching",
+    "Stripe Integrated Payments",
+    "Video Coaching",
+    "Integrations",
+    "resources RESOURCES Blog Guides Webinars Customer Stories Events HELP AND SUPPORT About Help Center Get Started What is ABC Trainerize?",
+    "RESOURCES Blog Guides Webinars Customer Stories Events",
+    "Customer Stories",
+    "HELP AND SUPPORT About Help Center Get Started What is ABC Trainerize?",
+    "HELP AND SUPPORT",
+    "Help Center",
+    "Get Started",
+    "What is ABC Trainerize?",
+    "academy View the Academy Take a Business Course Learn the Product",
+    "View the Academy Take a Business Course Learn the Product",
+    "View the Academy",
+    "Take a Business Course",
+    "Learn the Product",
+    "Independent trainers",
+    "Fitness clubs",
+    "Enterprise",
+    "EDUCATION View the Academy Take a Business Course Learn the Product",
+    "Get listed on",
+    "Trainerize.me",
+    "TZ Collective",
+    "Stripe Payments",
+    "Gyms and Studios",
+    "Enterprise Solutions",
+    "Contact us",
+    "User Terms",
+    "Business Terms",
+    "Privacy Policy",
+    "Cookie Policy",
+    "Cookie Settings",
+    "Getting Started",
+    "Product Updates"
+  ],
+  "parsing_errors": [],
+  "feature_flags": {
+    "habit_coaching": true,
+    "check_ins": true,
+    "groups_teams": true,
+    "messaging": true,
+    "client_management": true,
+    "mobile_app": true,
+    "payments_billing": true,
+    "integrations": true,
+    "white_label_branding": true
+  },
+  "feature_samples": {
+    "habit_coaching_examples": [
+      "Independent Coach Personal Trainer Nutrition Coach Lifestyle Coach Health & Wellness Coach Content Creator/Influencer",
+      "Independent Coach",
+      "Nutrition Coach"
+    ],
+    "check_ins_examples": [
+      "Personal Trainer",
+      "Content Creator/Influencer",
+      "Small to Medium Business Personal Training Studio Gym Boutique Studio Health & Wellness Center Education"
+    ],
+    "groups_teams_examples": [
+      "Large Business Health/Fitness Club Community Recreation Center Corporate Wellness",
+      "Community Recreation Center",
+      "Group training"
+    ],
+    "messaging_examples": [
+      "ENGAGE Communication Community Motivation",
+      "Communication"
+    ],
+    "client_management_examples": [
+      "MANAGE Scheduling Payments Marketing Clients Teams",
+      "Contact us",
+      "User Terms"
+    ],
+    "mobile_app_examples": [
+      "Custom Branded Apps",
+      "Gyms and Studios"
+    ],
+    "payments_billing_examples": [
+      "Stripe Integrated Payments",
+      "Stripe Payments"
+    ],
+    "integrations_examples": [
+      "Integrations"
+    ],
+    "white_label_branding_examples": [
+      "resources RESOURCES Blog Guides Webinars Customer Stories Events HELP AND SUPPORT About Help Center Get Started What is ABC Trainerize?",
+      "RESOURCES Blog Guides Webinars Customer Stories Events",
+      "Customer Stories"
+    ]
+  },
+  "unmatched_features": [
+    "Boutique Studio",
+    "Health & Wellness Center",
+    "Health/Fitness Club",
+    "Corporate Wellness",
+    "Motivation",
+    "HELP AND SUPPORT",
+    "Help Center",
+    "Get Started",
+    "View the Academy",
+    "Learn the Product"
+  ]
+}

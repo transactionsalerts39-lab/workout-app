@@ -1,0 +1,76 @@
+{
+  "vendor": "trainheroic_marketplace",
+  "base_url": "https://marketplace.trainheroic.com",
+  "slug": "trainheroic_marketplace",
+  "fetched_at": "2025-10-16T20:13:37.264199",
+  "pages_scraped": [
+    {
+      "url": "https://marketplace.trainheroic.com",
+      "page_type": "pricing",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/trainheroic_marketplace_pricing_20251016_201339.html",
+      "is_sufficient": true
+    },
+    {
+      "url": "https://marketplace.trainheroic.com",
+      "page_type": "features",
+      "status_code": 200,
+      "extraction_method": "requests",
+      "html_path": "/Users/ranjodhsingh/Documents/workout-app/Research/raw_html/trainheroic_marketplace_features_20251016_201346.html",
+      "is_sufficient": true
+    }
+  ],
+  "pricing": [
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Training Plans",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Training Plans",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    },
+    {
+      "plan_name": "Unknown Plan",
+      "raw_text": "Free Trial",
+      "price_amount": null,
+      "currency": null,
+      "billing_cycle": null,
+      "per_unit": null,
+      "trial_days": null
+    }
+  ],
+  "features_raw": [
+    "The Marketplace",
+    "For trainers & gym owners",
+    "Help Center",
+    "Support@trainheroic.com"
+  ],
+  "parsing_errors": [],
+  "feature_flags": {
+    "marketplace_access": true,
+    "check_ins": true
+  },
+  "feature_samples": {
+    "marketplace_access_examples": [
+      "The Marketplace"
+    ],
+    "check_ins_examples": [
+      "For trainers & gym owners",
+      "Support@trainheroic.com"
+    ]
+  },
+  "unmatched_features": [
+    "Help Center"
+  ]
+}

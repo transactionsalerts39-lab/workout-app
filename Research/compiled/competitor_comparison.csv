@@ -1,0 +1,9 @@
+Vendor,Base_URL,Pricing_URLs,Features_URLs,Plans_Found,Features_Found,Entry_Plan_Price,Entry_Plan_Currency,Entry_Plan_Billing,Trial_Days,Notes,check_ins,client_management,coach_athlete_chat,exercise_library,form_check_video,groups_teams,habit_coaching,integrations,marketplace_access,messaging,mobile_app,nutrition_tracking,payments_billing,progress_tracking,white_label_branding,workout_builder
+trainerize,https://www.trainerize.com,https://www.trainerize.com/pricing,https://www.trainerize.com/features,239,67,5.0,USD,monthly,30,,Yes,Yes,No,No,No,Yes,Yes,Yes,No,Yes,Yes,No,Yes,No,Yes,No
+truecoach,https://truecoach.co,https://truecoach.co/pricing,https://truecoach.co/features,31,78,26.0,USD,monthly,,,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+mypthub,https://www.mypthub.net,https://www.mypthub.net/pricing,https://www.mypthub.net/features,0,0,,,,,,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+ptdistinction,https://www.ptdistinction.com,https://www.ptdistinction.com/pricing,https://www.ptdistinction.com/features,72,0,1.0,USD,monthly,,,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+everfit,https://everfit.io,https://everfit.io/pricing,https://everfit.io/features,175,40,2.0,USD,,,,Yes,Yes,No,No,Yes,Yes,Yes,Yes,Yes,Yes,No,No,Yes,Yes,Yes,Yes
+trainheroic,https://www.trainheroic.com,https://www.trainheroic.com/pricing,https://www.trainheroic.com/platform; https://www.trainheroic.com/coaches,0,18,,,,,,Yes,Yes,Yes,Yes,No,No,Yes,No,No,No,Yes,No,No,No,No,Yes
+trainerize_me,https://www.trainerize.me,https://www.trainerize.me/for-trainers; https://www.trainerize.me/about,https://www.trainerize.me/for-trainers,2,24,,,,,,Yes,No,No,No,No,Yes,No,No,No,No,No,No,No,No,No,Yes
+trainheroic_marketplace,https://marketplace.trainheroic.com,https://marketplace.trainheroic.com,https://marketplace.trainheroic.com,3,4,,,,,,Yes,No,No,No,No,No,No,No,Yes,No,No,No,No,No,No,No
