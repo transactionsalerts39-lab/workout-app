@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAuthContext } from '../../context/AuthContext'
 import { Button } from '../../components/ui/button'
 import { Badge } from '../../components/ui/badge'
@@ -52,6 +52,9 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
   const { getExerciseProgress, updateExerciseProgress, markExerciseUsingPlan } = useProgressContext()
   const [savedExerciseIds, setSavedExerciseIds] = useState<Set<string>>(new Set())
   const [checklists, setChecklists] = useState<ExerciseChecklistState>({})
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const [lastAutoSave, setLastAutoSave] = useState<number | null>(null)
+  const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   const session = useMemo(() => findSession(weekIndex, sessionId), [findSession, weekIndex, sessionId])
 
@@ -76,7 +79,56 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
     setForms(nextState)
     setChecklists(nextChecklist)
     setSavedExerciseIds(new Set())
+    setHasUnsavedChanges(false)
   }, [session, user, weekIndex, getExerciseProgress])
+
+  // Auto-save every 30 seconds when there are unsaved changes
+  const saveAllProgress = useCallback(async () => {
+    if (!session || !user) return
+    
+    const unsavedExercises = session.exercises.filter(
+      (exercise) => !savedExerciseIds.has(exercise.exerciseId)
+    )
+    
+    for (const exercise of unsavedExercises) {
+      const form = forms[exercise.exerciseId]
+      if (!form) continue
+      const entries = normaliseLines(form.setEntries)
+      try {
+        await updateExerciseProgress({
+          userId: user.id,
+          weekIndex,
+          sessionId: session.sessionId,
+          exercise,
+          setEntries: entries,
+          notes: form.notes.trim() || undefined,
+        })
+        setSavedExerciseIds((prev) => new Set(prev).add(exercise.exerciseId))
+      } catch (error) {
+        console.error('Auto-save failed for exercise', exercise.exerciseId, error)
+      }
+    }
+    setHasUnsavedChanges(false)
+    setLastAutoSave(Date.now())
+  }, [session, user, weekIndex, forms, savedExerciseIds, updateExerciseProgress])
+
+  useEffect(() => {
+    if (!hasUnsavedChanges) return
+
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current)
+    }
+
+    autoSaveTimerRef.current = setTimeout(() => {
+      saveAllProgress()
+    }, 30000) // 30 seconds
+
+    return () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current)
+      }
+    }
+  }, [hasUnsavedChanges, saveAllProgress])
 
   if (!session || !user) {
     return (
@@ -124,12 +176,44 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
         nextSaved.delete(exercise.exerciseId)
         return nextSaved
       })
+      
+      setHasUnsavedChanges(true)
 
       return {
         ...previous,
         [exercise.exerciseId]: next,
       }
     })
+  }
+
+  // Complete all sets for an exercise at once
+  const handleCompleteAllSets = (exercise: SessionExerciseView) => {
+    const totalSets = Math.max(exercise.prescribedSets, exercise.plannedSets.length, 1)
+    const completedChecklist = Array(totalSets).fill(true)
+    
+    setChecklists((previous) => ({
+      ...previous,
+      [exercise.exerciseId]: completedChecklist,
+    }))
+
+    setForms((prevForms) => {
+      const entries = buildSetEntries(exercise, totalSets, exercise.plannedSets)
+      return {
+        ...prevForms,
+        [exercise.exerciseId]: {
+          setEntries: entries.join('\n'),
+          notes: prevForms[exercise.exerciseId]?.notes ?? exercise.comment ?? '',
+        },
+      }
+    })
+
+    setSavedExerciseIds((prev) => {
+      const nextSaved = new Set(prev)
+      nextSaved.delete(exercise.exerciseId)
+      return nextSaved
+    })
+    
+    setHasUnsavedChanges(true)
   }
 
   const handleSave = async (exerciseId: string) => {
@@ -241,7 +325,18 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
               </div>
 
               <div className="space-y-2">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Track sets</p>
+                <div className="flex items-center justify-between">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-400">Track sets</p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleCompleteAllSets(exercise)}
+                    disabled={completedSets === totalSets}
+                    className="h-7 text-xs text-brand-400 hover:text-brand-300 disabled:text-neutral-500"
+                  >
+                    Complete All
+                  </Button>
+                </div>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 max-[420px]:grid-cols-1">
                   {checklist.map((checked, index) => {
                     const optionClass = checked
@@ -250,20 +345,27 @@ export function WorkoutSessionView({ weekIndex, sessionId, onBack }: WorkoutSess
                     return (
                       <label
                         key={`${exercise.exerciseId}_${index}`}
-                        className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-xs font-medium transition ${optionClass} hover:border-brand-300 hover:bg-brand-500/15 hover:text-neutral-100`}
+                        className={`flex cursor-pointer items-center gap-2 rounded-xl border px-4 py-3 text-xs font-medium transition ${optionClass} hover:border-brand-300 hover:bg-brand-500/15 hover:text-neutral-100 min-h-[44px]`}
                       >
                         <input
                           type="checkbox"
                           checked={checked}
                           onChange={() => handleToggleSet(exercise, index)}
-                          className="size-3 accent-brand-500"
+                          className="size-4 accent-brand-500"
                         />
                         <span>Set {index + 1}</span>
                       </label>
                     )
                   })}
                 </div>
-                <p className="text-[11px] text-neutral-400">Completed {completedSets} of {totalSets} sets.</p>
+                <div className="flex items-center justify-between text-[11px] text-neutral-400">
+                  <p>Completed {completedSets} of {totalSets} sets.</p>
+                  {hasUnsavedChanges ? (
+                    <p className="text-amber-400">Unsaved changes (auto-save in 30s)</p>
+                  ) : lastAutoSave ? (
+                    <p className="text-emerald-400">Auto-saved</p>
+                  ) : null}
+                </div>
               </div>
 
               <label className="flex flex-col gap-2 text-sm">

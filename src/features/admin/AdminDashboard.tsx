@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAuthContext } from '../../context/AuthContext'
 import { useProgressContext } from '../../context/ProgressContext'
 import { useProgramContext } from '../../context/ProgramContext'
@@ -184,20 +184,19 @@ function formatCurrency(amount: number, currency: Currency) {
   }).format(amount)
 }
 
-type AdminTab = 'overview' | 'planning' | 'clients' | 'intake' | 'scheduling' | 'reminders' | 'messaging' | 'compliance' | 'operations' | 'activity' | 'settings'
+type AdminTab = 'overview' | 'planning' | 'clients' | 'calendar' | 'messaging' | 'compliance' | 'business' | 'settings'
+type ClientSubTab = 'roster' | 'intake'
+type CalendarSubTab = 'scheduling' | 'reminders'
 
-const ADMIN_TABS: Array<{ id: AdminTab; label: string }> = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'planning', label: 'Plan Builder' },
-  { id: 'clients', label: 'Clients' },
-  { id: 'intake', label: 'Client Intake' },
-  { id: 'scheduling', label: 'Scheduling' },
-  { id: 'reminders', label: 'Reminders' },
-  { id: 'messaging', label: 'Messages' },
-  { id: 'compliance', label: 'Compliance' },
-  { id: 'operations', label: 'Revenue & Ops' },
-  { id: 'activity', label: 'Activity' },
-  { id: 'settings', label: 'Settings' },
+const ADMIN_TABS: Array<{ id: AdminTab; label: string; icon?: string }> = [
+  { id: 'overview', label: 'Overview', icon: '📊' },
+  { id: 'planning', label: 'Plan Builder', icon: '📝' },
+  { id: 'clients', label: 'Clients', icon: '👥' },
+  { id: 'calendar', label: 'Calendar', icon: '📅' },
+  { id: 'messaging', label: 'Messages', icon: '💬' },
+  { id: 'compliance', label: 'Compliance', icon: '✅' },
+  { id: 'business', label: 'Business', icon: '💰' },
+  { id: 'settings', label: 'Settings', icon: '⚙️' },
 ]
 
 const PLAN_HISTORY_TIMEFRAMES: Array<{ id: 'all' | '7' | '30' | '90'; label: string; days?: number }> = [
@@ -403,6 +402,10 @@ export function AdminDashboard() {
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const [latestIntakePreview, setLatestIntakePreview] = useState<ClientIntakeRecord | null>(null)
   const [activeTab, setActiveTab] = useState<AdminTab>('overview')
+  const [clientSubTab, setClientSubTab] = useState<ClientSubTab>('roster')
+  const [calendarSubTab, setCalendarSubTab] = useState<CalendarSubTab>('scheduling')
+  const [globalSearchQuery, setGlobalSearchQuery] = useState('')
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [categorySearch, setCategorySearch] = useState('')
   const [challengeSearch, setChallengeSearch] = useState('')
   const [challengeDifficultyFilter, setChallengeDifficultyFilter] = useState('all')
@@ -415,6 +418,7 @@ export function AdminDashboard() {
   const [isEditingMonthlyRevenue, setIsEditingMonthlyRevenue] = useState(false)
   const [monthlyRevenueDraft, setMonthlyRevenueDraft] = useState('')
   const [monthlyRevenueError, setMonthlyRevenueError] = useState<string | null>(null)
+  const [quickActionClientId, setQuickActionClientId] = useState<string | null>(null)
   const hasHydratedSelections = useRef(false)
 
   useEffect(() => {
@@ -663,9 +667,21 @@ export function AdminDashboard() {
 
   useEffect(() => {
     if (!toastMessage) return
-    const timeout = setTimeout(() => setToastMessage(null), 3200)
+    const timeout = setTimeout(() => setToastMessage(null), 4500)
     return () => clearTimeout(timeout)
   }, [toastMessage])
+
+  // Global search keyboard shortcut (Cmd/Ctrl + K)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+        event.preventDefault()
+        setIsSearchOpen(true)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   useEffect(() => {
     setSelectedExercises((previous) =>
@@ -1281,12 +1297,14 @@ export function AdminDashboard() {
   )
 
   const planningContent = (
-    <div className="grid gap-6 lg:grid-cols-[minmax(320px,1fr)_minmax(320px,1fr)] lg:items-start">
-      <section
-        className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto"
-        onDragOver={handleLibraryDragOver}
-        onDrop={handleLibraryDrop}
-      >
+    <div className="space-y-6">
+      {/* Two-column exercise panels */}
+      <div className="grid gap-6 lg:grid-cols-[minmax(320px,1fr)_minmax(320px,1fr)] lg:items-start">
+        <section
+          className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto"
+          onDragOver={handleLibraryDragOver}
+          onDrop={handleLibraryDrop}
+        >
         <header className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1">
             <h2 className="text-lg font-semibold text-slate-900">Exercise library</h2>
@@ -1408,10 +1426,10 @@ export function AdminDashboard() {
         ) : null}
       </section>
 
-      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
-        <header className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-1">
-            <h2 className="text-lg font-semibold text-slate-900">Selected exercises</h2>
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
+          <header className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold text-slate-900">Selected exercises</h2>
             <p className="text-xs text-slate-500">Drag to reorder or use the Remove button for quick edits.</p>
             {activeTemplate && templateAdjustmentStats ? (
               <p className="mt-1 text-xs font-semibold text-indigo-600">
@@ -1624,10 +1642,12 @@ export function AdminDashboard() {
           <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-10 text-center text-sm text-slate-500">
             No exercises added yet. Use the library to start building the training stack.
           </div>
-        )}
-      </section>
+          )}
+        </section>
+      </div>
 
-      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card lg:col-span-2 lg:self-start">
+      {/* Plan designer section - separate from the grid */}
+      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card">
         <header className="mb-4 space-y-1">
           <h2 className="text-lg font-semibold text-slate-900">Plan designer</h2>
           <p className="text-xs text-slate-500">Assign this set of exercises and lock in schedule details.</p>
@@ -1839,7 +1859,7 @@ export function AdminDashboard() {
                     <h3 className="text-base font-semibold text-slate-900">{client.name}</h3>
                     <p className="text-xs text-slate-500 leading-relaxed">Goal: {client.goal}</p>
                   </div>
-                  <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
+                  <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
                     <span className="rounded-full bg-indigo-100 px-3 py-1 text-indigo-600">{product?.name ?? 'Custom plan'}</span>
                     <span
                       className={`rounded-full px-3 py-1 text-white ${
@@ -1857,6 +1877,93 @@ export function AdminDashboard() {
                     {client.activeChallengeId ? (
                       <span className="rounded-full bg-violet-100 px-3 py-1 text-violet-700">Challenge active</span>
                     ) : null}
+                    {/* Quick Actions Dropdown */}
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setQuickActionClientId(quickActionClientId === client.id ? null : client.id)}
+                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:border-indigo-300 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                        aria-label="Quick actions"
+                      >
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                        </svg>
+                      </button>
+                      {quickActionClientId === client.id ? (
+                        <div className="absolute right-0 top-full z-20 mt-1 w-48 rounded-xl border border-slate-200 bg-white py-1 shadow-lg">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setActiveTab('messaging')
+                              setQuickActionClientId(null)
+                              setToastMessage(`Opening messages for ${client.name}...`)
+                            }}
+                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700"
+                          >
+                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                            Send Message
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              extendSubscription(client.id, 1)
+                              setQuickActionClientId(null)
+                              setToastMessage(`Extended ${client.name}'s subscription by 1 month`)
+                            }}
+                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700"
+                          >
+                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Extend 1 Month
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setQuickActionClientId(null)
+                              setToastMessage(`Viewing progress for ${client.name}...`)
+                            }}
+                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700"
+                          >
+                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            View Progress
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setActiveTab('planning')
+                              setQuickActionClientId(null)
+                              setToastMessage(`Opening plan editor for ${client.name}...`)
+                            }}
+                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700"
+                          >
+                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Edit Plan
+                          </button>
+                          <div className="my-1 border-t border-slate-100" />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              toggleAutoRenew(client.id)
+                              setQuickActionClientId(null)
+                              setToastMessage(`Auto-renew ${client.subscription.autoRenew ? 'disabled' : 'enabled'} for ${client.name}`)
+                            }}
+                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700"
+                          >
+                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Toggle Auto-Renew
+                          </button>
+                        </div>
+                      ) : null}
+                    </div>
                   </div>
                 </header>
                 <div className="mt-4 grid gap-4 md:grid-cols-4">
@@ -1912,8 +2019,34 @@ export function AdminDashboard() {
             )
           })
         ) : (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-10 text-center text-sm text-slate-500">
-            No clients found for these filters.
+          <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-indigo-100 text-indigo-500">
+              <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <h4 className="mt-4 text-sm font-semibold text-slate-800">No clients found</h4>
+            <p className="mt-2 text-xs text-slate-500">Try adjusting your filters or add a new client to get started.</p>
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setClientSearch('')
+                  setClientStatusFilter('all')
+                  setClientProductFilter('all')
+                }}
+                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600"
+              >
+                Clear filters
+              </button>
+              <button
+                type="button"
+                onClick={() => setClientSubTab('intake')}
+                className="rounded-full bg-indigo-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-indigo-500"
+              >
+                View intake forms
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -2373,7 +2506,7 @@ export function AdminDashboard() {
       </header>
 
       <nav className="rounded-3xl border border-slate-200 bg-white p-2 shadow-card">
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {ADMIN_TABS.map((tab) => {
             const isActive = activeTab === tab.id
             return (
@@ -2381,38 +2514,311 @@ export function AdminDashboard() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition flex items-center gap-2 ${
                   isActive
                     ? 'bg-indigo-600 text-white shadow'
                     : 'border border-slate-200 bg-white text-slate-600 hover:border-indigo-200 hover:text-indigo-600'
                 }`}
               >
+                <span className="hidden sm:inline">{tab.icon}</span>
                 {tab.label}
               </button>
             )
           })}
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIsSearchOpen(true)}
+              className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-500 transition hover:border-indigo-200 hover:text-indigo-600"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="7" strokeWidth="2" />
+                <path d="m20 20-3.5-3.5" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+              <span className="hidden md:inline">Search clients...</span>
+              <kbd className="hidden rounded bg-slate-200 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 lg:inline">⌘K</kbd>
+            </button>
+          </div>
         </div>
       </nav>
 
       <div className="space-y-6">
         {activeTab === 'overview' ? overviewContent : null}
         {activeTab === 'planning' ? planningContent : null}
-        {activeTab === 'clients' ? clientsContent : null}
-        {activeTab === 'intake' ? intakeContent : null}
-        {activeTab === 'scheduling' ? schedulingContent : null}
-        {activeTab === 'reminders' ? remindersContent : null}
+        {activeTab === 'clients' ? (
+          <div className="space-y-4">
+            <div className="flex gap-2 border-b border-slate-200 pb-2">
+              <button
+                type="button"
+                onClick={() => setClientSubTab('roster')}
+                className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition ${clientSubTab === 'roster' ? 'bg-white border border-b-0 border-slate-200 text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                Client Roster
+              </button>
+              <button
+                type="button"
+                onClick={() => setClientSubTab('intake')}
+                className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition ${clientSubTab === 'intake' ? 'bg-white border border-b-0 border-slate-200 text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                Client Intake
+              </button>
+            </div>
+            {clientSubTab === 'roster' ? clientsContent : intakeContent}
+          </div>
+        ) : null}
+        {activeTab === 'calendar' ? (
+          <div className="space-y-4">
+            <div className="flex gap-2 border-b border-slate-200 pb-2">
+              <button
+                type="button"
+                onClick={() => setCalendarSubTab('scheduling')}
+                className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition ${calendarSubTab === 'scheduling' ? 'bg-white border border-b-0 border-slate-200 text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                Scheduling
+              </button>
+              <button
+                type="button"
+                onClick={() => setCalendarSubTab('reminders')}
+                className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition ${calendarSubTab === 'reminders' ? 'bg-white border border-b-0 border-slate-200 text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                Reminders
+              </button>
+            </div>
+            {calendarSubTab === 'scheduling' ? schedulingContent : remindersContent}
+          </div>
+        ) : null}
         {activeTab === 'messaging' ? messagingContent : null}
         {activeTab === 'compliance' ? complianceContent : null}
-        {activeTab === 'operations' ? operationsContent : null}
-        {activeTab === 'activity' ? activityContent : null}
+        {activeTab === 'business' ? (
+          <div className="space-y-6">
+            {operationsContent}
+            {activityContent}
+          </div>
+        ) : null}
         {activeTab === 'settings' ? settingsContent : null}
       </div>
 
       {toastMessage ? (
-        <div className="fixed bottom-6 right-6 rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-lg">
+        <div className="fixed bottom-6 right-6 rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-lg z-50">
           {toastMessage}
         </div>
       ) : null}
+
+      {/* Global Search Modal */}
+      {isSearchOpen ? (
+        <GlobalSearchModal
+          query={globalSearchQuery}
+          onQueryChange={setGlobalSearchQuery}
+          onClose={() => {
+            setIsSearchOpen(false)
+            setGlobalSearchQuery('')
+          }}
+          clients={clientRoster}
+          planHistory={planHistory}
+          workoutTemplates={workoutTemplates}
+          onSelectClient={(clientId) => {
+            setSelectedAthleteId(clientId)
+            setActiveTab('clients')
+            setClientSubTab('roster')
+            setIsSearchOpen(false)
+            setGlobalSearchQuery('')
+          }}
+          onSelectTemplate={(templateId) => {
+            setActiveTemplateId(templateId)
+            setActiveTab('planning')
+            setIsSearchOpen(false)
+            setGlobalSearchQuery('')
+          }}
+        />
+      ) : null}
+    </div>
+  )
+}
+
+// Global Search Modal Component
+interface GlobalSearchModalProps {
+  query: string
+  onQueryChange: (query: string) => void
+  onClose: () => void
+  clients: Array<{ client: { id: string; userId: string; name: string; goal: string }; product: { name: string } | null }>
+  planHistory: PlanHistoryRecord[]
+  workoutTemplates: WorkoutTemplate[]
+  onSelectClient: (clientId: string) => void
+  onSelectTemplate: (templateId: string) => void
+}
+
+function GlobalSearchModal({
+  query,
+  onQueryChange,
+  onClose,
+  clients,
+  planHistory,
+  workoutTemplates,
+  onSelectClient,
+  onSelectTemplate,
+}: GlobalSearchModalProps) {
+  const inputRef = React.useRef<HTMLInputElement>(null)
+
+  React.useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
+
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
+
+  const searchQuery = query.trim().toLowerCase()
+
+  const filteredClients = React.useMemo(() => {
+    if (!searchQuery) return clients.slice(0, 5)
+    return clients.filter(({ client, product }) => {
+      return (
+        client.name.toLowerCase().includes(searchQuery) ||
+        client.goal.toLowerCase().includes(searchQuery) ||
+        (product?.name ?? '').toLowerCase().includes(searchQuery)
+      )
+    }).slice(0, 8)
+  }, [clients, searchQuery])
+
+  const filteredTemplates = React.useMemo(() => {
+    if (!searchQuery) return workoutTemplates.slice(0, 3)
+    return workoutTemplates.filter((template) => {
+      return (
+        template.name.toLowerCase().includes(searchQuery) ||
+        template.splitName.toLowerCase().includes(searchQuery) ||
+        template.categoryBreakdown.some((cat) => cat.toLowerCase().includes(searchQuery))
+      )
+    }).slice(0, 5)
+  }, [workoutTemplates, searchQuery])
+
+  const filteredPlans = React.useMemo(() => {
+    if (!searchQuery) return planHistory.slice(0, 3)
+    return planHistory.filter((plan) => {
+      return (
+        plan.planName.toLowerCase().includes(searchQuery) ||
+        plan.athleteName.toLowerCase().includes(searchQuery)
+      )
+    }).slice(0, 5)
+  }, [planHistory, searchQuery])
+
+  const hasResults = filteredClients.length > 0 || filteredTemplates.length > 0 || filteredPlans.length > 0
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
+      <button
+        type="button"
+        onClick={onClose}
+        className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"
+        aria-label="Close search"
+      />
+      <div className="relative w-full max-w-xl rounded-2xl border border-slate-200 bg-white shadow-2xl">
+        <div className="flex items-center gap-3 border-b border-slate-200 px-4 py-3">
+          <svg className="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7" strokeWidth="2" />
+            <path d="m20 20-3.5-3.5" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(event) => onQueryChange(event.target.value)}
+            placeholder="Search clients, templates, plans..."
+            className="flex-1 bg-transparent text-base text-slate-900 placeholder:text-slate-400 focus:outline-none"
+          />
+          <kbd className="rounded bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-500">ESC</kbd>
+        </div>
+
+        <div className="max-h-[60vh] overflow-y-auto p-2">
+          {!hasResults && searchQuery ? (
+            <div className="px-4 py-8 text-center text-sm text-slate-500">
+              No results found for "{query}"
+            </div>
+          ) : (
+            <>
+              {filteredClients.length > 0 ? (
+                <div className="mb-2">
+                  <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Clients</p>
+                  {filteredClients.map(({ client, product }) => (
+                    <button
+                      key={client.id}
+                      type="button"
+                      onClick={() => onSelectClient(client.userId)}
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition hover:bg-slate-100"
+                    >
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 font-semibold">
+                        {client.name.charAt(0)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-slate-900 truncate">{client.name}</p>
+                        <p className="text-xs text-slate-500 truncate">{client.goal} {product ? `· ${product.name}` : ''}</p>
+                      </div>
+                      <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+
+              {filteredTemplates.length > 0 ? (
+                <div className="mb-2">
+                  <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Templates</p>
+                  {filteredTemplates.map((template) => (
+                    <button
+                      key={template.id}
+                      type="button"
+                      onClick={() => onSelectTemplate(template.id)}
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition hover:bg-slate-100"
+                    >
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                        📋
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-slate-900 truncate">{template.name}</p>
+                        <p className="text-xs text-slate-500 truncate">{template.splitName} · {template.durationWeeks} weeks</p>
+                      </div>
+                      <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+
+              {filteredPlans.length > 0 ? (
+                <div>
+                  <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Recent Plans</p>
+                  {filteredPlans.map((plan) => (
+                    <div
+                      key={plan.id}
+                      className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm"
+                    >
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+                        📅
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-slate-900 truncate">{plan.planName}</p>
+                        <p className="text-xs text-slate-500 truncate">{plan.athleteName} · {plan.weeks} weeks</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+            </>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between border-t border-slate-200 px-4 py-2 text-xs text-slate-500">
+          <span>Press <kbd className="rounded bg-slate-100 px-1.5 py-0.5 font-semibold">↵</kbd> to select</span>
+          <span>Press <kbd className="rounded bg-slate-100 px-1.5 py-0.5 font-semibold">ESC</kbd> to close</span>
+        </div>
+      </div>
     </div>
   )
 }

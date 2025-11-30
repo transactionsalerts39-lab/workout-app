@@ -37,6 +37,8 @@ type SessionState = 'pending' | 'in-progress' | 'completed'
 
 type NotificationTone = 'success' | 'warning' | 'danger' | 'info'
 
+type CheckInStep = 'energy' | 'weight' | 'notes' | 'photo'
+
 interface CelebrationState {
   sessionId: string
   emoji: string
@@ -230,6 +232,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
   const [checkInPhotoPreviewUrl, setCheckInPhotoPreviewUrl] = useState('')
   const [checkInPhotoFile, setCheckInPhotoFile] = useState<File | null>(null)
   const [checkInSubmitting, setCheckInSubmitting] = useState(false)
+  const [checkInStep, setCheckInStep] = useState<CheckInStep>('energy')
   const [dashboardFeedback, setDashboardFeedback] = useState<string | null>(null)
   const [celebrationState, setCelebrationState] = useState<CelebrationState | null>(null)
   const [markingSessionId, setMarkingSessionId] = useState<string | null>(null)
@@ -633,6 +636,7 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
       setCheckInWeight('')
       setCheckInPhotoPreviewUrl('')
       setCheckInPhotoFile(null)
+      setCheckInStep('energy')
     } catch (error) {
       console.error('Failed to submit check-in', error)
       setDashboardFeedback('Unable to submit check-in right now.')
@@ -798,7 +802,23 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
             })}
           </div>
         ) : (
-          <p className="text-sm text-neutral-300/80">No sessions scheduled for this week yet.</p>
+          <div className="rounded-2xl border border-dashed border-white/20 bg-white/5 px-6 py-10 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-400">
+              <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h4 className="mt-4 text-sm font-semibold text-neutral-100">No sessions this week</h4>
+            <p className="mt-2 text-xs text-neutral-400">Your coach hasn't scheduled workouts for this week yet.</p>
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              <Button variant="outline" size="sm" onClick={() => onSelectWeek(weekIndex > 0 ? weekIndex - 1 : weekIndex)}>
+                View previous week
+              </Button>
+              <Button variant="secondary" size="sm" onClick={() => setActiveSection('chat')}>
+                Message coach
+              </Button>
+            </div>
+          </div>
         )}
       </CardContent>
     </Card>
@@ -858,6 +878,24 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
     </Card>
   )
 
+  const checkInSteps: CheckInStep[] = ['energy', 'weight', 'notes', 'photo']
+  const checkInStepIndex = checkInSteps.indexOf(checkInStep)
+  const checkInProgress = Math.round(((checkInStepIndex + 1) / checkInSteps.length) * 100)
+
+  const handleNextStep = () => {
+    const currentIndex = checkInSteps.indexOf(checkInStep)
+    if (currentIndex < checkInSteps.length - 1) {
+      setCheckInStep(checkInSteps[currentIndex + 1])
+    }
+  }
+
+  const handlePrevStep = () => {
+    const currentIndex = checkInSteps.indexOf(checkInStep)
+    if (currentIndex > 0) {
+      setCheckInStep(checkInSteps[currentIndex - 1])
+    }
+  }
+
   const checkInsCard = !clientProfile ? null : (
     <Card>
       <CardHeader className="mb-4 space-y-0">
@@ -868,66 +906,177 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
       </CardHeader>
       <CardContent className="grid gap-6 lg:grid-cols-[minmax(280px,360px)_1fr]">
         <div className="space-y-4 rounded-2xl border border-white/12 bg-white/5 p-5">
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="check-in-energy">Energy level</Label>
-            <Select
-              id="check-in-energy"
-              value={checkInEnergy}
-              onChange={(event) => setCheckInEnergy(Number(event.target.value) as 1 | 2 | 3 | 4 | 5)}
-            >
-              <option value={5}>🔥 Peaks</option>
-              <option value={4}>💪 Strong</option>
-              <option value={3}>🙂 Balanced</option>
-              <option value={2}>😌 Below average</option>
-              <option value={1}>😴 Drained</option>
-            </Select>
-          </div>
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="check-in-stress">Stress level</Label>
-            <Select
-              id="check-in-stress"
-              value={checkInStress}
-              onChange={(event) => setCheckInStress(Number(event.target.value) as 1 | 2 | 3 | 4 | 5)}
-            >
-              <option value={1}>Very low</option>
-              <option value={2}>Manageable</option>
-              <option value={3}>Moderate</option>
-              <option value={4}>High</option>
-              <option value={5}>Very high</option>
-            </Select>
-          </div>
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="check-in-weight">Body weight (kg)</Label>
-            <Input
-              id="check-in-weight"
-              type="number"
-              min={0}
-              step="0.1"
-              value={checkInWeight}
-              onChange={(event) => setCheckInWeight(event.target.value)}
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="check-in-notes">Notes to coach</Label>
-            <Textarea
-              id="check-in-notes"
-              value={checkInNotes}
-              onChange={(event) => setCheckInNotes(event.target.value)}
-              rows={3}
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="check-in-photo">Progress photo</Label>
-            <Input id="check-in-photo" type="file" accept="image/*" onChange={handlePhotoInputChange} className="file:text-xs" />
-          </div>
-          {checkInPhotoPreviewUrl ? (
-            <div className="overflow-hidden rounded-2xl border border-white/10">
-              <img src={checkInPhotoPreviewUrl} alt="Progress preview" className="h-40 w-full object-cover" />
+          {/* Progress indicator */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.24em] text-neutral-400">
+              <span>Step {checkInStepIndex + 1} of {checkInSteps.length}</span>
+              <span>{checkInProgress}% complete</span>
             </div>
-          ) : null}
-          <Button type="button" onClick={handleSubmitCheckIn} disabled={checkInSubmitting} className="w-full">
-            {checkInSubmitting ? 'Submitting…' : 'Submit check-in'}
-          </Button>
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full bg-gradient-to-r from-brand-500 to-brand-400 transition-all duration-300"
+                style={{ width: `${checkInProgress}%` }}
+              />
+            </div>
+            <div className="flex justify-between">
+              {checkInSteps.map((step, index) => (
+                <button
+                  key={step}
+                  type="button"
+                  onClick={() => setCheckInStep(step)}
+                  className={cn(
+                    'flex size-8 items-center justify-center rounded-full text-xs font-medium transition-colors min-h-[44px] min-w-[44px]',
+                    index <= checkInStepIndex
+                      ? 'bg-brand-500/20 text-brand-300 border border-brand-400/40'
+                      : 'bg-white/5 text-neutral-400 border border-white/10',
+                  )}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Step content */}
+          {checkInStep === 'energy' && (
+            <div className="space-y-4 pt-2">
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="check-in-energy" className="text-sm font-semibold text-neutral-100">How's your energy?</Label>
+                <p className="text-xs text-neutral-400 mb-2">Rate how energised you've felt this week.</p>
+                <Select
+                  id="check-in-energy"
+                  value={checkInEnergy}
+                  onChange={(event) => setCheckInEnergy(Number(event.target.value) as 1 | 2 | 3 | 4 | 5)}
+                  className="min-h-[44px]"
+                >
+                  <option value={5}>🔥 Peaks</option>
+                  <option value={4}>💪 Strong</option>
+                  <option value={3}>🙂 Balanced</option>
+                  <option value={2}>😌 Below average</option>
+                  <option value={1}>😴 Drained</option>
+                </Select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="check-in-stress" className="text-sm font-semibold text-neutral-100">Stress level</Label>
+                <p className="text-xs text-neutral-400 mb-2">How stressed have you been?</p>
+                <Select
+                  id="check-in-stress"
+                  value={checkInStress}
+                  onChange={(event) => setCheckInStress(Number(event.target.value) as 1 | 2 | 3 | 4 | 5)}
+                  className="min-h-[44px]"
+                >
+                  <option value={1}>Very low</option>
+                  <option value={2}>Manageable</option>
+                  <option value={3}>Moderate</option>
+                  <option value={4}>High</option>
+                  <option value={5}>Very high</option>
+                </Select>
+              </div>
+            </div>
+          )}
+
+          {checkInStep === 'weight' && (
+            <div className="space-y-4 pt-2">
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="check-in-weight" className="text-sm font-semibold text-neutral-100">Body weight</Label>
+                <p className="text-xs text-neutral-400 mb-2">Optional — enter your current weight in kilograms.</p>
+                <Input
+                  id="check-in-weight"
+                  type="number"
+                  min={0}
+                  step="0.1"
+                  placeholder="e.g. 72.5"
+                  value={checkInWeight}
+                  onChange={(event) => setCheckInWeight(event.target.value)}
+                  className="min-h-[44px]"
+                />
+              </div>
+            </div>
+          )}
+
+          {checkInStep === 'notes' && (
+            <div className="space-y-4 pt-2">
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="check-in-notes" className="text-sm font-semibold text-neutral-100">Notes to coach</Label>
+                <p className="text-xs text-neutral-400 mb-2">Share anything relevant — sleep, diet, injuries, wins.</p>
+                <Textarea
+                  id="check-in-notes"
+                  value={checkInNotes}
+                  onChange={(event) => setCheckInNotes(event.target.value)}
+                  rows={4}
+                  placeholder="How did the week go? Any highlights or challenges?"
+                />
+              </div>
+            </div>
+          )}
+
+          {checkInStep === 'photo' && (
+            <div className="space-y-4 pt-2">
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="check-in-photo" className="text-sm font-semibold text-neutral-100">Progress photo</Label>
+                <p className="text-xs text-neutral-400 mb-2">Optional — capture visual progress. Max 2MB.</p>
+                <Input
+                  id="check-in-photo"
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoInputChange}
+                  className="file:text-xs min-h-[44px]"
+                />
+              </div>
+              {checkInPhotoPreviewUrl ? (
+                <div className="overflow-hidden rounded-2xl border border-white/10">
+                  <img src={checkInPhotoPreviewUrl} alt="Progress preview" className="h-40 w-full object-cover" />
+                </div>
+              ) : (
+                <div className="flex h-32 items-center justify-center rounded-2xl border border-dashed border-white/20 bg-white/5 text-xs text-neutral-400">
+                  No photo selected
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Navigation buttons */}
+          <div className="flex gap-2 pt-2">
+            {checkInStepIndex > 0 && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handlePrevStep}
+                className="flex-1 min-h-[44px]"
+              >
+                Back
+              </Button>
+            )}
+            {checkInStep === 'photo' ? (
+              <Button
+                type="button"
+                onClick={handleSubmitCheckIn}
+                disabled={checkInSubmitting}
+                className="flex-1 min-h-[44px]"
+              >
+                {checkInSubmitting ? 'Submitting…' : 'Submit check-in'}
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                onClick={handleNextStep}
+                className="flex-1 min-h-[44px]"
+              >
+                Continue
+              </Button>
+            )}
+          </div>
+
+          {/* Skip link */}
+          {checkInStep !== 'photo' && checkInStep !== 'energy' && (
+            <button
+              type="button"
+              onClick={handleNextStep}
+              className="w-full text-center text-xs text-neutral-400 hover:text-neutral-300 transition-colors min-h-[44px]"
+            >
+              Skip this step
+            </button>
+          )}
         </div>
 
         <div className="space-y-6">
@@ -952,7 +1101,15 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                 })}
               </ul>
             ) : (
-              <p className="mt-3 text-xs text-neutral-400">No check-ins logged yet — share your first update to keep coaching feedback flowing.</p>
+              <div className="mt-3 rounded-xl border border-dashed border-white/15 bg-white/5 p-4 text-center">
+                <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="mt-2 text-xs font-medium text-neutral-200">No check-ins yet</p>
+                <p className="mt-1 text-[10px] text-neutral-400">Share your first update to keep coaching feedback flowing.</p>
+              </div>
             )}
           </div>
           <div>
@@ -971,7 +1128,15 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
                 ))}
               </div>
             ) : (
-              <p className="mt-3 text-xs text-neutral-400">Upload your first progress photo to visualise change over time.</p>
+              <div className="mt-3 rounded-xl border border-dashed border-white/15 bg-white/5 p-4 text-center">
+                <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-violet-500/10 text-violet-400">
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <p className="mt-2 text-xs font-medium text-neutral-200">No photos yet</p>
+                <p className="mt-1 text-[10px] text-neutral-400">Upload progress photos to visualise your transformation.</p>
+              </div>
             )}
           </div>
         </div>
@@ -1259,16 +1424,43 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
 
   const renderMobileSection = () => {
     switch (activeSection) {
-      case 'overview':
+      case 'overview': {
+        // Get next incomplete session for quick access widget
+        const nextIncompleteSession = activeWeek.sessions.find((session) => {
+          const sessionProgress = weekProgress?.[session.sessionId]
+          const state = evaluateSessionState(session, sessionProgress)
+          return state !== 'completed'
+        })
         return (
           <div className="space-y-6">
             {feedbackBanner}
+            {/* Next Session Quick Access Widget */}
+            {nextIncompleteSession ? (
+              <Card className="border-indigo-500/30 bg-gradient-to-br from-indigo-900/50 to-purple-900/50">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-indigo-300">Up Next</p>
+                      <p className="mt-1 truncate text-lg font-semibold text-white">{nextIncompleteSession.dayTitle}</p>
+                      <p className="text-sm text-neutral-300/80">{nextIncompleteSession.focusLabel} · {nextIncompleteSession.exercises.length} exercises</p>
+                    </div>
+                    <Button
+                      onClick={() => onOpenSession(activeWeek.weekIndex, nextIncompleteSession.sessionId)}
+                      className="shrink-0 bg-white text-indigo-700 hover:bg-indigo-50"
+                    >
+                      Start Workout
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : null}
             {statsCard}
             {programOverviewCard}
             {scheduleUpdatesCard}
             {upcomingCard}
           </div>
         )
+      }
       case 'sessions':
         return (
           <div className="space-y-6">
@@ -1348,10 +1540,29 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
     )
   }
 
+  // Find the next incomplete session
+  const nextSession = useMemo(() => {
+    if (!activeWeek?.sessions?.length) return null
+    for (const session of activeWeek.sessions) {
+      const sessionProgress = weekProgress?.[session.sessionId]
+      const state = evaluateSessionState(session, sessionProgress)
+      if (state !== 'completed') {
+        return session
+      }
+    }
+    return activeWeek.sessions[0] // fallback to first if all complete
+  }, [activeWeek, weekProgress])
+
   return (
     <div className="relative pb-28">
       <div className="space-y-6">{renderMobileSection()}</div>
-      <MobileNavTabs activeSection={activeSection} onSelectSection={(section) => setActiveSection(section)} />
+      <MobileNavTabs
+        activeSection={activeSection}
+        onSelectSection={(section) => setActiveSection(section)}
+        notificationCount={notifications.length}
+        unreadChatCount={0}
+        pendingSessionCount={completionSummary.totalSessions - completionSummary.completedSessions}
+      />
       <FloatingMenu
         open={menuOpen}
         onOpen={() => setMenuOpen(true)}
@@ -1361,6 +1572,20 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
           setMenuOpen(false)
         }}
       />
+      {/* FAB for quick workout logging */}
+      {nextSession ? (
+        <button
+          type="button"
+          onClick={() => onOpenSession(activeWeek.weekIndex, nextSession.sessionId)}
+          className="fixed bottom-20 left-4 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30 transition-transform hover:scale-105 active:scale-95 md:hidden"
+          aria-label="Start next workout"
+        >
+          <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </button>
+      ) : null}
     </div>
   )
 }
@@ -1368,14 +1593,17 @@ export function UserDashboard({ weekIndex, onSelectWeek, onOpenSession }: UserDa
 interface MobileNavTabsProps {
   activeSection: DashboardSection
   onSelectSection: (section: DashboardSection) => void
+  notificationCount?: number
+  unreadChatCount?: number
+  pendingSessionCount?: number
 }
 
-function MobileNavTabs({ activeSection, onSelectSection }: MobileNavTabsProps) {
-  const tabs: Array<{ id: DashboardSection; label: string; icon: string }> = [
-    { id: 'overview', label: 'Overview', icon: '🏠' },
-    { id: 'sessions', label: 'Sessions', icon: '📅' },
+function MobileNavTabs({ activeSection, onSelectSection, notificationCount = 0, unreadChatCount = 0, pendingSessionCount = 0 }: MobileNavTabsProps) {
+  const tabs: Array<{ id: DashboardSection; label: string; icon: string; badge?: number }> = [
+    { id: 'overview', label: 'Overview', icon: '🏠', badge: notificationCount > 0 ? notificationCount : undefined },
+    { id: 'sessions', label: 'Sessions', icon: '📅', badge: pendingSessionCount > 0 ? pendingSessionCount : undefined },
     { id: 'progress', label: 'Progress', icon: '📈' },
-    { id: 'chat', label: 'Chat', icon: '💬' },
+    { id: 'chat', label: 'Chat', icon: '💬', badge: unreadChatCount > 0 ? unreadChatCount : undefined },
   ]
 
   return (
@@ -1389,12 +1617,17 @@ function MobileNavTabs({ activeSection, onSelectSection }: MobileNavTabsProps) {
               type="button"
               onClick={() => onSelectSection(tab.id)}
               className={cn(
-                'flex items-center justify-center gap-2 rounded-full px-3 py-2 text-xs font-semibold transition',
+                'relative flex min-h-[44px] items-center justify-center gap-1.5 rounded-full px-2 py-2 text-xs font-semibold transition',
                 isActive ? 'bg-white/10 text-neutral-50 shadow-inner' : 'text-neutral-300 hover:text-white',
               )}
             >
-              <span aria-hidden="true">{tab.icon}</span>
-              <span>{tab.label}</span>
+              <span aria-hidden="true" className="text-base">{tab.icon}</span>
+              <span className="hidden sm:inline">{tab.label}</span>
+              {tab.badge ? (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-bold text-white">
+                  {tab.badge > 9 ? '9+' : tab.badge}
+                </span>
+              ) : null}
             </button>
           )
         })}
@@ -1423,7 +1656,7 @@ function FloatingMenu({ open, onOpen, onClose, onSelectSection }: FloatingMenuPr
       <button
         type="button"
         onClick={onOpen}
-        className="fixed bottom-20 right-4 z-30 inline-flex h-12 items-center justify-center rounded-full border border-white/10 bg-gradient-primary px-5 text-sm font-semibold text-white shadow-soft md:hidden"
+        className="fixed bottom-20 right-4 z-30 inline-flex h-12 min-w-[44px] items-center justify-center rounded-full border border-white/10 bg-gradient-primary px-5 text-sm font-semibold text-white shadow-soft md:hidden"
       >
         Menu
       </button>
@@ -1442,7 +1675,7 @@ function FloatingMenu({ open, onOpen, onClose, onSelectSection }: FloatingMenuPr
                 key={item.id}
                 type="button"
                 onClick={() => onSelectSection(item.id)}
-                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm text-neutral-100 transition hover:border-white/20 hover:bg-white/10"
+                className="w-full min-h-[48px] rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm text-neutral-100 transition hover:border-white/20 hover:bg-white/10"
               >
                 <span className="font-semibold">{item.label}</span>
                 {item.helper ? <p className="text-xs text-neutral-300">{item.helper}</p> : null}
