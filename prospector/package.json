@@ -1,0 +1,32 @@
+{
+  "name": "prospector",
+  "version": "1.0.0",
+  "description": "Compliant prospect collector + outreach helper (manual inputs only).",
+  "type": "commonjs",
+  "main": "dist/cli/index.js",
+  "bin": {
+    "prospector": "dist/cli/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "ts-node src/cli/index.ts",
+    "start": "node dist/cli/index.js",
+    "test": "vitest run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^12.4.6",
+    "commander": "^14.0.2",
+    "csv-parse": "^6.1.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/csv-parse": "^1.1.12",
+    "@types/node": "^24.10.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.14"
+  }
+}
