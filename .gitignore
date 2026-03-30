@@ -1,0 +1,10 @@
+# Ignore everything by default
+*
+
+# Allow tracked project directories
+!Demo_HTML/
+!Demo_HTML/**
+!prospector/
+!prospector/**
+!Shrutika_fitness_landing_page/
+!Shrutika_fitness_landing_page/**

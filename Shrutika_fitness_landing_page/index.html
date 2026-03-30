@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shrutika Fitness Coaching</title>
+    <meta
+      name="description"
+      content="Personalized online fitness coaching with structured plans, accountability, and measurable progress."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="pill-nav" aria-label="Main navigation">
+        <span class="nav-brand-name">Shrutika Mathur</span>
+        <a class="pill-nav-item" href="#about">About</a>
+        <a class="pill-nav-item pill-nav-active" href="#plans">Coaching Plans</a>
+        <a class="pill-nav-item" href="#process">Process</a>
+        <a class="pill-nav-item" href="#transformations">Transformation</a>
+        <a class="pill-nav-item pill-nav-active" href="#book-call">Book a Call</a>
+        <a class="pill-nav-item" href="#testimonials">Testimony</a>
+      </nav>
+      <button
+        class="mobile-menu-toggle"
+        id="mobile-menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-menu-panel"
+      >
+        Menu
+      </button>
+      <div class="mobile-menu-panel" id="mobile-menu-panel" hidden>
+        <a href="#about" data-mobile-menu-link>About</a>
+        <a href="#plans" data-mobile-menu-link>Coaching Plans</a>
+        <a href="#process" data-mobile-menu-link>Process</a>
+        <a href="#transformations" data-mobile-menu-link>Transformation</a>
+        <a href="#book-call" data-mobile-menu-link>Book a Call</a>
+        <a href="#testimonials" data-mobile-menu-link>Testimony</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero panel" id="book-call" data-reveal>
+        <img
+          class="hero-bg-img"
+          src="/src/assets/hero-bg.jpg"
+          alt="Shrutika performing a barbell deadlift in the gym"
+          loading="eager"
+        />
+        <div class="hero-overlay-text">
+          <h3 class="hero-left-heading">While you're still "figuring it out," others are already transforming.</h3>
+          <p class="hero-left-sub1">Fat loss. Muscle building. Body recomposition. Fixing your lifestyle.</p>
+          <p class="hero-left-sub2">Every week you wait is a week someone else didn't. They've already started. They're already seeing results. And you? You're still waiting for the "RIGHT TIME."</p>
+          <p class="hero-left-sub3">This isn't a generic template or a 30-day crash diet. You get customized plans built around your body, your schedule, your goals and it's already working for people who stopped overthinking and started moving.</p>
+        </div>
+
+        <div class="hero-overlay-right">
+          <div class="hero-right-col">
+            <h3 class="hero-right-heading">WHAT YOU'RE DOING NOW:</h3>
+            <ul class="hero-right-list hero-right-list--red">
+              <li>Trying random workouts</li>
+              <li>Restarting every Monday</li>
+              <li>Cutting calories too hard</li>
+              <li>Losing motivation</li>
+            </ul>
+          </div>
+          <div class="hero-right-col">
+            <h3 class="hero-right-heading">WHAT WE BUILD:</h3>
+            <ul class="hero-right-list hero-right-list--green">
+              <li>Structured programming</li>
+              <li>Progressive overload</li>
+              <li>Sustainable nutrition</li>
+              <li>Weekly accountability</li>
+            </ul>
+          </div>
+          <p class="hero-right-cta">Stop Restarting. Start Progressing.</p>
+        </div>
+      </section>
+
+      <section class="section panel" id="process" data-reveal>
+        <div class="section-heading">
+          <h2>Coaching process</h2>
+        </div>
+        <div class="process-flow">
+          <div class="process-row">
+            <article class="process-card">
+              <span>Step 1</span>
+              <p>Book your one-on-one consultation call.</p>
+            </article>
+            <span class="process-arrow" aria-hidden="true">→</span>
+            <article class="process-card">
+              <span>Step 2</span>
+              <p>Discuss your Goals and Concerns.</p>
+            </article>
+            <span class="process-arrow" aria-hidden="true">→</span>
+            <article class="process-card">
+              <span>Step 3</span>
+              <p>I assess your Body Habits and Lifestyle.</p>
+            </article>
+          </div>
+          <div class="process-row process-row--centered">
+            <article class="process-card">
+              <span>Step 4</span>
+              <p>Get a customized plan specially designed for you.</p>
+            </article>
+            <span class="process-arrow" aria-hidden="true">→</span>
+            <article class="process-card">
+              <span>Step 5</span>
+              <p>Weekly review loop until your body changes.</p>
+            </article>
+          </div>
+        </div>
+        <div class="double-cta" style="justify-content: center;">
+          <a class="pill pill-dark" href="#book-call" data-book-call-url data-fallback="#book-call">Book a Call with Shrutika</a>
+        </div>
+      </section>
+
+      <section class="section panel" id="why" data-reveal>
+        <div class="section-heading">
+          <h2>Why this is not a Template Plan</h2>
+          <p>Every body is different. So is every plan.</p>
+        </div>
+        <div class="comparison-scroll-wrap">
+          <div class="comparison-table" role="table" aria-label="Coaching comparison">
+            <div class="comparison-row comparison-head" role="row">
+              <span role="columnheader">What you see elsewhere</span>
+              <span role="columnheader">What you get here</span>
+            </div>
+            <div class="comparison-row" role="row">
+              <span>Same calorie chart for everyone</span>
+              <span>Training and nutrition built around your habits, lifestyle, and preferences</span>
+            </div>
+            <div class="comparison-row" role="row">
+              <span>No one checks if you're doing the exercises right</span>
+              <span>Form correction and execution so you stay injury free</span>
+            </div>
+            <div class="comparison-row" role="row">
+              <span>Just "eat less" — no real plan</span>
+              <span>A step-by-step plan to lose fat, build strength and grow</span>
+            </div>
+            <div class="comparison-row" role="row">
+              <span>No view of stress or sleep</span>
+              <span>Plan adjusted for sleep, stress, steps, and recovery</span>
+            </div>
+            <div class="comparison-row" role="row">
+              <span>No clear plan — just trying things and hoping it works</span>
+              <span>Clear data-driven results and meticulous progress tracking</span>
+            </div>
+          </div>
+          <span class="comparison-swipe-hint" aria-hidden="true">
+            <span class="comparison-swipe-icon">↔</span>
+            Swipe to compare
+          </span>
+        </div>
+      </section>
+
+      <section class="plans-dark" id="plans" data-reveal>
+        <div class="section-heading section-heading-dark">
+          <h2>Choose your plan level</h2>
+          <p>Pick the level that matches your current stage, then progress with structure.</p>
+        </div>
+        <div class="plan-cards">
+          <article class="plan-card" data-plan-card="beginner">
+            <img src="/src/assets/plans-reference.png" alt="Beginner plan visual" loading="lazy" />
+            <div class="plan-copy">
+              <h3>Beginner</h3>
+              <p>For consistency, movement confidence, and habit-building foundations.</p>
+            </div>
+            <button class="pill pill-light choose-plan-btn" type="button" data-plan="beginner">
+              Choose Beginner
+            </button>
+          </article>
+          <article class="plan-card" data-plan-card="intermediate">
+            <img src="/src/assets/plans-reference.png" alt="Intermediate plan visual" loading="lazy" />
+            <div class="plan-copy">
+              <h3>Intermediate</h3>
+              <p>For physique shaping, progressive overload, and tighter nutrition structure.</p>
+            </div>
+            <button class="pill pill-light choose-plan-btn" type="button" data-plan="intermediate">
+              Choose Intermediate
+            </button>
+          </article>
+          <article class="plan-card" data-plan-card="advanced">
+            <img src="/src/assets/plans-reference.png" alt="Advanced plan visual" loading="lazy" />
+            <div class="plan-copy">
+              <h3>Advanced</h3>
+              <p>For aggressive physique goals requiring precision, tracking, and execution.</p>
+            </div>
+            <button class="pill pill-light choose-plan-btn" type="button" data-plan="advanced">
+              Choose Advanced
+            </button>
+          </article>
+        </div>
+        <span class="section-swipe-hint" aria-hidden="true">
+          <span class="section-swipe-icon">↔</span>
+          Swipe plans
+        </span>
+      </section>
+
+
+      <section class="section panel" id="transformations" data-reveal>
+        <div class="section-heading">
+          <h2>Transformations and testimonials</h2>
+          <p>Real client effort, coached with clear direction and accountability.</p>
+        </div>
+        <div class="transformation-grid" id="testimonials">
+          <article class="transform-card">
+            <img src="/src/assets/audience-reference.png" alt="Client transformation proof one" loading="lazy" />
+            <blockquote>
+              "I stopped guessing and finally had a system I could follow every week."
+            </blockquote>
+            <cite>Client A, 12 weeks</cite>
+          </article>
+          <article class="transform-card">
+            <img src="/src/assets/process-reference.png" alt="Client transformation proof two" loading="lazy" />
+            <blockquote>
+              "My energy, strength, and body composition all improved with a realistic plan."
+            </blockquote>
+            <cite>Client B, 10 weeks</cite>
+          </article>
+          <article class="transform-card">
+            <img src="/src/assets/why-reference.png" alt="Client transformation proof three" loading="lazy" />
+            <blockquote>
+              "The weekly feedback helped me stay consistent and push past plateaus."
+            </blockquote>
+            <cite>Client C, 16 weeks</cite>
+          </article>
+        </div>
+        <span class="section-swipe-hint" aria-hidden="true">
+          <span class="section-swipe-icon">↔</span>
+          Swipe stories
+        </span>
+      </section>
+
+      <section class="section panel" id="calculator" data-reveal>
+        <div class="section-heading">
+          <h2>DIY calculator</h2>
+          <p>Estimate calories and daily macros for your current goal.</p>
+        </div>
+        <div class="calculator-grid">
+          <form id="calc-form" class="form-block" novalidate>
+            <label>
+              Weight (kg)
+              <input type="number" name="weightKg" min="30" max="200" step="0.1" required />
+            </label>
+            <label>
+              Height (cm)
+              <input type="number" name="heightCm" min="120" max="220" step="0.1" required />
+            </label>
+            <label>
+              Age
+              <input type="number" name="age" min="16" max="75" required />
+            </label>
+            <label>
+              Sex
+              <select name="sex" required>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+              </select>
+            </label>
+            <label>
+              Activity level
+              <select name="activity" required>
+                <option value="1.2">Sedentary</option>
+                <option value="1.375">Lightly active</option>
+                <option value="1.55" selected>Moderately active</option>
+                <option value="1.725">Very active</option>
+                <option value="1.9">Athlete</option>
+              </select>
+            </label>
+            <label>
+              Goal
+              <select name="goal" required>
+                <option value="maintain">Maintain</option>
+                <option value="cut">Cut</option>
+                <option value="build">Build</option>
+              </select>
+            </label>
+            <button class="pill pill-dark" type="submit">Calculate Targets</button>
+          </form>
+
+          <aside class="result-block" aria-live="polite">
+            <h3>Estimated Targets</h3>
+            <div class="result-grid">
+              <div class="result-row">
+                <span>Maintenance calories</span>
+                <strong id="maintenance-kcal">-</strong>
+              </div>
+              <div class="result-row">
+                <span>Goal calories</span>
+                <strong id="goal-kcal">-</strong>
+              </div>
+              <div class="result-row">
+                <span>Protein</span>
+                <strong id="protein-g">-</strong>
+              </div>
+              <div class="result-row">
+                <span>Carbs</span>
+                <strong id="carbs-g">-</strong>
+              </div>
+              <div class="result-row">
+                <span>Fats</span>
+                <strong id="fats-g">-</strong>
+              </div>
+            </div>
+            <p class="note">This is an estimate, not medical advice.</p>
+          </aside>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <a id="contact-link" data-instagram-url href="#">Contact</a>
+      <a href="/privacy-policy.html">Privacy policy</a>
+      <a href="/terms-of-service.html">Terms of service</a>
+      <a href="/refund-policy.html">Refund policy</a>
+    </footer>
+
+    <button
+      class="mobile-start-cta pill pill-dark"
+      id="mobile-start-cta"
+      type="button"
+      aria-controls="mobile-action-sheet"
+      aria-expanded="false"
+    >
+      Start Here
+    </button>
+
+    <nav class="mobile-tabbar" aria-label="Mobile section shortcuts">
+      <a href="#plans" data-core-tab="plans">Plans</a>
+      <a href="#why" data-core-tab="why">Why Me</a>
+      <a href="#process" data-core-tab="process">Process</a>
+      <a href="#transformations" data-core-tab="transformations">Transforms</a>
+      <a href="#calculator" data-core-tab="calculator">Calculator</a>
+      <a href="#choose-plan" data-core-tab="choose-plan">Choose Plan</a>
+      <span class="mobile-tabbar-hint" aria-hidden="true">
+        <span class="mobile-tabbar-hint-icon">↔</span>
+        Swipe
+      </span>
+    </nav>
+
+    <div class="mobile-sheet-backdrop" id="mobile-sheet-backdrop" hidden></div>
+    <section
+      class="mobile-action-sheet"
+      id="mobile-action-sheet"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="mobile-sheet-title"
+      hidden
+    >
+      <div class="mobile-sheet-handle" aria-hidden="true"></div>
+      <h2 id="mobile-sheet-title">Quick actions</h2>
+      <p>Pick your next step.</p>
+      <div class="mobile-sheet-actions">
+        <a
+          class="pill pill-dark"
+          href="#book-call"
+          data-book-call-url
+          data-fallback="#book-call"
+          data-mobile-sheet-action
+        >
+          Book a Call
+        </a>
+        <a class="pill pill-light" href="#choose-plan" data-mobile-sheet-action>Choose Plan</a>
+        <a class="pill pill-light" href="#calculator" data-mobile-sheet-action>DIY Calculator</a>
+        <a
+          class="pill pill-light"
+          href="#choose-plan"
+          data-instagram-url
+          data-mobile-sheet-action
+          target="_blank"
+          rel="noreferrer"
+        >
+          DM on Insta
+        </a>
+      </div>
+      <button class="mobile-sheet-close" type="button" data-mobile-sheet-close>Close</button>
+    </section>
+
+    <a class="insta-fab" id="insta-fab" data-instagram-url href="#" target="_blank" rel="noreferrer">DM on Insta</a>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
