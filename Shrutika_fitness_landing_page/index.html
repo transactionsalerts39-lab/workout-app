@@ -162,45 +162,65 @@
 
       <section class="plans-dark" id="plans" data-reveal>
         <div class="section-heading section-heading-dark">
-          <h2>Choose your plan level</h2>
-          <p>Pick the level that matches your current stage, then progress with structure.</p>
+          <h2>Choose your coaching plan</h2>
+          <p>Pick the duration that fits your commitment. The longer you stay, the deeper the results.</p>
         </div>
-        <div class="plan-cards">
-          <article class="plan-card" data-plan-card="beginner">
-            <img src="/src/assets/plans-reference.png" alt="Beginner plan visual" loading="lazy" />
+        <div class="plan-cards plan-cards--2col">
+          <article class="plan-card plan-card--list">
             <div class="plan-copy">
-              <h3>Beginner</h3>
-              <p>For consistency, movement confidence, and habit-building foundations.</p>
+              <h3>90 DAYS <span class="plan-label">PLAN</span> <span class="plan-subtitle">(BUILT FOR BUSY PROFESSIONALS)</span></h3>
+              <ul class="plan-features">
+                <li>Flexible workout plans built around your fitness levels</li>
+                <li>Personalized nutrition plans based on your habits, preferences and lifestyle</li>
+                <li><span class="feature-label">Check-ins:</span> Weekly video call</li>
+                <li><span class="feature-label">Support:</span> 24×7 text/email support <span class="feature-note">(Priority support with faster feedback)</span></li>
+                <li>Exercise execution correction <span class="feature-note">(through video calls)</span></li>
+                <li>Get trained with Shrutika Mathur</li>
+              </ul>
             </div>
-            <button class="pill pill-light choose-plan-btn" type="button" data-plan="beginner">
-              Choose Beginner
-            </button>
           </article>
-          <article class="plan-card" data-plan-card="intermediate">
-            <img src="/src/assets/plans-reference.png" alt="Intermediate plan visual" loading="lazy" />
+          <article class="plan-card plan-card--list">
             <div class="plan-copy">
-              <h3>Intermediate</h3>
-              <p>For physique shaping, progressive overload, and tighter nutrition structure.</p>
+              <h3>60 DAYS <span class="plan-label">PLAN</span></h3>
+              <ul class="plan-features">
+                <li>Flexible workout plans built around your fitness levels</li>
+                <li>Personalized nutrition plans based on your habits, preferences and lifestyle</li>
+                <li><span class="feature-label">Check-ins:</span> Bi-weekly email</li>
+                <li><span class="feature-label">Support:</span> 24×7 text/email support</li>
+                <li>Get trained with Shrutika Mathur</li>
+              </ul>
             </div>
-            <button class="pill pill-light choose-plan-btn" type="button" data-plan="intermediate">
-              Choose Intermediate
-            </button>
           </article>
-          <article class="plan-card" data-plan-card="advanced">
-            <img src="/src/assets/plans-reference.png" alt="Advanced plan visual" loading="lazy" />
+          <article class="plan-card plan-card--list">
             <div class="plan-copy">
-              <h3>Advanced</h3>
-              <p>For aggressive physique goals requiring precision, tracking, and execution.</p>
+              <h3>PRESET <span class="plan-label">PLAN</span> <span class="plan-subtitle">(BUILT FOR STUDENTS)</span></h3>
+              <ul class="plan-features">
+                <li>One-time workout plan</li>
+                <li>One-time personal and nutritional plan</li>
+                <li><span class="feature-label">Support:</span> Email/WhatsApp support</li>
+                <li>No check-ins</li>
+                <li>Ideal for students</li>
+                <li>Coached by Shrutika Mathur</li>
+              </ul>
             </div>
-            <button class="pill pill-light choose-plan-btn" type="button" data-plan="advanced">
-              Choose Advanced
-            </button>
+          </article>
+          <article class="plan-card plan-card--list">
+            <div class="plan-copy">
+              <h3>VIP ELITE <span class="plan-label">PLAN</span></h3>
+              <p class="plan-tagline">The most complete coaching experience — for those who want everything.</p>
+              <ul class="plan-features">
+                <li>Flexible workout plans built around your fitness levels</li>
+                <li>Personalized nutrition plans based on your habits, preferences, and lifestyle</li>
+                <li>Twice-a-week 1:1 video coaching sessions</li>
+                <li>Real-time exercise form correction and technique guidance</li>
+                <li>Priority WhatsApp/text/email support with fastest feedback</li>
+                <li>Regular plan adjustments based on your progress and routine</li>
+                <li>Closer accountability to keep you consistent, focused, and on track</li>
+                <li>Get personally coached by Shrutika Mathur</li>
+              </ul>
+            </div>
           </article>
         </div>
-        <span class="section-swipe-hint" aria-hidden="true">
-          <span class="section-swipe-icon">↔</span>
-          Swipe plans
-        </span>
       </section>
 
 
@@ -244,7 +264,7 @@
           <p>Estimate calories and daily macros for your current goal.</p>
         </div>
         <div class="calculator-grid">
-          <form id="calc-form" class="form-block" novalidate>
+          <form id="calc-form" class="form-block form-block--2col" novalidate>
             <label>
               Weight (kg)
               <input type="number" name="weightKg" min="30" max="200" step="0.1" required />
@@ -265,24 +285,22 @@
               </select>
             </label>
             <label>
-              Activity level
+              Fitness level
               <select name="activity" required>
-                <option value="1.2">Sedentary</option>
-                <option value="1.375">Lightly active</option>
-                <option value="1.55" selected>Moderately active</option>
-                <option value="1.725">Very active</option>
-                <option value="1.9">Athlete</option>
+                <option value="1.375">Beginner</option>
+                <option value="1.55" selected>Intermediate</option>
+                <option value="1.725">Advanced</option>
               </select>
             </label>
             <label>
               Goal
               <select name="goal" required>
+                <option value="lose-weight">Lose Weight</option>
                 <option value="maintain">Maintain</option>
-                <option value="cut">Cut</option>
-                <option value="build">Build</option>
+                <option value="build-muscle">Build Muscle</option>
               </select>
             </label>
-            <button class="pill pill-dark" type="submit">Calculate Targets</button>
+            <button class="pill pill-dark form-full" type="submit">Calculate Targets</button>
           </form>
 
           <aside class="result-block" aria-live="polite">

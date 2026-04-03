@@ -573,11 +573,11 @@ main {
   border-radius: 30px;
   padding: clamp(24px, 4vw, 42px);
   background:
-    radial-gradient(circle at 100% 0%, rgba(245, 102, 31, 0.38), transparent 30%),
-    radial-gradient(circle at 0% 100%, rgba(245, 102, 31, 0.22), transparent 30%),
-    linear-gradient(140deg, #161a46 0%, #1f2357 55%, #252a66 100%);
+    radial-gradient(circle at 92% 0%, rgba(245, 102, 31, 0.55) 0%, transparent 38%),
+    radial-gradient(circle at 8% 100%, rgba(245, 102, 31, 0.18) 0%, transparent 30%),
+    #0f0f11;
   color: #f8f9ff;
-  border: 1px solid #353b84;
+  border: 1px solid #2a1a0e;
   box-shadow: var(--shadow-strong);
 }
 
@@ -592,10 +592,68 @@ main {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.plan-cards--2col {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.plan-card--list {
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-card--list .plan-copy {
+  flex: 1;
+}
+
+.plan-tagline {
+  margin: 6px 0 12px;
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.plan-features {
+  list-style: none;
+  margin: 0 0 4px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.plan-features li {
+  font-size: 1rem;
+  color: #ffffff;
+  padding-left: 22px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.plan-features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #6ee892;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.feature-label {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.feature-note {
+  color: #ffffff;
+  font-size: 0.88em;
+  opacity: 0.8;
+}
+
 .plan-card {
-  border: 1px solid #5158a4;
+  border: 1px solid #2a2a2a;
+  border-left: 3px solid var(--accent);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.06);
+  background: #1a1a1a;
   overflow: hidden;
   display: grid;
 }
@@ -612,8 +670,28 @@ main {
 }
 
 .plan-copy h3 {
-  margin: 0;
+  margin: 0 0 6px;
   font-family: "Sora", sans-serif;
+  color: var(--accent);
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ffffff;
+  display: inline-block;
+}
+
+.plan-label {
+  color: var(--accent);
+  font-size: 1em;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  vertical-align: middle;
+}
+
+.plan-subtitle {
+  color: #ffffff;
+  font-size: 0.6em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  vertical-align: middle;
 }
 
 .plan-copy p {
@@ -705,17 +783,25 @@ main {
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: #fffdf9;
-  padding: 18px;
+  padding: 12px;
   display: grid;
-  gap: 12px;
+  gap: 8px;
 }
 
 .form-block label,
 .lead-form label {
   display: grid;
-  gap: 6px;
+  gap: 3px;
   font-weight: 700;
-  font-size: 0.92rem;
+  font-size: 0.85rem;
+}
+
+.form-block--2col {
+  grid-template-columns: 1fr 1fr;
+}
+
+.form-block--2col .form-full {
+  grid-column: 1 / -1;
 }
 
 input,
@@ -729,8 +815,8 @@ input,
 select,
 textarea {
   border: 1px solid #cfc7b7;
-  border-radius: 12px;
-  padding: 11px 12px;
+  border-radius: 10px;
+  padding: 7px 10px;
   background: #fffefb;
   color: var(--ink);
 }
@@ -746,13 +832,14 @@ textarea:focus-visible {
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: #f7f2e8;
-  padding: 18px;
+  padding: 12px;
 }
 
 .result-block h3 {
   margin-top: 0;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   font-family: "Sora", sans-serif;
+  font-size: 1rem;
 }
 
 .result-grid {
