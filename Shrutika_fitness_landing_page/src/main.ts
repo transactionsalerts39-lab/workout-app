@@ -41,20 +41,7 @@ type CoreSectionId =
   | "why"
   | "process"
   | "transformations"
-  | "calculator"
-  | "choose-plan";
-
-interface MobileActionItem {
-  id: string;
-  label: string;
-  href: string;
-  external?: boolean;
-}
-
-interface MobileNavConfig {
-  tabSections: CoreSectionId[];
-  actionItems: MobileActionItem[];
-}
+  | "calculator";
 
 const SITE_LINKS: SiteLinks = {
   bookCallUrl: "https://calendly.com/your-booking-link",
@@ -73,18 +60,8 @@ const SITE_LINKS: SiteLinks = {
 const isPlaceholderGoogleForm = SITE_LINKS.googleFormAction.includes("REPLACE_FORM_ID");
 const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const mobileBreakpoint = window.matchMedia("(max-width: 820px)");
-const MOBILE_NAV_CONFIG: MobileNavConfig = {
-  tabSections: ["plans", "why", "process", "transformations", "calculator", "choose-plan"],
-  actionItems: [
-    { id: "book", label: "Book a Call", href: "#book-call" },
-    { id: "choose", label: "Choose Plan", href: "#choose-plan" },
-    { id: "calculator", label: "DIY Calculator", href: "#calculator" },
-    { id: "insta", label: "DM on Insta", href: "#choose-plan", external: true }
-  ]
-};
 
 let closeMobileMenuPanel: () => void = () => {};
-let closeMobileActionSheet: () => void = () => {};
 
 const toNumber = (value: FormDataEntryValue | null): number => Number(value ?? 0);
 
@@ -97,7 +74,6 @@ function isMobileView(): boolean {
 
 function closeMobileOverlays(): void {
   closeMobileMenuPanel();
-  closeMobileActionSheet();
 }
 
 function getGoalFactor(goal: Goal): number {
@@ -226,7 +202,6 @@ function setupMobileMenu(): void {
   };
 
   const openMenu = (): void => {
-    closeMobileActionSheet();
     menuPanel.hidden = false;
     menuToggle.setAttribute("aria-expanded", "true");
   };
@@ -262,223 +237,6 @@ function setupMobileMenu(): void {
   } else {
     mobileBreakpoint.addListener(onViewportChange);
   }
-}
-
-function setupMobileActionSheet(): void {
-  const startButton = document.getElementById("mobile-start-cta") as HTMLButtonElement | null;
-  const sheet = document.getElementById("mobile-action-sheet") as HTMLElement | null;
-  const backdrop = document.getElementById("mobile-sheet-backdrop") as HTMLDivElement | null;
-  const closeButton = document.querySelector<HTMLButtonElement>("[data-mobile-sheet-close]");
-  const actionLinks = document.querySelectorAll<HTMLAnchorElement>("[data-mobile-sheet-action]");
-
-  if (!startButton || !sheet || !backdrop || !closeButton) return;
-
-  let previousFocus: HTMLElement | null = null;
-
-  const closeSheet = (): void => {
-    sheet.hidden = true;
-    backdrop.hidden = true;
-    startButton.setAttribute("aria-expanded", "false");
-    document.body.classList.remove("mobile-overlay-open");
-
-    if (previousFocus && previousFocus.isConnected) {
-      previousFocus.focus();
-    }
-  };
-
-  const openSheet = (): void => {
-    if (!isMobileView()) return;
-    closeMobileMenuPanel();
-
-    previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    sheet.hidden = false;
-    backdrop.hidden = false;
-    startButton.setAttribute("aria-expanded", "true");
-    document.body.classList.add("mobile-overlay-open");
-
-    const firstAction = sheet.querySelector<HTMLElement>("[data-mobile-sheet-action]");
-    firstAction?.focus();
-  };
-
-  closeMobileActionSheet = closeSheet;
-
-  startButton.addEventListener("click", () => {
-    const isOpen = startButton.getAttribute("aria-expanded") === "true";
-    if (isOpen) {
-      closeSheet();
-      return;
-    }
-    openSheet();
-  });
-
-  backdrop.addEventListener("click", closeSheet);
-  closeButton.addEventListener("click", closeSheet);
-
-  actionLinks.forEach((link) => {
-    link.addEventListener("click", () => {
-      closeSheet();
-    });
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") closeSheet();
-  });
-
-  const onViewportChange = (e: MediaQueryListEvent): void => {
-    if (!e.matches) closeSheet();
-  };
-
-  if (mobileBreakpoint.addEventListener) {
-    mobileBreakpoint.addEventListener("change", onViewportChange);
-  } else {
-    mobileBreakpoint.addListener(onViewportChange);
-  }
-}
-
-function setupMobileTabScrollSpy(): void {
-  const tabbar = document.querySelector<HTMLElement>(".mobile-tabbar");
-  const tabs = document.querySelectorAll<HTMLAnchorElement>("[data-core-tab]");
-  if (!tabbar || !tabs.length) return;
-
-  const sections = MOBILE_NAV_CONFIG.tabSections
-    .map((sectionId) => document.getElementById(sectionId))
-    .filter((section): section is HTMLElement => section instanceof HTMLElement);
-
-  if (!sections.length) return;
-
-  let currentActiveId: CoreSectionId | null = null;
-  let tabHintDismissed = false;
-
-  const dismissTabbarHint = (): void => {
-    tabHintDismissed = true;
-    tabbar.classList.remove("show-hint");
-  };
-
-  const syncTabbarHintState = (): void => {
-    if (!isMobileView()) {
-      tabbar.classList.remove("show-hint");
-      return;
-    }
-
-    const canScroll = tabbar.scrollWidth - tabbar.clientWidth > 8;
-    const shouldShowHint = canScroll && tabbar.scrollLeft < 18 && !tabHintDismissed;
-    tabbar.classList.toggle("show-hint", shouldShowHint);
-  };
-
-  const setActiveTab = (activeId: CoreSectionId): void => {
-    tabs.forEach((tab) => {
-      const tabId = tab.dataset.coreTab as CoreSectionId | undefined;
-      tab.classList.toggle("is-active", tabId === activeId);
-      if (tabId === activeId) tab.setAttribute("aria-current", "page");
-      else tab.removeAttribute("aria-current");
-    });
-
-    const activeTab = tabbar.querySelector<HTMLAnchorElement>(`[data-core-tab="${activeId}"]`);
-    if (activeTab && currentActiveId !== activeId && isMobileView()) {
-      activeTab.scrollIntoView({
-        block: "nearest",
-        inline: "center",
-        behavior: isReducedMotion ? "auto" : "smooth"
-      });
-    }
-
-    currentActiveId = activeId;
-  };
-
-  const refreshActiveTab = (): void => {
-    if (!isMobileView()) return;
-
-    const header = document.querySelector<HTMLElement>(".site-header");
-    const offsetTop = (header?.offsetHeight ?? 0) + 16;
-    let currentId: CoreSectionId = MOBILE_NAV_CONFIG.tabSections[0];
-    let bestDistance = Number.POSITIVE_INFINITY;
-
-    sections.forEach((section) => {
-      const top = section.getBoundingClientRect().top - offsetTop;
-      const eligible = top <= window.innerHeight * 0.55;
-      if (!eligible) return;
-
-      const distance = Math.abs(top);
-      if (distance < bestDistance) {
-        bestDistance = distance;
-        currentId = section.id as CoreSectionId;
-      }
-    });
-
-    setActiveTab(currentId);
-  };
-
-  refreshActiveTab();
-  syncTabbarHintState();
-
-  tabbar.addEventListener(
-    "scroll",
-    () => {
-      if (tabbar.scrollLeft > 8) dismissTabbarHint();
-      syncTabbarHintState();
-    },
-    { passive: true }
-  );
-
-  window.addEventListener(
-    "scroll",
-    () => {
-      refreshActiveTab();
-      if (window.scrollY > 140) dismissTabbarHint();
-    },
-    { passive: true }
-  );
-
-  window.addEventListener("resize", () => {
-    refreshActiveTab();
-    syncTabbarHintState();
-  });
-
-  requestAnimationFrame(syncTabbarHintState);
-  window.setTimeout(dismissTabbarHint, 4000);
-
-  const onViewportChange = (): void => {
-    refreshActiveTab();
-    syncTabbarHintState();
-  };
-
-  if (mobileBreakpoint.addEventListener) {
-    mobileBreakpoint.addEventListener("change", onViewportChange);
-  } else {
-    mobileBreakpoint.addListener(onViewportChange);
-  }
-}
-
-function setupMobileStartCtaVisibility(): void {
-  const startButton = document.getElementById("mobile-start-cta") as HTMLButtonElement | null;
-  if (!startButton) return;
-
-  let lastScrollY = window.scrollY;
-
-  const syncVisibility = (): void => {
-    if (!isMobileView()) {
-      startButton.classList.remove("is-hidden");
-      lastScrollY = window.scrollY;
-      return;
-    }
-
-    const currentY = window.scrollY;
-    const isScrollingDown = currentY > lastScrollY + 8;
-    const isDeepIntoPage = currentY > 220;
-    const shouldHide = isScrollingDown && isDeepIntoPage;
-
-    startButton.classList.toggle("is-hidden", shouldHide);
-
-    if (currentY < 120) {
-      startButton.classList.remove("is-hidden");
-    }
-
-    lastScrollY = currentY;
-  };
-
-  syncVisibility();
-  window.addEventListener("scroll", syncVisibility, { passive: true });
-  window.addEventListener("resize", syncVisibility);
 }
 
 function setupCalculator(): void {
@@ -623,9 +381,6 @@ function setupLeadForm(): void {
 function init(): void {
   setExternalLinks();
   setupMobileMenu();
-  setupMobileActionSheet();
-  setupMobileTabScrollSpy();
-  setupMobileStartCtaVisibility();
   setupSmoothAnchors();
   setupScrollReveal();
   setupCalculator();

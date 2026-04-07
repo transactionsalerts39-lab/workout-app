@@ -17,6 +17,18 @@
   </head>
   <body>
     <header class="site-header">
+      <div class="mobile-header-row">
+        <span class="mobile-brand-name">Shrutika Mathur</span>
+        <button
+          class="mobile-menu-toggle"
+          id="mobile-menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-menu-panel"
+        >
+          Menu
+        </button>
+      </div>
       <nav class="pill-nav" aria-label="Main navigation">
         <span class="nav-brand-name">Shrutika Mathur</span>
         <a class="pill-nav-item" href="#about">About</a>
@@ -26,15 +38,6 @@
         <a class="pill-nav-item pill-nav-active" href="#book-call">Book a Call</a>
         <a class="pill-nav-item" href="#testimonials">Testimony</a>
       </nav>
-      <button
-        class="mobile-menu-toggle"
-        id="mobile-menu-toggle"
-        type="button"
-        aria-expanded="false"
-        aria-controls="mobile-menu-panel"
-      >
-        Menu
-      </button>
       <div class="mobile-menu-panel" id="mobile-menu-panel" hidden>
         <a href="#about" data-mobile-menu-link>About</a>
         <a href="#plans" data-mobile-menu-link>Coaching Plans</a>
@@ -47,12 +50,15 @@
 
     <main id="top">
       <section class="hero panel" id="book-call" data-reveal>
-        <img
-          class="hero-bg-img"
-          src="/src/assets/hero-bg.jpg"
-          alt="Shrutika performing a barbell deadlift in the gym"
-          loading="eager"
-        />
+        <picture>
+          <source media="(max-width: 820px)" srcset="/src/assets/hero-bg-mobile.jpg" />
+          <img
+            class="hero-bg-img"
+            src="/src/assets/hero-bg.jpg"
+            alt="Shrutika performing a barbell deadlift in the gym"
+            loading="eager"
+          />
+        </picture>
         <div class="hero-overlay-text">
           <h3 class="hero-left-heading">While you're still "figuring it out," others are already transforming.</h3>
           <p class="hero-left-sub1">Fat loss. Muscle building. Body recomposition. Fixing your lifestyle.</p>
@@ -340,67 +346,6 @@
       <a href="/terms-of-service.html">Terms of service</a>
       <a href="/refund-policy.html">Refund policy</a>
     </footer>
-
-    <button
-      class="mobile-start-cta pill pill-dark"
-      id="mobile-start-cta"
-      type="button"
-      aria-controls="mobile-action-sheet"
-      aria-expanded="false"
-    >
-      Start Here
-    </button>
-
-    <nav class="mobile-tabbar" aria-label="Mobile section shortcuts">
-      <a href="#plans" data-core-tab="plans">Plans</a>
-      <a href="#why" data-core-tab="why">Why Me</a>
-      <a href="#process" data-core-tab="process">Process</a>
-      <a href="#transformations" data-core-tab="transformations">Transforms</a>
-      <a href="#calculator" data-core-tab="calculator">Calculator</a>
-      <a href="#choose-plan" data-core-tab="choose-plan">Choose Plan</a>
-      <span class="mobile-tabbar-hint" aria-hidden="true">
-        <span class="mobile-tabbar-hint-icon">↔</span>
-        Swipe
-      </span>
-    </nav>
-
-    <div class="mobile-sheet-backdrop" id="mobile-sheet-backdrop" hidden></div>
-    <section
-      class="mobile-action-sheet"
-      id="mobile-action-sheet"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="mobile-sheet-title"
-      hidden
-    >
-      <div class="mobile-sheet-handle" aria-hidden="true"></div>
-      <h2 id="mobile-sheet-title">Quick actions</h2>
-      <p>Pick your next step.</p>
-      <div class="mobile-sheet-actions">
-        <a
-          class="pill pill-dark"
-          href="#book-call"
-          data-book-call-url
-          data-fallback="#book-call"
-          data-mobile-sheet-action
-        >
-          Book a Call
-        </a>
-        <a class="pill pill-light" href="#choose-plan" data-mobile-sheet-action>Choose Plan</a>
-        <a class="pill pill-light" href="#calculator" data-mobile-sheet-action>DIY Calculator</a>
-        <a
-          class="pill pill-light"
-          href="#choose-plan"
-          data-instagram-url
-          data-mobile-sheet-action
-          target="_blank"
-          rel="noreferrer"
-        >
-          DM on Insta
-        </a>
-      </div>
-      <button class="mobile-sheet-close" type="button" data-mobile-sheet-close>Close</button>
-    </section>
 
     <a class="insta-fab" id="insta-fab" data-instagram-url href="#" target="_blank" rel="noreferrer">DM on Insta</a>
 
