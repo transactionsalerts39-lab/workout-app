@@ -1,0 +1,9 @@
+.vercel
+.env.local
+.env.*.local
+node_modules/
+dist/
+output/
+.DS_Store
+.codex/
+.claude/settings.local.json
