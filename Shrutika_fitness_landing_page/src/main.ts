@@ -378,6 +378,50 @@ function setupLeadForm(): void {
   });
 }
 
+function setupTestimonialCarousels(): void {
+  if (isReducedMotion) return;
+
+  const DELAY_MS = 3000;
+  const INTERVAL_MS = 3500;
+
+  document.querySelectorAll<HTMLElement>("[data-carousel]").forEach((carousel) => {
+    const track = carousel.querySelector<HTMLElement>(".card-photos-track");
+    const dots = carousel.querySelectorAll<HTMLElement>(".dot");
+    if (!track || dots.length < 2) return;
+
+    let current = 0;
+    const total = dots.length;
+
+    const goTo = (index: number): void => {
+      current = index;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, i) => d.classList.toggle("active", i === current));
+    };
+
+    const advance = (): void => goTo((current + 1) % total);
+
+    let timer = setTimeout(function tick() {
+      advance();
+      timer = setTimeout(tick, INTERVAL_MS) as unknown as ReturnType<typeof setTimeout>;
+    }, DELAY_MS);
+
+    // Pause on hover/touch
+    const pause = (): void => clearTimeout(timer);
+    const resume = (): void => {
+      clearTimeout(timer);
+      timer = setTimeout(function tick() {
+        advance();
+        timer = setTimeout(tick, INTERVAL_MS) as unknown as ReturnType<typeof setTimeout>;
+      }, INTERVAL_MS) as unknown as ReturnType<typeof setTimeout>;
+    };
+
+    carousel.addEventListener("mouseenter", pause);
+    carousel.addEventListener("mouseleave", resume);
+    carousel.addEventListener("touchstart", pause, { passive: true });
+    carousel.addEventListener("touchend", resume, { passive: true });
+  });
+}
+
 function init(): void {
   setExternalLinks();
   setupMobileMenu();
@@ -386,6 +430,7 @@ function init(): void {
   setupCalculator();
   setupPlanButtons();
   setupLeadForm();
+  setupTestimonialCarousels();
 }
 
 init();

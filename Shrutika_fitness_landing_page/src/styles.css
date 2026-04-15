@@ -754,10 +754,46 @@ main {
   grid-template-rows: auto 1fr auto;
 }
 
-.transform-card img {
+/* Photo carousel */
+.card-photos {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-photos-track {
+  display: flex;
+  transition: transform 420ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.card-photos-track img {
   width: 100%;
-  height: 190px;
+  flex: 0 0 100%;
+  height: 220px;
   object-fit: cover;
+  display: block;
+}
+
+.card-photo-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.card-photo-dots .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.5);
+  transition: background 200ms, width 200ms;
+}
+
+.card-photo-dots .dot.active {
+  background: #fff;
+  width: 16px;
 }
 
 .transform-card blockquote {
@@ -1321,7 +1357,7 @@ textarea:focus-visible {
 
   .transformation-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 
@@ -1329,8 +1365,8 @@ textarea:focus-visible {
     min-width: 0;
   }
 
-  .transform-card img {
-    height: 180px;
+  .card-photos-track img {
+    height: 200px;
   }
 
   .transform-card blockquote {
@@ -1499,6 +1535,16 @@ textarea:focus-visible {
 }
 
 @media (max-width: 430px) {
+  .transformation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .transform-card:last-child {
+    grid-column: auto;
+    max-width: 100%;
+    justify-self: auto;
+  }
+
   .hero {
     min-height: clamp(680px, 186vw, 900px);
   }
