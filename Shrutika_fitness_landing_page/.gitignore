@@ -3,7 +3,7 @@
 .env.*.local
 node_modules/
 dist/
-output/
 .DS_Store
-.codex/
 .claude/settings.local.json
+.codex/
+output/

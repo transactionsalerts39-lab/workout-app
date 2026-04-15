@@ -379,10 +379,9 @@ function setupLeadForm(): void {
 }
 
 function setupTestimonialCarousels(): void {
-  if (isReducedMotion) return;
-
   const DELAY_MS = 3000;
   const INTERVAL_MS = 3500;
+  const SWIPE_THRESHOLD = 40; // px needed to trigger a swipe
 
   document.querySelectorAll<HTMLElement>("[data-carousel]").forEach((carousel) => {
     const track = carousel.querySelector<HTMLElement>(".card-photos-track");
@@ -391,34 +390,126 @@ function setupTestimonialCarousels(): void {
 
     let current = 0;
     const total = dots.length;
+    let paused = false;
+    let timer: ReturnType<typeof setTimeout>;
 
+    // --- Navigation ---
     const goTo = (index: number): void => {
-      current = index;
+      current = ((index % total) + total) % total;
+      track.style.transition = "transform 380ms cubic-bezier(0.4, 0, 0.2, 1)";
       track.style.transform = `translateX(-${current * 100}%)`;
       dots.forEach((d, i) => d.classList.toggle("active", i === current));
     };
 
-    const advance = (): void => goTo((current + 1) % total);
+    const advance = (): void => goTo(current + 1);
 
-    let timer = setTimeout(function tick() {
-      advance();
-      timer = setTimeout(tick, INTERVAL_MS) as unknown as ReturnType<typeof setTimeout>;
-    }, DELAY_MS);
-
-    // Pause on hover/touch
-    const pause = (): void => clearTimeout(timer);
-    const resume = (): void => {
+    // --- Auto-play ---
+    const startTimer = (delay = INTERVAL_MS): void => {
       clearTimeout(timer);
       timer = setTimeout(function tick() {
-        advance();
-        timer = setTimeout(tick, INTERVAL_MS) as unknown as ReturnType<typeof setTimeout>;
-      }, INTERVAL_MS) as unknown as ReturnType<typeof setTimeout>;
+        if (!paused) advance();
+        timer = setTimeout(tick, INTERVAL_MS);
+      }, delay);
     };
 
+    const pause = (): void => {
+      paused = true;
+      clearTimeout(timer);
+    };
+
+    const resume = (): void => {
+      paused = false;
+      startTimer();
+    };
+
+    startTimer(DELAY_MS);
+
+    // --- Hover (desktop) ---
     carousel.addEventListener("mouseenter", pause);
     carousel.addEventListener("mouseleave", resume);
-    carousel.addEventListener("touchstart", pause, { passive: true });
-    carousel.addEventListener("touchend", resume, { passive: true });
+
+    // --- Dot clicks ---
+    dots.forEach((dot, i) => {
+      dot.addEventListener("click", () => {
+        goTo(i);
+        pause();
+        startTimer();
+      });
+    });
+
+    // --- Touch swipe (mobile) ---
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isSwiping = false;
+
+    carousel.addEventListener("touchstart", (e: TouchEvent) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      isSwiping = false;
+      pause();
+    }, { passive: true });
+
+    carousel.addEventListener("touchmove", (e: TouchEvent) => {
+      const dx = e.touches[0].clientX - touchStartX;
+      const dy = e.touches[0].clientY - touchStartY;
+      // Only mark as horizontal swipe if movement is mostly horizontal
+      if (!isSwiping && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 8) {
+        isSwiping = true;
+      }
+      if (isSwiping) {
+        // Live-drag feedback: shift track with finger
+        const offset = -(current * 100) + (dx / carousel.offsetWidth) * 100;
+        track.style.transition = "none";
+        track.style.transform = `translateX(${offset}%)`;
+      }
+    }, { passive: true });
+
+    carousel.addEventListener("touchend", (e: TouchEvent) => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (isSwiping && Math.abs(dx) >= SWIPE_THRESHOLD) {
+        goTo(dx < 0 ? current + 1 : current - 1);
+      } else {
+        // Snap back if swipe wasn't far enough
+        track.style.transition = "transform 380ms cubic-bezier(0.4, 0, 0.2, 1)";
+        track.style.transform = `translateX(-${current * 100}%)`;
+      }
+      isSwiping = false;
+      startTimer();
+    }, { passive: true });
+
+    // --- Mouse drag (desktop) ---
+    let dragStartX = 0;
+    let isDragging = false;
+
+    track.addEventListener("mousedown", (e: MouseEvent) => {
+      dragStartX = e.clientX;
+      isDragging = true;
+      track.style.cursor = "grabbing";
+      pause();
+      e.preventDefault();
+    });
+
+    window.addEventListener("mousemove", (e: MouseEvent) => {
+      if (!isDragging) return;
+      const dx = e.clientX - dragStartX;
+      const offset = -(current * 100) + (dx / carousel.offsetWidth) * 100;
+      track.style.transition = "none";
+      track.style.transform = `translateX(${offset}%)`;
+    });
+
+    window.addEventListener("mouseup", (e: MouseEvent) => {
+      if (!isDragging) return;
+      isDragging = false;
+      track.style.cursor = "";
+      const dx = e.clientX - dragStartX;
+      if (Math.abs(dx) >= SWIPE_THRESHOLD) {
+        goTo(dx < 0 ? current + 1 : current - 1);
+      } else {
+        track.style.transition = "transform 380ms cubic-bezier(0.4, 0, 0.2, 1)";
+        track.style.transform = `translateX(-${current * 100}%)`;
+      }
+      startTimer();
+    });
   });
 }
 
