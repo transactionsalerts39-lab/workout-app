@@ -751,7 +751,7 @@ main {
   background: #fffdf8;
   overflow: hidden;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto auto;
 }
 
 /* Photo carousel */
@@ -769,8 +769,7 @@ main {
 .card-photos-track img {
   width: 100%;
   flex: 0 0 100%;
-  height: 220px;
-  object-fit: cover;
+  height: auto;
   display: block;
 }
 
@@ -1366,7 +1365,7 @@ textarea:focus-visible {
   }
 
   .card-photos-track img {
-    height: 200px;
+    height: auto;
   }
 
   .transform-card blockquote {
